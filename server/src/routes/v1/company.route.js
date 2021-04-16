@@ -6,11 +6,13 @@ const companyController = require('../../controllers/company.controller');
 
 const router = express.Router();
 
-router.route('/').post(validate(companyValidation.createCompany), companyController.createCompany);
-//.get(validate(companyValidation.getCompanies), companyController.getCompanies);
+router
+  .route('/')
+  .post(validate(companyValidation.createCompany), companyController.createCompany)
+  .get(validate(companyValidation.getCompanies), companyController.getCompanies);
 
 router
-  .route('/:userId')
+  .route('/:companyID')
   .get(auth('getUsers'), validate(companyValidation.getCompany), companyController.getCompany)
   .patch(auth('manageUsers'), validate(companyValidation.updateCompany), companyController.updateCompany)
   .delete(auth('manageUsers'), validate(companyValidation.deleteCompany), companyController.deleteCompany);
@@ -69,14 +71,14 @@ module.exports = router;
  *                   specialties:
  *                     type: array
  *             example:
- *               name: fake name
- *               headLine: company head line
- *               about: company about
+ *               name: Thai's Company
+ *               headLine: The greatest company in the world!
+ *               about: Information & Technology
  *               baseInfo: {
- *                  linkWeb: fake website url,
+ *                  linkWeb: https://fb.com/quocthai.user,
  *                  industry: Services,
- *                  companySize: 100,
- *                  headQuarter: fake headquarter,
+ *                  companySize: 101,
+ *                  headQuarter: Thu Duc - HCM - Vietnam,
  *                  type: publishing,
  *                  founded: 1999,
  *                  specialties: ['financial', 'service', 'business'],
@@ -106,24 +108,19 @@ module.exports = router;
  *         name: name
  *         schema:
  *           type: string
- *         description: User name
- *       - in: query
- *         name: role
- *         schema:
- *           type: string
- *         description: User role
+ *         description: Company name
  *       - in: query
  *         name: sortBy
  *         schema:
  *           type: string
- *         description: sort by query in the form of field:desc/asc (ex. name:asc)
+ *         description: Sort by query in the form of field:desc/asc (ex. name:asc)
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of users
+ *         description: Maximum number of companies
  *       - in: query
  *         name: page
  *         schema:
@@ -142,7 +139,7 @@ module.exports = router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/User'
+ *                     $ref: '#/components/schemas/Company'
  *                 page:
  *                   type: integer
  *                   example: 1
@@ -166,23 +163,24 @@ module.exports = router;
  * /companies/{id}:
  *   get:
  *     summary: Get a company
- *     description: Get information of company.
+ *     description: Get information of the company.
  *     tags: [Companies]
  *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Company id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/Company'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -202,7 +200,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Company id
  *     requestBody:
  *       required: true
  *       content:
@@ -212,28 +210,41 @@ module.exports = router;
  *             properties:
  *               name:
  *                 type: string
- *               email:
+ *               headLine:
  *                 type: string
- *                 format: email
- *                 description: must be unique
- *               password:
+ *               about:
  *                 type: string
- *                 format: password
- *                 minLength: 8
- *                 description: At least one number and one letter
+ *               industry:
+ *                 type: string
+ *               companySize:
+ *                 type: number
+ *               headQuarter:
+ *                 type: string
+ *               type:
+ *                 type: string
+ *               founded:
+ *                 type: number
+ *               specialties:
+ *                 type: array
  *             example:
- *               name: fake name
- *               email: fake@example.com
- *               password: password1
+ *               name: Thais's company
+ *               headLine: The greater then others
+ *               about: XL is real
+ *               industry: Information Technology
+ *               companySize: 1001
+ *               headQuarter: Singapore
+ *               type: personal
+ *               founded: 2025
+ *               specialties: ['website developer', 'hacking company']
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/Company'
  *       "400":
- *         $ref: '#/components/responses/DuplicateEmail'
+ *         $ref: '#/components/responses/DuplicateName'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -253,7 +264,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Company id
  *     responses:
  *       "200":
  *         description: No content
