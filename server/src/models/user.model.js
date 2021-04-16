@@ -4,26 +4,166 @@ const bcrypt = require('bcryptjs');
 const { toJSON, paginate } = require('./plugins');
 const { roles } = require('../config/roles');
 
+// Utils func
+//const { randomPassword } = require('./../utils/passport');
+
+const enumUser = {
+	values: ['candidate', 'employer', 'admin'],
+	message: `Quyền người dùng phải là 'candidate', 'employer', 'admin'!`,
+};
+
+const enumStatus = {
+	values: ['open', 'close'],
+	message: `Trạng thái phải là 'open' or 'close'!`,
+};
+
+
 const userSchema = mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
-      lowercase: true,
-      validate(value) {
-        if (!validator.isEmail(value)) {
-          throw new Error('Invalid email');
-        }
+    baseInfo :{
+      firstName: {
+          type: String,
+          required: [true, 'Họ là bắt buộc!'],
+          trim: true,
       },
+      lastName: {
+          type: String,
+          required: [true, 'Tên là bắt buộc!'],
+          trim: true,
+      },
+      deadLine:{
+          type: Date,
+          
+      },
+      education:{
+          type: Array,
+          default: [],
+          // luu object gom avt cua truong hoc va thong tin co ban
+      },
+      country: {
+          type: String,
+          default: "",
+      },
+      location: {
+          type: String,
+          default: "",
+      },
+      industry: {
+          type: String,
+          default: "",
+      },
+      dob:{
+          type: Date,
+          required: true,
+      }
+      
+    },
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+
+    backgroundAvt: {
+        type: String,
+        default: "",
+    },
+    cloudinary_id_background: {
+    type: String,
+    default: '',
+  },
+    avatar: {
+    type: String,
+    default: '',
+    },
+    cloudinary_id: {
+    type: String,
+    default: '',
+   },
+    status:{
+        type: String,
+        enum: enumStatus,
+
+    },
+    ///--------------------------------------------
+    contact: {
+        
+      email: {
+        type: String,
+        unique: true,
+        trim: true,
+        lowercase: true,
+        validate(value) {
+          if (!validator.isEmail(value)) {
+            throw new Error('Invalid email');
+          }
+        },
+      },
+      
+    },
+    about: {
+        type: String,
+        default: '',
+    },
+    connection: {
+
+        type: Array,
+        default: [],
+        //mot object lu user_id cua ban be
+    },
+    fetured: {
+
+        type: String,
+        default: '',
+        //link blog, site
+    },
+    dashboard: {
+
+        type: Array,
+        default: [],
+        //profileViewCount, articleCount, searchApperanceCount
+    },
+    experience: {
+
+        type: Array,
+        default: [],
+        //luu kinh nghiem cua nguoi do, nhung job da lam
+    },
+    following: {
+
+        type: Array,
+        default: [],
+    },
+    savePost: {
+
+        type: Array,
+        default: [],
+        //save cac bai post tuyen dung
+    },
+    licenseAndCert: {
+
+        type: Array,
+        default: [],
+        //cac giay chung nhan
+    },
+    volunteer: {
+
+        type: Array,
+        default: [],
+        //Hoat dong tinh nguyen
+    },
+    skill: {
+        type: Array,
+        default: [],
+        //cac ki nang ngoai
+    },
+    username: {
+
+        type: String,
+        required: true,
+        unique: true,
     },
     password: {
+
       type: String,
       required: true,
       trim: true,
@@ -32,22 +172,45 @@ const userSchema = mongoose.Schema(
         if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
           throw new Error('Password must contain at least one letter and one number');
         }
-      },
-      private: true, // used by the toJSON plugin
+
     },
-    role: {
-      type: String,
-      enum: roles,
-      default: 'user',
     },
-    isEmailVerified: {
-      type: Boolean,
-      default: false,
+  roles: {
+    type: String,
+    enum: enumUser,
+    default: 'candidate',
+  },
+
+  passwordResetToken: {
+    type: String,
+    //default: randomPassword(10),
+  },
+  passwordResetExpires: {
+    type: Date,
+    default: Date.now(),
+  },
+  google: {
+    type: Object,
+    default: {
+      id: '',
+      token: '',
     },
   },
-  {
-    timestamps: true,
-  }
+  facebook: {
+    type: Object,
+    default: {
+      id: '',
+      token: '',
+    },
+  },
+      
+      
+    
+      
+    },
+    {
+      timestamps: true,
+    }
 );
 
 // add plugin that converts mongoose to json
