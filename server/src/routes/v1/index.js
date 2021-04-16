@@ -1,6 +1,10 @@
 const express = require('express');
 const authRoute = require('./auth.route');
 const userRoute = require('./user.route');
+const companyRoute = require('./company.route');
+const cvRoute = require('./cv.route');
+const jobRoute = require('./job.route');
+const messageRoute = require('./message.route');
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
 
@@ -15,6 +19,22 @@ const defaultRoutes = [
     path: '/users',
     route: userRoute,
   },
+  {
+    path: '/companies',
+    route: companyRoute,
+  },
+  // {
+  //   path: '/cvs',
+  //   route: cvRoute,
+  // },
+  // {
+  //   path: '/jobs',
+  //   route: jobRoute,
+  // },
+  // {
+  //   path: '/messages',
+  //   route: messageRoute,
+  // },
 ];
 
 const devRoutes = [
