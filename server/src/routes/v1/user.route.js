@@ -42,13 +42,22 @@ module.exports = router;
  *           schema:
  *             type: object
  *             required:
- *               - name
+ *               - username
+ *               - firstName
+ *               - lastName
  *               - email
  *               - password
  *               - role
  *             properties:
- *               name:
+ *               firstName:
  *                 type: string
+ *                 description: First name
+ *               lastName:
+ *                  type: string
+ *                  description: Last name
+ *               userName: 
+ *                  type: string
+ *                  description: must be unique
  *               email:
  *                 type: string
  *                 format: email
@@ -60,12 +69,13 @@ module.exports = router;
  *                 description: At least one number and one letter
  *               role:
  *                  type: string
- *                  enum: [user, admin]
+ *                  enum: [candidate, employer, admin]
  *             example:
- *               name: fake name
- *               email: fake@example.com
+ *               firstName: Hai thanh dep trai
+ *               lastName:  Khoai to               
+ *               email: thanhprovl@example.com
  *               password: password1
- *               role: user
+ *               role: candidate
  *     responses:
  *       "201":
  *         description: Created
@@ -88,14 +98,19 @@ module.exports = router;
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
- *         name: name
+ *         name: firstName
  *         schema:
- *           type: string
- *         description: User name
+ *            type: string
+ *         description: User first name
+ *       - in: query
+ *         name: lastName
+ *         schema:
+ *            type: string
+ *         description: User last name
  *       - in: query
  *         name: role
  *         schema:
- *           type: string
+ *           type: string          
  *         description: User role
  *       - in: query
  *         name: sortBy

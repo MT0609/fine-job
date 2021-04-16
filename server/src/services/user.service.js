@@ -2,6 +2,10 @@ const httpStatus = require('http-status');
 const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { sendEmail } = require('./email.service');
+
+
+
+
 /**
  * Create a user
  * @param {Object} userBody
@@ -11,8 +15,12 @@ const createUser = async (userBody) => {
   if (await User.isEmailTaken(userBody.email)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
-  const user = await User.create(userBody);
-  await sendEmail(userBody.email, 'Verify your account!', 'Click below button to verify account!');
+
+  var newUser = formatUser(userBody);
+
+  const user = await User.create(newUser);
+  await sendEmail(newUser.contact.email, 'Verify your account!', 'Click below button to verify account!');
+  
   return user;
 };
 
@@ -81,6 +89,51 @@ const deleteUserById = async (userId) => {
   return user;
 };
 
+
+/**
+ * format object body to user 
+ * @param {object} user
+ * @returns {object} newUser
+ */
+
+const formatUser = (user) => {
+  
+  var baseInfo = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      sex: user.sex,
+      deadLine: user.deadLine,
+      education: user.education,
+      country: user.country,
+      location: user.location,
+      industry: user.industry,
+      dob: user.dob,
+
+  }
+  let contact = {
+      email: user.email,
+      phone: user.phone,
+
+  }
+  function deleteProps (obj, prop) {
+    for (const p of prop) {
+        (p in obj) && (delete obj[p]);
+    }    
+  }
+
+  deleteProps(user, ['firstName', 'lastName', 'sex', 'deadLine', 'education', 'country', 'location', 'industry', 'dob']);
+  deleteProps(user, ['phone', 'email']);
+  let newUser = {
+    baseInfo: baseInfo, 
+    contact: contact,
+  }
+  
+  newUser = Object.assign(newUser, user);
+  console.log(newUser);
+  return newUser;
+}
+
+
 module.exports = {
   createUser,
   queryUsers,
@@ -88,4 +141,5 @@ module.exports = {
   getUserByEmail,
   updateUserById,
   deleteUserById,
+  formatUser,
 };
