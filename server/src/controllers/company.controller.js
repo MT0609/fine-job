@@ -10,27 +10,27 @@ const createCompany = catchAsync(async (req, res) => {
 });
 
 const getCompanies = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['name', 'role']);
+  const filter = pick(req.query, ['username', 'role']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  const result = await userService.queryUsers(filter, options);
+  const result = await companyService.queryCompanies(filter, options);
   res.send(result);
 });
 
 const getCompany = catchAsync(async (req, res) => {
-  const user = await userService.getUserById(req.params.userId);
-  if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  const company = await companyService.getCompanyById(req.params.companyID);
+  if (!company) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Company not found');
   }
-  res.send(user);
+  res.send(company);
 });
 
 const updateCompany = catchAsync(async (req, res) => {
-  const user = await userService.updateUserById(req.params.userId, req.body);
-  res.send(user);
+  const company = await companyService.updateUserById(req.params.companyID, req.body);
+  res.send(company);
 });
 
 const deleteCompany = catchAsync(async (req, res) => {
-  await userService.deleteUserById(req.params.userId);
+  await companyService.deleteCompanyById(req.params.companyID);
   res.status(httpStatus.NO_CONTENT).send();
 });
 

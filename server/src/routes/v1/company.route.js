@@ -6,14 +6,16 @@ const companyController = require('../../controllers/company.controller');
 
 const router = express.Router();
 
-router.route('/').post(validate(companyValidation.createCompany), companyController.createCompany);
-//.get(validate(companyValidation.getCompanies), companyController.getCompanies);
+router
+  .route('/')
+  .post(validate(companyValidation.createCompany), companyController.createCompany)
+  .get(validate(companyValidation.getCompanies), companyController.getCompanies);
 
 router
-  .route('/:userId')
+  .route('/:companyID')
   .get(auth('getUsers'), validate(companyValidation.getCompany), companyController.getCompany)
   .patch(auth('manageUsers'), validate(companyValidation.updateCompany), companyController.updateCompany)
-  .delete(auth('manageUsers'), validate(companyValidation.deleteCompany), companyController.deleteCompany);
+  .delete(validate(companyValidation.deleteCompany), companyController.deleteCompany);
 
 module.exports = router;
 
@@ -175,7 +177,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Company id
  *     responses:
  *       "200":
  *         description: OK

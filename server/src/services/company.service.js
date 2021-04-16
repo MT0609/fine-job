@@ -1,7 +1,7 @@
 const httpStatus = require('http-status');
 const { Company } = require('../models');
 const ApiError = require('../utils/ApiError');
-const { sendEmail } = require('./email.service');
+
 /**
  * Create a user
  * @param {Object} userBody
@@ -11,9 +11,7 @@ const createCompany = async (userBody) => {
   if (await Company.isNameTaken(userBody.name)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Company name already taken');
   }
-  console.log(userBody);
   const company = await Company.create(userBody);
-  //await sendEmail(userBody.email, 'Company created', 'Your company has been created in the system!');
   return company;
 };
 
@@ -26,67 +24,67 @@ const createCompany = async (userBody) => {
  * @param {number} [options.page] - Current page (default = 1)
  * @returns {Promise<QueryResult>}
  */
-const queryUsers = async (filter, options) => {
-  const users = await User.paginate(filter, options);
-  return users;
+const queryCompanies = async (filter, options) => {
+  const companies = await Company.paginate(filter, options);
+  return companies;
 };
 
 /**
- * Get user by id
+ * Get company by id
  * @param {ObjectId} id
- * @returns {Promise<User>}
+ * @returns {Promise<Company>}
  */
-const getUserById = async (id) => {
-  return User.findById(id);
+const getCompanyById = async (id) => {
+  return Company.findById(id);
 };
 
 /**
- * Get user by email
+ * Get company by email
  * @param {string} email
- * @returns {Promise<User>}
+ * @returns {Promise<Company>}
  */
-const getUserByEmail = async (email) => {
-  return User.findOne({ email });
+const getCompanyByEmail = async (email) => {
+  return Company.findOne({ email });
 };
 
 /**
- * Update user by id
- * @param {ObjectId} userId
+ * Update company by id
+ * @param {ObjectId} companyID
  * @param {Object} updateBody
- * @returns {Promise<User>}
+ * @returns {Promise<Company>}
  */
-const updateUserById = async (userId, updateBody) => {
-  const user = await getUserById(userId);
+const updateCompanyById = async (companyID, updateBody) => {
+  const company = await getCompanyById(companyID);
   if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Company not found');
   }
-  if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
+  if (updateBody.email && (await User.isEmailTaken(updateBody.email, companyID))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
-  Object.assign(user, updateBody);
-  await user.save();
-  return user;
+  Object.assign(company, updateBody);
+  await company.save();
+  return company;
 };
 
 /**
- * Delete user by id
- * @param {ObjectId} userId
- * @returns {Promise<User>}
+ * Delete company by id
+ * @param {ObjectId} companyID
+ * @returns {Promise<Company>}
  */
-const deleteUserById = async (userId) => {
-  const user = await getUserById(userId);
-  if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+const deleteCompanyById = async (companyID) => {
+  const company = await getCompanyById(companyID);
+  if (!company) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Company not found');
   }
-  await user.remove();
-  return user;
+  await company.remove();
+  return company;
 };
 
 module.exports = {
   createCompany,
-  queryUsers,
-  getUserById,
-  getUserByEmail,
-  updateUserById,
-  deleteUserById,
+  queryCompanies,
+  getCompanyById,
+  getCompanyByEmail,
+  updateCompanyById,
+  deleteCompanyById,
 };

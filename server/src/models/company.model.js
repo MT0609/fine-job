@@ -52,18 +52,20 @@ const companySchema = mongoose.Schema(
       type: String,
       default: '',
     },
-    employees: {
-      userID: {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: 'User',
+    employees: [
+      {
+        userID: {
+          type: mongoose.SchemaTypes.ObjectId,
+          ref: 'User',
+        },
+        name: {
+          type: String,
+        },
+        avatar: {
+          type: String,
+        },
       },
-      name: {
-        type: String,
-      },
-      avatar: {
-        type: String,
-      },
-    },
+    ],
     baseInfo: {
       linkWeb: {
         type: String,
@@ -94,18 +96,33 @@ const companySchema = mongoose.Schema(
         default: [],
       },
     },
-    locations: {
-      type: Array,
-      default: [],
-    },
+    locations: [
+      {
+        name: {
+          type: String,
+        },
+        lang: {
+          type: Number,
+        },
+        long: {
+          type: Number,
+        },
+      },
+    ],
     jobs: {
       type: Array,
       default: [],
     },
-    photos: {
-      type: Array,
-      default: [],
-    },
+    photos: [
+      {
+        title: {
+          type: String,
+        },
+        url: {
+          type: String,
+        },
+      },
+    ],
     blacklisted: {
       type: Boolean,
       default: false,

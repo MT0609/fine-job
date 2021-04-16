@@ -19,6 +19,150 @@ components:
         name: fake name
         role: user
 
+    Company:
+      type: object
+      properties:
+        name:
+          type: string
+        owner:
+          type: string
+        backgroundAvt:
+          type: string
+          format: url
+        avatar:
+          type: string
+          format: url
+        headLine:
+          type: string
+        followers:
+          type: array
+          items:
+            type: object
+            properties:
+            userID:
+              type: string
+            name:
+              type: string
+            avatar:
+              type: string
+              format: url
+        about:
+          type: string,
+        employees:
+          type: array
+          items:
+            type: object
+            properties:
+              userID:
+                type: string
+              name:
+                type: string
+              avatar:
+                type: string
+        baseInfo:
+          type: object
+          properties:
+            linkWeb:
+              type: string
+              format: url
+            industry:
+              type: string
+              enum: ['Information Technology & Services', 'Services', 'Information Technology']
+            companySize:
+              type: number
+            headQuarter:
+              type: string
+            type:
+              type: string
+              enum: ['closing', 'publishing', 'personal']
+            founded:
+              type: number
+            specialties:
+              type: array
+              items:
+                type: string
+        locations:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              lang:
+                type: number
+              long:
+                type: number
+                format: url
+        jobs:
+          type: array
+          items:
+            type: object
+        photos:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+              url:
+                type: string
+        blacklisted:
+          type: boolean
+      example:
+        name: Qouc Tahi Company
+        owner: 5ebac534954b54139806c112
+        backgroundAvt: https://fb.com/quocthai.user
+        avatar: https://fb.com/quocthai.user
+        headLine: BE Developer
+        followers:
+          - userID: 5ebac534954b54139806c111
+            name: KAKXi
+            avatar: https://fb.com
+        about: A great developer
+        employees:
+          - userID: 5ebac534954b54139806c113
+            name: AJS ASC
+            avatar: https://fb.com
+        baseInfo:
+          linkWeb: https://fb.com
+          industry: Services
+          companySize: 100
+          headQuarter: Ho Chi Minh
+          type: publishing
+          founded: 1990
+          specialties:
+            - financial
+            - service
+            - business
+        locations:
+          - name: 127 Le Van Viet, Q9, TP HCM
+            lang: 192
+            long: 168
+          - name: Dao Duy Tu, Q10, TP HCM
+            lang: 127
+            long: 192
+          - name: Thu Thiem, Q2, TP HCM
+            lang: 192
+            long: 171
+        jobs:
+          - title: Job title 1
+            jobID: 5ebac534954b54139806c112
+            posted: 2020-05-12T16:18:04.793Z
+          - title: Job title 2
+            jobID: 5ebac534954b54139806c112
+            posted: 2020-05-12T16:18:04.793Z
+          - title: Job title 3
+            jobID: 5ebac534954b54139806c112
+            posted: 2020-05-12T16:18:04.793Z
+        photos:
+          - title: photo title 1
+            url: https://fb.com-1.jpg
+          - title: photo title 2
+            url: https://fb.com-2.jpg
+          - title: photo title 3
+            url: https://fb.com-3.jpg
+        blacklisted: false
+
     Token:
       type: object
       properties:

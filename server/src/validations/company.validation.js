@@ -20,7 +20,7 @@ const createCompany = {
 
 const getCompanies = {
   query: Joi.object().keys({
-    name: Joi.string(),
+    username: Joi.string(),
     role: Joi.string(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
@@ -30,13 +30,13 @@ const getCompanies = {
 
 const getCompany = {
   params: Joi.object().keys({
-    userId: Joi.string().custom(objectId),
+    companyID: Joi.string().custom(objectId),
   }),
 };
 
 const updateCompany = {
   params: Joi.object().keys({
-    userId: Joi.required().custom(objectId),
+    companyID: Joi.required().custom(objectId),
   }),
   body: Joi.object()
     .keys({
@@ -49,7 +49,7 @@ const updateCompany = {
 
 const deleteCompany = {
   params: Joi.object().keys({
-    userId: Joi.string().custom(objectId),
+    companyID: Joi.string().custom(objectId),
   }),
 };
 
