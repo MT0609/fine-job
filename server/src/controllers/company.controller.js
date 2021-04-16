@@ -10,7 +10,7 @@ const createCompany = catchAsync(async (req, res) => {
 });
 
 const getCompanies = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['username', 'role']);
+  const filter = pick(req.query, ['name', 'role']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await companyService.queryCompanies(filter, options);
   res.send(result);
@@ -25,7 +25,7 @@ const getCompany = catchAsync(async (req, res) => {
 });
 
 const updateCompany = catchAsync(async (req, res) => {
-  const company = await companyService.updateUserById(req.params.companyID, req.body);
+  const company = await companyService.updateCompanyById(req.params.companyID, req.body);
   res.send(company);
 });
 

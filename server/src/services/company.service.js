@@ -55,12 +55,16 @@ const getCompanyByEmail = async (email) => {
  */
 const updateCompanyById = async (companyID, updateBody) => {
   const company = await getCompanyById(companyID);
-  if (!user) {
+  if (!company) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Company not found');
   }
-  if (updateBody.email && (await User.isEmailTaken(updateBody.email, companyID))) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
-  }
+
+  const baseInfo = ['industry', 'companySize', 'headQuarter', 'type', 'founded', 'specialties'];
+
+  baseInfo.forEach((el) => {
+    if (updateBody[el]) company.baseInfo[el] = updateBody[el];
+  });
+
   Object.assign(company, updateBody);
   await company.save();
   return company;

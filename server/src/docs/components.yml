@@ -201,6 +201,15 @@ components:
           example:
             code: 400
             message: Email already taken
+    DuplicateName:
+      description: name already taken
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Name already taken
     Unauthorized:
       description: Unauthorized
       content:

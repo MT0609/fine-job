@@ -89,7 +89,7 @@ const companySchema = mongoose.Schema(
       },
       founded: {
         type: Number,
-        required: true,
+        default: 1900,
       },
       specialties: {
         type: Array,
