@@ -1,0 +1,64 @@
+@import "../../utils/scss/mixins.scss";
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0.2rem 1rem 0 5rem;
+  border-bottom: 1px solid #cfd8dc;
+  background-color: #ffffff;
+
+  &__container {
+    @include flexbox(space-between, center);
+  }
+  &__thumbnail {
+    img {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+  &__links {
+    ul {
+      list-style-type: none;
+      @include flexbox;
+
+      li {
+        margin-right: 1rem;
+
+        a,
+        button {
+          padding: 0.5rem;
+          @include flexbox(space-between, center, column);
+          &:hover {
+            text-decoration: none;
+          }
+        }
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+
+    &--active {
+      border-bottom: 2px solid #191919;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    padding: 0.5rem 1rem 0.5rem 1rem;
+
+    &__userOptions {
+      ul {
+        li {
+          span {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}

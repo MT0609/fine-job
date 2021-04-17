@@ -1,0 +1,14 @@
+@mixin flexbox(
+  $justify-content: center,
+  $align-items: center,
+  $flex-direction: row
+) {
+  display: -webkit-box; // old
+  display: -moz-box; // old
+  display: -ms-flexbox; // ie
+  display: -webkit-flex; // new
+  display: flex; // new
+  justify-content: $justify-content;
+  align-items: $align-items;
+  flex-direction: $flex-direction;
+}
