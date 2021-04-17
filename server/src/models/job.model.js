@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validate = require('validator');
 const { toJSON, paginate } = require('./plugins');
 const { tokenTypes } = require('../config/tokens');
+const { number, string } = require('joi');
 
 const enumIndustry = {
   values: ['Information Technology & Services', 'Services', 'Information Technology'],
@@ -26,20 +27,26 @@ const jobSchema = mongoose.Schema(
       index: true,
     },
     company: {
+      name: {
+        type: String,
+        required: true,
+      },
+      id: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Company',
+      },
       avatar: {
         type: String,
+        default: '',
       },
-      location: {
+      size: {
+        type: Number,
+        default: 0,
+      },
+      industry: {
         type: String,
-      },
-      cpn: {
-        size: {
-          type: Number,
-        },
-        industry: {
-          type: String,
-          enum: enumIndustry,
-        },
+        enum: enumIndustry,
+        default: 'Services',
       },
     },
     posted: {
@@ -54,6 +61,7 @@ const jobSchema = mongoose.Schema(
       jobType: {
         type: String,
         enum: enumJobType,
+        default: 'contract',
       },
     },
     skills: {
@@ -68,14 +76,18 @@ const jobSchema = mongoose.Schema(
       type: String,
       require: true,
     },
-    companyID: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: 'Company',
-      required: true,
+    locations: {
+      type: Array,
+      default: [],
+    },
+    maxSalary: {
+      type: Number,
+      default: 0,
     },
     status: {
       type: String,
       enum: enumJobStatus,
+      default: 'open',
     },
   },
   {

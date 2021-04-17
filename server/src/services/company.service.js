@@ -3,7 +3,7 @@ const { Company } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
- * Create a user
+ * Create a company
  * @param {Object} userBody
  * @returns {Promise<Company>}
  */
@@ -16,7 +16,7 @@ const createCompany = async (userBody) => {
 };
 
 /**
- * Query for users
+ * Query for companies
  * @param {Object} filter - Mongo filter
  * @param {Object} options - Query options
  * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)

@@ -23,6 +23,10 @@ const defaultRoutes = [
     path: '/companies',
     route: companyRoute,
   },
+  {
+    path: '/jobs',
+    route: jobRoute,
+  },
   // {
   //   path: '/cvs',
   //   route: cvRoute,
