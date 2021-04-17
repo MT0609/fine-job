@@ -77,18 +77,12 @@ const userSchema = mongoose.Schema(
         type: String,
         default: "",
     },
-    cloudinary_id_background: {
-    type: String,
-    default: '',
-  },
+  
     avatar: {
     type: String,
     default: '',
     },
-    cloudinary_id: {
-    type: String,
-    default: '',
-   },
+ 
     status:{
         type: String,
         enum: enumStatus,

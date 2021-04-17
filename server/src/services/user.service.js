@@ -57,6 +57,15 @@ const getUserByEmail = async (email) => {
 };
 
 /**
+ * Get user by username
+ * @param {string} username
+ * @returns {Promise<User>}
+ */
+ const getUserByUsername = async (username) => {
+  return User.findOne({ username });
+};
+
+/**
  * Update user by id
  * @param {ObjectId} userId
  * @param {Object} updateBody
@@ -70,7 +79,12 @@ const updateUserById = async (userId, updateBody) => {
   if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
-  Object.assign(user, updateBody);
+
+  let changeUser = formatUser(updateBody);
+  
+  let newUser = mergeDeep(user, changeUser);
+  //de giu lai thanh phan user
+  Object.assign(user, newUser);
   await user.save();
   return user;
 };
@@ -108,13 +122,15 @@ const formatUser = (user) => {
       location: user.location,
       industry: user.industry,
       dob: user.dob,
-
   }
   let contact = {
       email: user.email,
       phone: user.phone,
 
   }
+  Object.keys(baseInfo).forEach(key => baseInfo[key] === undefined ? delete baseInfo[key] : {});
+  Object.keys(contact).forEach(key => contact[key] === undefined ? delete contact[key] : {});
+
   function deleteProps (obj, prop) {
     for (const p of prop) {
         (p in obj) && (delete obj[p]);
@@ -129,17 +145,51 @@ const formatUser = (user) => {
   }
   
   newUser = Object.assign(newUser, user);
-  console.log(newUser);
+
+
   return newUser;
 }
 
+/**
+ * Simple object check.
+ * @param item
+ * @returns {boolean}
+ */
+ function isObject (item) {
+  return (item && typeof item === 'object' && !Array.isArray(item));
+}
+
+/**
+ * Deep merge two objects.
+ * @param target
+ * @param ...sources
+ */
+const mergeDeep  = (target, ...sources) =>{
+  if (!sources.length) return target;
+  const source = sources.shift();
+
+  if (isObject(target) && isObject(source)) {
+    for (const key in source) {
+      if (isObject(source[key])) {
+        if (!target[key]) Object.assign(target, { [key]: {} });
+        mergeDeep(target[key], source[key]);
+      } else {
+        Object.assign(target, { [key]: source[key] });
+      }
+    }
+  }
+
+  return mergeDeep(target, ...sources);
+}
 
 module.exports = {
   createUser,
   queryUsers,
   getUserById,
   getUserByEmail,
+  getUserByUsername,
   updateUserById,
   deleteUserById,
   formatUser,
+  mergeDeep
 };

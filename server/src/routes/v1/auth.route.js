@@ -98,17 +98,17 @@ module.exports = router;
  *           schema:
  *             type: object
  *             required:
- *               - email
+ *               - username
  *               - password
  *             properties:
- *               email:
+ *               username:
  *                 type: string
- *                 format: email
+ *                 format: string
  *               password:
  *                 type: string
  *                 format: password
  *             example:
- *               email: fake@example.com
+ *               username: thanhcute
  *               password: password1
  *     responses:
  *       "200":
