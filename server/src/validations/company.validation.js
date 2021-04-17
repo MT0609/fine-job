@@ -48,7 +48,10 @@ const updateCompany = {
       headQuarter: Joi.string(),
       type: Joi.string(),
       founded: Joi.number(),
-      specialties: Joi.array().items(Joi.string()),
+      specialties: Joi.string(),
+      avatar: Joi.any(),
+      backgroundAvt: Joi.any(),
+      photos: Joi.any(),
     })
     .min(1),
 };

@@ -61,4 +61,7 @@ module.exports = {
     },
     from: envVars.EMAIL_FROM,
   },
+  cloudinary: {
+    id: envVars.CLOUDINARY_URL
+  }
 };

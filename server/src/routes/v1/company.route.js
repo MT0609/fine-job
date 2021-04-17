@@ -6,6 +6,16 @@ const companyController = require('../../controllers/company.controller');
 
 const router = express.Router();
 
+// Multer upload
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+// const upload = require('../../config/multer');
+const cpUpload = upload.fields([
+  { name: 'avatar', maxCount: 1 },
+  { name: 'backgroundAvt', maxCount: 1 },
+  { name: 'photos', maxCount: 8 },
+]);
+
 router
   .route('/')
   .post(validate(companyValidation.createCompany), companyController.createCompany)
@@ -14,7 +24,7 @@ router
 router
   .route('/:companyID')
   .get(auth('getUsers'), validate(companyValidation.getCompany), companyController.getCompany)
-  .patch(auth('manageUsers'), validate(companyValidation.updateCompany), companyController.updateCompany)
+  .patch(cpUpload, validate(companyValidation.updateCompany), companyController.updateCompany)
   .delete(auth('manageUsers'), validate(companyValidation.deleteCompany), companyController.deleteCompany);
 
 module.exports = router;
@@ -194,6 +204,8 @@ module.exports = router;
  *     tags: [Companies]
  *     security:
  *       - bearerAuth: []
+ *     consumes:
+ *       - multipart/form-data
  *     parameters:
  *       - in: path
  *         name: id
@@ -204,38 +216,55 @@ module.exports = router;
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
  *               name:
  *                 type: string
+ *                 required: true
+ *                 default: Thais's company
  *               headLine:
  *                 type: string
+ *                 required: true
+ *                 default: The greater then others
  *               about:
  *                 type: string
+ *                 required: true
+ *                 default: XL is real
  *               industry:
  *                 type: string
+ *                 required: true
+ *                 enum: ['Information Technology & Services', 'Services', 'Information Technology']
+ *                 default: Information Technology
  *               companySize:
  *                 type: number
+ *                 default: 101
  *               headQuarter:
  *                 type: string
+ *                 default: Vietnam
  *               type:
  *                 type: string
+ *                 enum: ['closing', 'publishing', 'personal']
+ *                 default: personal
  *               founded:
  *                 type: number
+ *                 default: 1900
  *               specialties:
  *                 type: array
- *             example:
- *               name: Thais's company
- *               headLine: The greater then others
- *               about: XL is real
- *               industry: Information Technology
- *               companySize: 1001
- *               headQuarter: Singapore
- *               type: personal
- *               founded: 2025
- *               specialties: ['website developer', 'hacking company']
+ *                 items:
+ *                   type: string
+ *                 default:
+ *                   - website developer
+ *                   - hacking company
+ *               avatar:
+ *                 type: file
+ *               backgroundAvt:
+ *                 type: file
+ *               photos:
+ *                 type: array
+ *                 items:
+ *                   type: file
  *     responses:
  *       "200":
  *         description: OK
