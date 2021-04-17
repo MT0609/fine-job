@@ -1,0 +1,10 @@
+.App {
+  text-align: center;
+}
+
+.App__main {
+  padding-top: 5rem;
+  background-color: #f9fafb;
+  z-index: -1;
+  min-height: 100vh;
+}
