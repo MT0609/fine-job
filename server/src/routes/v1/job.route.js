@@ -22,9 +22,9 @@ router
   .get(validate(jobValidation.getJobs), jobController.getJobs);
 
 router
-  .route('/:companyID')
-  .get(auth('getUsers'), validate(jobValidation.getJob), jobController.getJob)
-  .patch(cpUpload, validate(jobValidation.updateJob), jobController.updateJob)
+  .route('/:jobID')
+  .get(validate(jobValidation.getJob), jobController.getJob)
+  .patch(validate(jobValidation.updateJob), jobController.updateJob)
   .delete(auth('manageUsers'), validate(jobValidation.deleteJob), jobController.deleteJob);
 
 module.exports = router;
@@ -122,10 +122,10 @@ module.exports = router;
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
- *         name: name
+ *         name: title
  *         schema:
  *           type: string
- *         description: Company name
+ *         description: Job name
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -137,7 +137,7 @@ module.exports = router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of companies
+ *         description: Maximum number of jobs
  *       - in: query
  *         name: page
  *         schema:
@@ -156,7 +156,7 @@ module.exports = router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Company'
+ *                     $ref: '#/components/schemas/Job'
  *                 page:
  *                   type: integer
  *                   example: 1
@@ -183,14 +183,13 @@ module.exports = router;
  *     description: Get information of the job.
  *     tags: [Jobs]
  *     security:
- *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: Company id
+ *         description: Job id
  *     responses:
  *       "200":
  *         description: OK
@@ -223,55 +222,47 @@ module.exports = router;
  *     requestBody:
  *       required: true
  *       content:
- *         multipart/form-data:
+ *         application/json:
  *           schema:
  *             type: object
  *             properties:
- *               name:
- *                 type: string
- *                 required: true
- *                 default: Thais's company
- *               headLine:
- *                 type: string
- *                 required: true
- *                 default: The greater then others
- *               about:
- *                 type: string
- *                 required: true
- *                 default: XL is real
- *               industry:
- *                 type: string
- *                 required: true
- *                 enum: ['Information Technology & Services', 'Services', 'Information Technology']
- *                 default: Information Technology
- *               companySize:
- *                 type: number
- *                 default: 101
- *               headQuarter:
- *                 type: string
- *                 default: Vietnam
- *               type:
- *                 type: string
- *                 enum: ['closing', 'publishing', 'personal']
- *                 default: personal
- *               founded:
- *                 type: number
- *                 default: 1900
- *               specialties:
+ *               jobType:
+ *                 type: array
+ *                 items:
+ *                    type: string
+ *                    enum: ['full-time', 'part-time', 'internship', 'contract', 'remote', 'temporary', 'volunteer']
+ *               skills:
  *                 type: array
  *                 items:
  *                   type: string
- *                 default:
- *                   - website developer
- *                   - hacking company
- *               avatar:
- *                 type: file
- *               backgroundAvt:
- *                 type: file
- *               photos:
+ *               description:
+ *                 type: string
+ *               title:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *                 enum: ['open', 'close']
+ *               maxSalary:
+ *                 type: number
+ *               locations:
  *                 type: array
  *                 items:
- *                   type: file
+ *                   type: string
+ *
+ *             example:
+ *               jobType:
+ *                 - part-time
+ *                 - full-time
+ *               skills:
+ *                 - NodeJS
+ *                 - ReactJS
+ *               description: Node app boilerplate
+ *               title: NodeJS developer
+ *               status: open
+ *               maxSalary: 5000
+ *               locations:
+ *                  - Vietnam
+ *                  - Singapore
  *     responses:
  *       "200":
  *         description: OK
@@ -279,8 +270,6 @@ module.exports = router;
  *           application/json:
  *             schema:
  *                $ref: '#/components/schemas/Job'
- *       "400":
- *         $ref: '#/components/responses/DuplicateName'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -300,7 +289,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Company id
+ *         description: Job id
  *     responses:
  *       "200":
  *         description: No content

@@ -6,6 +6,8 @@ const { companyService } = require('../services');
 const { uploadSingleAvatar } = require('../config/cloudinary');
 
 const createCompany = catchAsync(async (req, res) => {
+  // Add owner company
+  req.body.owner = req.user.id;
   const company = await companyService.createCompany(req.body);
   res.status(httpStatus.CREATED).send(company);
 });

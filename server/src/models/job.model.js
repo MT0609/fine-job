@@ -21,6 +21,10 @@ const enumJobStatus = {
 
 const jobSchema = mongoose.Schema(
   {
+    creator: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+    },
     title: {
       type: String,
       required: true,
@@ -58,11 +62,12 @@ const jobSchema = mongoose.Schema(
         type: Number,
         default: 0,
       },
-      jobType: {
-        type: String,
-        enum: enumJobType,
-        default: 'contract',
-      },
+      jobType: [
+        {
+          type: String,
+          enum: enumJobType,
+        },
+      ],
     },
     skills: {
       type: Array,

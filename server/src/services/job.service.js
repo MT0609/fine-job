@@ -20,7 +20,7 @@ const createJob = async (userBody) => {
   // Format user body to fix job
   userBody.company = {
     name: company.name,
-    id,
+    id: id,
     avatar: company.avatar,
     size: company.baseInfo.companySize,
     industry: company.baseInfo.industry,
@@ -38,6 +38,9 @@ const createJob = async (userBody) => {
     description: userBody.description,
     salary: userBody.maxSalary,
   };
+
+  company.jobs.push(jobSub);
+  await company.save();
 
   return job;
 };
@@ -86,20 +89,11 @@ const updateJobById = async (jobID, updateBody) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Job not found');
   }
 
-  // Custom fields update
-  const baseInfo = ['industry', 'companySize', 'headQuarter', 'type', 'founded', 'specialties'];
+  if (updateBody.jobType) job.job.jobType = updateBody.jobType;
 
-  baseInfo.forEach((el) => {
-    if (updateBody[el]) company.baseInfo[el] = updateBody[el];
-  });
-
-  company.baseInfo.specialties = updateBody.specialties.split(',');
-
-  console.log(updateBody);
-
-  Object.assign(company, updateBody);
-  await company.save();
-  return company;
+  Object.assign(job, updateBody);
+  await job.save();
+  return job;
 };
 
 /**

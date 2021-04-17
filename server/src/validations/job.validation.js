@@ -15,7 +15,7 @@ const createJob = {
 
 const getJobs = {
   query: Joi.object().keys({
-    name: Joi.string(),
+    title: Joi.string(),
     role: Joi.string(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
@@ -25,35 +25,32 @@ const getJobs = {
 
 const getJob = {
   params: Joi.object().keys({
-    companyID: Joi.string().custom(objectId),
+    jobID: Joi.string().custom(objectId),
   }),
 };
 
 const updateJob = {
   params: Joi.object().keys({
-    companyID: Joi.required().custom(objectId),
+    jobID: Joi.required().custom(objectId),
   }),
   body: Joi.object()
     .keys({
-      name: Joi.string(),
-      headLine: Joi.string(),
-      about: Joi.string(),
-      industry: Joi.string(),
-      companySize: Joi.number(),
-      headQuarter: Joi.string(),
-      type: Joi.string(),
-      founded: Joi.number(),
-      specialties: Joi.string(),
-      avatar: Joi.any(),
-      backgroundAvt: Joi.any(),
-      photos: Joi.any(),
+      jobType: Joi.array().items(
+        Joi.string().valid('full-time', 'part-time', 'internship', 'contract', 'remote', 'temporary', 'volunteer')
+      ),
+      skills: Joi.array().items(Joi.string()),
+      description: Joi.string(),
+      title: Joi.string(),
+      status: Joi.string().valid('open', 'close'),
+      maxSalary: Joi.number(),
+      locations: Joi.array().items(Joi.string()),
     })
     .min(1),
 };
 
 const deleteJob = {
   params: Joi.object().keys({
-    companyID: Joi.string().custom(objectId),
+    jobID: Joi.string().custom(objectId),
   }),
 };
 

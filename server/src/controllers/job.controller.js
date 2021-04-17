@@ -6,12 +6,14 @@ const { jobService } = require('../services');
 const { uploadSingleAvatar } = require('../config/cloudinary');
 
 const createJob = catchAsync(async (req, res) => {
+  // Add creator ID
+  req.body.creator = req.user.id;
   const job = await jobService.createJob(req.body);
   res.status(httpStatus.CREATED).send(job);
 });
 
 const getJobs = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['name', 'role']);
+  const filter = pick(req.query, ['title', 'role']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await jobService.queryJobs(filter, options);
   res.send(result);
@@ -26,34 +28,6 @@ const getJob = catchAsync(async (req, res) => {
 });
 
 const updateJob = catchAsync(async (req, res) => {
-  // File uploads
-  if (req.files) {
-    const uploaded = req.files;
-
-    // Avatar upload
-    if (uploaded['avatar']) {
-      const retAvt = await uploadSingleAvatar(uploaded['avatar'][0].path);
-      req.body.avatar = retAvt.url;
-    } else delete req.body.avatar;
-
-    // Background avt upload
-    if (uploaded['backgroundAvt']) {
-      const retBgAvt = await uploadSingleAvatar(uploaded['backgroundAvt'][0].path);
-      req.body.backgroundAvt = retBgAvt.url;
-    } else delete req.body.backgroundAvt;
-
-    // Photos upload
-    if (uploaded['photos']) {
-      const rets = await Promise.all(
-        uploaded['photos'].map(async (el) => {
-          const retPts = await uploadSingleAvatar(el.path);
-          return { title: new Date(), url: retPts.url };
-        })
-      );
-      req.body.photos = rets;
-    } else delete req.body.photos;
-  }
-
   const job = await jobService.updateJobById(req.params.jobID, req.body);
   res.send(job);
 });
