@@ -12,11 +12,17 @@ const enumUser = {
 	message: `Quyền người dùng phải là 'candidate', 'employer', 'admin'!`,
 };
 
+
 const enumStatus = {
 	values: ['open', 'close'],
 	message: `Trạng thái phải là 'open' or 'close'!`,
 };
 
+
+const enumSex = {
+	values: ['male', 'female', 'other'],
+	message: `Trạng thái phải là 'male', 'female', 'other'!`,
+};
 
 const userSchema = mongoose.Schema(
   {
@@ -31,9 +37,14 @@ const userSchema = mongoose.Schema(
           required: [true, 'Tên là bắt buộc!'],
           trim: true,
       },
-      deadLine:{
-          type: Date,
-          
+      sex: {
+          type: String,
+          enum: enumSex,
+          required: true,
+      },
+      headLine:{
+          type: String,
+          default: '',
       },
       education:{
           type: Array,
@@ -55,8 +66,7 @@ const userSchema = mongoose.Schema(
       dob:{
           type: Date,
           required: true,
-      }
-      
+      } 
     },
     isEmailVerified: {
       type: Boolean,
@@ -67,18 +77,12 @@ const userSchema = mongoose.Schema(
         type: String,
         default: "",
     },
-    cloudinary_id_background: {
-    type: String,
-    default: '',
-  },
+  
     avatar: {
     type: String,
     default: '',
     },
-    cloudinary_id: {
-    type: String,
-    default: '',
-   },
+ 
     status:{
         type: String,
         enum: enumStatus,
@@ -86,19 +90,26 @@ const userSchema = mongoose.Schema(
     },
     ///--------------------------------------------
     contact: {
-        
-      email: {
-        type: String,
-        unique: true,
-        trim: true,
-        lowercase: true,
-        validate(value) {
-          if (!validator.isEmail(value)) {
-            throw new Error('Invalid email');
-          }
-        },
-      },
       
+       
+       email: {
+          type: String,
+          unique: true,
+          trim: true,
+          lowercase: true,
+          validate(value) {
+            if (!validator.isEmail(value)) {
+              throw new Error('Invalid email');
+            }
+          },
+        },
+        phone: {
+
+          type: String,
+          default: '',
+        }   
+  
+    
     },
     about: {
         type: String,
@@ -245,6 +256,9 @@ userSchema.pre('save', async function (next) {
   }
   next();
 });
+
+
+
 
 /**
  * @typedef User
