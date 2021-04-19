@@ -31,6 +31,18 @@ const defaultRoutes = [
     path: '/messages',
     route: messageRoute,
   },
+  {
+    path: '/cvs',
+    route: cvRoute,
+  },
+  // {
+  //   path: '/jobs',
+  //   route: jobRoute,
+  // },
+  // {
+  //   path: '/messages',
+  //   route: messageRoute,
+  // },
 ];
 
 const devRoutes = [
