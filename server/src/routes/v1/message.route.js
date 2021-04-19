@@ -1,6 +1,7 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
+const { senderInTwoUser } = require('../../middlewares/message');
 const messageValidation = require('../../validations/message.validation');
 const messageController = require('../../controllers/message.controller');
 
@@ -18,9 +19,9 @@ const cpUpload = upload.fields([
 
 router
   .route('/')
-  .post(auth(), validate(messageValidation.createMessage), messageController.createMessage)
-  .get(auth(), validate(messageValidation.getMessages), messageController.getMessages)
-  .delete(auth(), validate(messageValidation.deleteMessage), messageController.deleteMessage);
+  .post(auth(), validate(messageValidation.createMessage), senderInTwoUser, messageController.createMessage)
+  .get(auth(), validate(messageValidation.getMessages), senderInTwoUser, messageController.getMessages)
+  .delete(auth(), validate(messageValidation.deleteMessage), senderInTwoUser, messageController.deleteMessage);
 
 module.exports = router;
 

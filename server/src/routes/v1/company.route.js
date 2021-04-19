@@ -18,14 +18,14 @@ const cpUpload = upload.fields([
 
 router
   .route('/')
-  .post(validate(companyValidation.createCompany), companyController.createCompany)
+  .post(auth(), validate(companyValidation.createCompany), companyController.createCompany)
   .get(validate(companyValidation.getCompanies), companyController.getCompanies);
 
 router
   .route('/:companyID')
-  .get(auth('getUsers'), validate(companyValidation.getCompany), companyController.getCompany)
-  .patch(cpUpload, validate(companyValidation.updateCompany), companyController.updateCompany)
-  .delete(auth('manageUsers'), validate(companyValidation.deleteCompany), companyController.deleteCompany);
+  .get(validate(companyValidation.getCompany), companyController.getCompany)
+  .patch(auth(), cpUpload, validate(companyValidation.updateCompany), companyController.updateCompany)
+  .delete(auth(), validate(companyValidation.deleteCompany), companyController.deleteCompany);
 
 module.exports = router;
 
