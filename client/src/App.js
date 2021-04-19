@@ -1,9 +1,18 @@
+import { useEffect } from "react";
 import { BrowserRouter, Switch } from "react-router-dom";
-import "./App.css";
+import { useDispatch } from "react-redux";
+import { getUserData } from "./actions/authActions";
 import Header from "./components/header";
-import { renderRoutes, routes } from "./configs/routes/routes";
+import { renderRoutes, routes } from "./configs/routes";
+import "./App.css";
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getUserData());
+  }, [dispatch]);
+
   return (
     <div className="App">
       <BrowserRouter>

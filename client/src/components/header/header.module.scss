@@ -5,9 +5,10 @@
   top: 0;
   left: 0;
   right: 0;
-  padding: 0.2rem 1rem 0 5rem;
+  padding: 0 1rem 0 5rem;
   border-bottom: 1px solid #cfd8dc;
   background-color: #ffffff;
+  z-index: 1000;
 
   &__container {
     @include flexbox(space-between, center);
@@ -49,9 +50,7 @@
 
 @media screen and (max-width: 600px) {
   .header {
-    padding: 0.5rem 1rem 0.5rem 1rem;
-
-    &__userOptions {
+    &__links {
       ul {
         li {
           span {

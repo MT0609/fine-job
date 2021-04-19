@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { AppBar, Tabs, Tab, Paper, Container } from "@material-ui/core";
 import TabPanel from "../../components/tabs/tabPanel";
 import SignIn from "../../container/signin";
@@ -7,6 +8,8 @@ import styles from "./authen.module.scss";
 
 function Authen() {
   const [value, setValue] = useState(0);
+
+  const auth = useSelector((state) => state.auth);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -32,11 +35,13 @@ function Authen() {
                 label="Login"
                 id="simple-tab-0"
                 aria-controls="simple-tabpanel-0"
+                disabled={auth.isLoading}
               />
               <Tab
                 label="Register"
                 id="simple-tab-1"
                 aria-controls="simple-tabpanel-1"
+                disabled={auth.isLoading}
               />
             </Tabs>
           </AppBar>

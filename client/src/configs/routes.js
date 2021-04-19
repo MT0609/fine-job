@@ -1,9 +1,9 @@
-import { ROUTES } from "../../constants/routes";
 import { Route } from "react-router-dom";
-import AuthenPage from "../../pages/authen";
-import Home from "../../pages/home";
-import Jobs from "../../pages/jobs";
-import ForgotPassword from "../../pages/forgot";
+import { ROUTES } from "../constants/routes";
+import AuthenPage from "../pages/authen";
+import Home from "../pages/home";
+import Jobs from "../pages/jobs";
+import ForgotPassword from "../pages/forgot";
 
 const routes = [
   {

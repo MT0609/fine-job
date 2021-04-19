@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Paper, Link, Avatar } from "@material-ui/core";
 import { AccountCircle, PeopleAlt, Work, Chat } from "@material-ui/icons";
 import UserSubMenu from "../usermenu";
@@ -10,6 +11,8 @@ function Header() {
   useEffect(() => {
     setFirstPathName(window.location.pathname.split("/")[1]);
   }, []);
+
+  const auth = useSelector((state) => state.auth);
 
   const [dropdownAnchor, setDropdownAnchor] = useState(null);
 
@@ -57,39 +60,42 @@ function Header() {
                 <span>Messages</span>
               </Link>
             </li>
-            <li className={styles.header__userIcon}>
-              <button onClick={handleClick}>
-                <Avatar
-                  style={{
-                    height: "1.6rem",
-                    width: "1.6rem",
-                    marginBottom: "0.4rem",
-                  }}
-                  alt="Avatar"
-                  src="https://mcnewsmd1.keeng.net/netnews/archive/images/2020/07/20/tinngan_011115_916156142_0.jpg"
-                />
-                <span>Me</span>
-              </button>
-              <Paper className={styles.header__userIcon__submenu}>
-                <UserSubMenu
-                  anchorEl={dropdownAnchor}
-                  open={Boolean(dropdownAnchor)}
-                  onclose={handleClose}
-                />
-              </Paper>
-            </li>
-            <li
-              className={
-                `${firstPathName}` === ROUTES.authen.replace("/", "")
-                  ? styles["header__links--active"]
-                  : ""
-              }
-            >
-              <Link href={ROUTES.authen}>
-                <AccountCircle />
-                <span>Login/Register</span>
-              </Link>
-            </li>
+            {auth.isAuth ? (
+              <li className={styles.header__userIcon}>
+                <button onClick={handleClick}>
+                  <Avatar
+                    style={{
+                      height: "1.6rem",
+                      width: "1.6rem",
+                      marginBottom: "0.4rem",
+                    }}
+                    alt="Avatar"
+                    src="https://mcnewsmd1.keeng.net/netnews/archive/images/2020/07/20/tinngan_011115_916156142_0.jpg"
+                  />
+                  <span>Me</span>
+                </button>
+                <Paper className={styles.header__userIcon__submenu}>
+                  <UserSubMenu
+                    anchorEl={dropdownAnchor}
+                    open={Boolean(dropdownAnchor)}
+                    onclose={handleClose}
+                  />
+                </Paper>
+              </li>
+            ) : (
+              <li
+                className={
+                  `${firstPathName}` === ROUTES.authen.replace("/", "")
+                    ? styles["header__links--active"]
+                    : ""
+                }
+              >
+                <Link href={ROUTES.authen}>
+                  <AccountCircle />
+                  <span>Login/Register</span>
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </section>
