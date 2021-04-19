@@ -123,6 +123,7 @@ const formatUser = (user) => {
       industry: user.industry,
       dob: user.dob,
   }
+  
   let contact = {
       email: user.email,
       phone: user.phone,
@@ -137,8 +138,8 @@ const formatUser = (user) => {
     }    
   }
 
-  deleteProps(user, ['firstName', 'lastName', 'sex', 'deadLine', 'education', 'country', 'location', 'industry', 'dob']);
-  deleteProps(user, ['phone', 'email']);
+  //deleteProps(user, ['firstName', 'lastName', 'sex', 'deadLine', 'education', 'country', 'location', 'industry', 'dob']);
+  //deleteProps(user, ['phone', 'email']);
   let newUser = {
     baseInfo: baseInfo, 
     contact: contact,
