@@ -18,8 +18,9 @@ const cpUpload = upload.fields([
 
 router
   .route('/')
-  .post(validate(messageValidation.createMessage), messageController.createMessage)
-  .get(validate(messageValidation.getMessage), messageController.getMessages);
+  .post(auth(), validate(messageValidation.createMessage), messageController.createMessage)
+  .get(auth(), validate(messageValidation.getMessages), messageController.getMessages)
+  .delete(auth(), validate(messageValidation.deleteMessage), messageController.deleteMessage);
 
 module.exports = router;
 
@@ -46,24 +47,25 @@ module.exports = router;
  *           schema:
  *             type: object
  *             required:
- *               - sender
- *               - receiver
- *               - type
+ *               - userID_1
+ *               - userID_2
+ *               - message
  *             properties:
- *               sender:
+ *               userID_1:
  *                 type: string
- *                 description: Sender ID
- *               receiver:
+ *                 description: User ID 1
+ *               userID_2:
  *                 type: string
- *                 description: Receiver ID
+ *                 description: User ID 2
  *               message:
  *                 type: string
+ *                 default: I love U
  *                 description: Message (null value for file upload)
  *
  *             example:
- *               sender: 6079d3b5bee9390730603276
- *               receiver: 6079d3b5bee9390730603276
- *               message: I lov U
+ *               userID_1: 607c03860737d93f141c575c
+ *               userID_2: 607c03350737d93f141c5758
+ *               message: I love U
  *     responses:
  *       "201":
  *         description: Created
@@ -84,15 +86,15 @@ module.exports = router;
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
- *         name: sender
+ *         name: userID_1
  *         schema:
  *           type: string
- *         description: Job name
+ *         description: User ID 1
  *       - in: query
- *         name: receiver
+ *         name: userID_2
  *         schema:
  *           type: string
- *         description: Job name
+ *         description: User ID 2
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -118,26 +120,41 @@ module.exports = router;
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 results:
- *                   type: object
- *                   properties:
- *                     $ref: '#/components/schemas/Message'
- *                 page:
- *                   type: integer
- *                   example: 1
- *                 limit:
- *                   type: integer
- *                   example: 10
- *                 totalPages:
- *                   type: integer
- *                   example: 1
- *                 totalResults:
- *                   type: integer
- *                   example: 1
+ *                $ref: '#/components/schemas/Message'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
+ *
+ *   delete:
+ *     summary: Delete a message
+ *     description: Users can delete own messages.
+ *     tags: [Messages]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: userID_1
+ *         schema:
+ *           type: string
+ *         description: User ID 1
+ *       - in: query
+ *         name: userID_2
+ *         schema:
+ *           type: string
+ *         description: User ID 2
+ *       - in: query
+ *         name: msgID
+ *         schema:
+ *           type: string
+ *         description: Message ID
+ *     responses:
+ *       "200":
+ *         description: No content
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
  */

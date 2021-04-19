@@ -8,18 +8,18 @@ const enumMessageStatus = {
 };
 
 const enumMessageType = {
-  values: ['plainText', 'file', 'image'],
-  message: `MessageType must be 'plainText, 'file', or 'image'!`,
+  values: ['text', 'file'],
+  message: `MessageType must be 'text' or 'file'!`,
 };
 
 const messageSchema = mongoose.Schema(
   {
-    sender: {
+    userID_1: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',
       required: true,
     },
-    receiver: {
+    userID_2: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',
       required: true,
@@ -32,7 +32,6 @@ const messageSchema = mongoose.Schema(
         },
         msg: {
           type: String,
-          required: true,
         },
         time: {
           type: Date,
@@ -41,6 +40,10 @@ const messageSchema = mongoose.Schema(
         type: {
           type: String,
           enum: enumMessageType,
+        },
+        sender: {
+          type: String,
+          required: true,
         },
       },
     ],
