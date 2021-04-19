@@ -18,14 +18,14 @@ const cpUpload = upload.fields([
 
 router
   .route('/')
-  .post(validate(jobValidation.createJob), jobController.createJob)
+  .post(auth(), validate(jobValidation.createJob), jobController.createJob)
   .get(validate(jobValidation.getJobs), jobController.getJobs);
 
 router
   .route('/:jobID')
   .get(validate(jobValidation.getJob), jobController.getJob)
-  .patch(validate(jobValidation.updateJob), jobController.updateJob)
-  .delete(auth('manageUsers'), validate(jobValidation.deleteJob), jobController.deleteJob);
+  .patch(auth(), validate(jobValidation.updateJob), jobController.updateJob)
+  .delete(auth(), validate(jobValidation.deleteJob), jobController.deleteJob);
 
 module.exports = router;
 
@@ -107,8 +107,6 @@ module.exports = router;
  *           application/json:
  *             schema:
  *                $ref: '#/components/schemas/Job'
- *       "400":
- *         $ref: '#/components/responses/DuplicateName'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -218,7 +216,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Company id
+ *         description: Job id
  *     requestBody:
  *       required: true
  *       content:

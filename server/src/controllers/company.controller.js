@@ -5,6 +5,11 @@ const catchAsync = require('../utils/catchAsync');
 const { companyService } = require('../services');
 const { uploadSingleAvatar } = require('../config/cloudinary');
 
+const isUserOwnerCompany = async (companyID, userID) => {
+  const company = await companyService.getCompanyById(companyID);
+  return company.owner === userID;
+};
+
 const createCompany = catchAsync(async (req, res) => {
   // Add owner company
   req.body.owner = req.user.id;
@@ -28,6 +33,10 @@ const getCompany = catchAsync(async (req, res) => {
 });
 
 const updateCompany = catchAsync(async (req, res) => {
+  // Users can update own companies.
+  const validOwner = await isUserOwnerCompany(req.params.companyID, req.user.id);
+  if (!validOwner) throw new ApiError(httpStatus.NOT_FOUND, 'Unable to update. You are not owner this company');
+
   // File uploads
   if (req.files) {
     const uploaded = req.files;
@@ -61,6 +70,10 @@ const updateCompany = catchAsync(async (req, res) => {
 });
 
 const deleteCompany = catchAsync(async (req, res) => {
+  // Users can update own companies.
+  const validOwner = await isUserOwnerCompany(req.params.companyID, req.user.id);
+  if (!validOwner) throw new ApiError(httpStatus.NOT_FOUND, 'Unable to delete. You are not owner this company');
+
   await companyService.deleteCompanyById(req.params.companyID);
   res.status(httpStatus.NO_CONTENT).send();
 });

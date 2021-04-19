@@ -5,6 +5,11 @@ const catchAsync = require('../utils/catchAsync');
 const { jobService } = require('../services');
 const { uploadSingleAvatar } = require('../config/cloudinary');
 
+const isUserOwnerJob = async (jobID, userID) => {
+  const job = await jobService.getJobById(jobID);
+  return job.creator.toString() === userID;
+};
+
 const createJob = catchAsync(async (req, res) => {
   // Add creator ID
   req.body.creator = req.user.id;
@@ -28,11 +33,19 @@ const getJob = catchAsync(async (req, res) => {
 });
 
 const updateJob = catchAsync(async (req, res) => {
+  // Users can update own companies.
+  const validOwner = await isUserOwnerJob(req.params.jobID, req.user.id);
+  if (!validOwner) throw new ApiError(httpStatus.NOT_FOUND, 'Unable to update. You are not create this job');
+
   const job = await jobService.updateJobById(req.params.jobID, req.body);
   res.send(job);
 });
 
 const deleteJob = catchAsync(async (req, res) => {
+  // Users can update own companies.
+  const validOwner = await isUserOwnerJob(req.params.jobID, req.user.id);
+  if (!validOwner) throw new ApiError(httpStatus.NOT_FOUND, 'Unable to delete. You are not create this job');
+
   await jobService.deleteJobById(req.params.jobID);
   res.status(httpStatus.NO_CONTENT).send();
 });
