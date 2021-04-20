@@ -12,8 +12,8 @@ router
   
 router 
   .route('/')
-  .get(auth('getAllCV'), validate(CVValidation.getAllUserCV), CVController.getUserCV);
-
+  .get(auth('getAllCV'), validate(CVValidation.getAllUserCV), CVController.getUserCV)
+  .patch(auth('getaCV'), validate(CVValidation.updateACV), CVController.updateCV)
 
 module.exports = router;
 
@@ -149,39 +149,6 @@ module.exports = router;
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
-*/
-
-
-/**
- * @swagger
- * /cvs/{cvid}:
- *   get:
- *     summary: Get ONE CV of a user by CV_ID
- *     description: Logged in users can fetch only their own user information. Only admins can fetch other users.
- *     tags: [cvs]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: cvid
- *         required: true
- *         schema:
- *           type: string
- *         description: CV id
- *     responses:
- *       "200":
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *                $ref: '#/components/schemas/User'
- *       "401":
- *         $ref: '#/components/responses/Unauthorized'
- *       "403":
- *         $ref: '#/components/responses/Forbidden'
- *       "404":
- *         $ref: '#/components/responses/NotFound'
- *
  *   patch:
  *     summary: Update a CV
  *     description: Logged in users can only update their own CV information. Only admins can update other users.
@@ -190,11 +157,17 @@ module.exports = router;
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: userid
  *         required: true
  *         schema:
  *           type: string
  *         description: User id
+ *       - in: path
+ *         name: cvid
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: CV Id 
  *     requestBody:
  *       required: true
  *       content:
@@ -203,26 +176,53 @@ module.exports = router;
  *             type: object
  *             properties:
  *               firstName:
- *                 type: string
+ *                  type: string
  *               lastName:
  *                  type: string
- *               email:
- *                 type: string
- *                 format: email
- *                 description: must be unique
- *               phone:
+ *               sex:
  *                  type: string
- *               password:
- *                 type: string
- *                 format: password
- *                 minLength: 8
- *                 description: At least one number and one letter
+ *               headLine:
+ *                  type: string
+ *               education:
+ *                  type: array
+ *                  items:
+ *                     type: string
+ *               location:
+ *                  type: string
+ *                  description: location of you
+ *               industry:
+ *                  type: string
+ *               dob:
+ *                  type: date
+ *               contact:
+ *                  type: object
+ *                  description: contact information of a user, such as phone, email, facebook,..
+ *               about: 
+ *                  type: string
+ *                  description: information about yourself  
+ *               featured:
+ *                  type: array
+ *                  description: Cai nay t k biet no la gi
+ *               experiences:
+ *                  type: array
+ *                  description: the experience of a user
+ *               licenseAndCert:
+ *                  type: array
+ *                  description: the licenseAndCert of a user
+ *               volunteer:
+ *                  type: array
+ *                  items:
+ *                     type: string
+ *                  description: the volunteer of a user
+ *               skills:
+ *                  type: string  
+ *                  description: the volunteer of a user
  *             example:
- *               firstName: Anh Thai code xuyen dem
- *               lastName: Nang tam the he viet
- *               phone: "696969696"
- *               email: fake@example.com
- *               password: password1
+ *               firstName: Anh Thai dinh cao nghe thuat
+ *               about: Anh thai khung qua anh oi
+ *               skills: code 2k do 1 ngay
+ *               headline: Nguyen Quoc Thai voi trinh do vuot xa loai nguoi, ngang bang loai cho.
+ *               
  *     responses:
  *       "200":
  *         description: OK
@@ -261,4 +261,37 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
+*/
+
+
+/**
+ * @swagger
+ * /cvs/{cvid}:
+ *   get:
+ *     summary: Get ONE CV of a user by CV_ID
+ *     description: Logged in users can fetch only their own user information. Only admins can fetch other users.
+ *     tags: [cvs]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: cvid
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: CV id
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/User'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *
  */
