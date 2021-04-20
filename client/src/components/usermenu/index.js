@@ -1,39 +1,43 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
-import {
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-  Link,
-} from "@material-ui/core";
+import { Menu, MenuItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import { ExitToApp, AccountBox } from "@material-ui/icons";
+import { signOut } from "./../../actions/authActions";
+import { ROUTES } from "../../constants/routes";
+
+const StyledMenu = withStyles({
+  paper: {
+    border: "1px solid #d3d4d5",
+  },
+})((props) => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: "bottom",
+      horizontal: "center",
+    }}
+    transformOrigin={{
+      vertical: "top",
+      horizontal: "center",
+    }}
+    {...props}
+  />
+));
 
 function UserSubMenu(props) {
   const { anchorEl, open, onclose } = props;
 
-  const StyledMenu = withStyles({
-    paper: {
-      border: "1px solid #d3d4d5",
-    },
-  })((props) => (
-    <Menu
-      elevation={0}
-      getContentAnchorEl={null}
-      anchorOrigin={{
-        vertical: "bottom",
-        horizontal: "center",
-      }}
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "center",
-      }}
-      {...props}
-    />
-  ));
+  const dispatch = useDispatch();
 
   const handleClose = () => {
     if (onclose) onclose();
+  };
+
+  const onSignOutClick = () => {
+    dispatch(signOut());
+    window.open(ROUTES.jobs, "_self");
   };
 
   return (
@@ -49,22 +53,13 @@ function UserSubMenu(props) {
         </ListItemIcon>
         <ListItemText primary="My Profile" />
       </MenuItem>
-      <Link href="/">
-        <MenuItem>
-          <ListItemIcon>
-            <ExitToApp fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Sign Out" />
-        </MenuItem>
-      </Link>
+      <MenuItem onClick={onSignOutClick}>
+        <ListItemIcon>
+          <ExitToApp fontSize="small" />
+        </ListItemIcon>
+        <ListItemText primary="Sign Out" />
+      </MenuItem>
     </StyledMenu>
-    // <div>
-    //   <Paper variant="outlined">
-    //     <p>Username</p>
-    //     <hr></hr>
-    //     <Button>Sign Out</Button>
-    //   </Paper>
-    // </div>
   );
 }
 

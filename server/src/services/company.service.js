@@ -3,7 +3,7 @@ const { Company } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
- * Create a user
+ * Create a company
  * @param {Object} userBody
  * @returns {Promise<Company>}
  */
@@ -16,7 +16,7 @@ const createCompany = async (userBody) => {
 };
 
 /**
- * Query for users
+ * Query for companies
  * @param {Object} filter - Mongo filter
  * @param {Object} options - Query options
  * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
@@ -59,11 +59,16 @@ const updateCompanyById = async (companyID, updateBody) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Company not found');
   }
 
+  // Custom fields update
   const baseInfo = ['industry', 'companySize', 'headQuarter', 'type', 'founded', 'specialties'];
 
   baseInfo.forEach((el) => {
     if (updateBody[el]) company.baseInfo[el] = updateBody[el];
   });
+
+  company.baseInfo.specialties = updateBody.specialties.split(',');
+
+  console.log(updateBody);
 
   Object.assign(company, updateBody);
   await company.save();

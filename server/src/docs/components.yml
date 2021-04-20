@@ -175,6 +175,123 @@ components:
         token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZWJhYzUzNDk1NGI1NDEzOTgwNmMxMTIiLCJpYXQiOjE1ODkyOTg0ODQsImV4cCI6MTU4OTMwMDI4NH0.m1U63blB0MLej_WfB7yC2FTMnCziif9X8yzwDEfJXAg
         expires: 2020-05-12T16:18:04.793Z
 
+    Job:
+      type: object
+      properties:
+        creator:
+          type: string
+        title:
+          type: string
+        company:
+          type: object
+          properties:
+            name:
+              type: string
+            id:
+              type: string
+            avatar:
+              type: string
+            size:
+              type: number
+            industry:
+              type: string
+              enum: ['Information Technology & Services', 'Services', 'Information Technology']
+        posted:
+          type: string
+          format: date-time
+        job:
+          type: object
+          properties:
+            applicantCount:
+              type: number
+            jobType:
+              type: array
+              items:
+                type: string
+                enum: ['full-time', 'part-time', 'internship', 'contract', 'remote', 'temporary', 'volunteer']
+        skills:
+          type: array
+          items:
+            type: string
+        viewCount:
+          type: number
+        description:
+          type: string
+        locations:
+          type: array
+          items:
+            type: string
+        maxSalary:
+          type: number
+        status:
+          type: string
+          enum: ['open', 'close']
+      example:
+        creator: 607c03860737d93f141c575c
+        title: Full-stack develop javascript
+        company:
+          name: Thai's Global
+          id: 6079d3a8bee9390730603274
+          avatar: https://fb.com/quocthai.user
+          size: 1000
+          industry: Services
+        posted: 2020-05-12T16:18:04.793Z
+        job:
+          applicantCount: 8
+          jopType:
+            - part-time
+        skills:
+          - mongoDb
+          - expressJs
+          - reactJs
+          - nodeJs
+        viewCount: 133
+        description: Master in MERN, MEAN stack
+        locations:
+          - 127 Hai Thuong Lan Ong - Q5 - HCM
+          - 112 Dao Duy Tu - Q10 - HCM
+        maxSalary: 3000
+        status: open
+
+    Message:
+      type: object
+      properties:
+        userID_1:
+          type: string
+        userID_2:
+          type: string
+        message:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                enum: ['waiting', 'sent', 'cancel', 'deleted']
+              msg:
+                type: string
+              time:
+                type: string
+                format: date-time
+              type:
+                type: string
+                enum: ['text', 'file']
+              sender:
+                type: string
+        blacklisted:
+          type: boolean
+
+      example:
+        userID_1: 607c03860737d93f141c575c
+        userID_2: 607c03350737d93f141c5758
+        message:
+          status: sent
+          msg: I love U
+          time: 2020-05-12T16:18:04.793Z
+          type: text
+          sender: 607c03860737d93f141c575c
+        blacklisted: false
+
     AuthTokens:
       type: object
       properties:

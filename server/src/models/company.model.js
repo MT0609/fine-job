@@ -21,6 +21,7 @@ const companySchema = mongoose.Schema(
     owner: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',
+      required: true,
     },
     backgroundAvt: {
       type: String,
