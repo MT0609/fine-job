@@ -62,9 +62,27 @@ const getAUserCV = catchAsync(async(req, res) => {
     res.send(CV);
 })
 
+const updateCV = catchAsync(async (req, res) => {
+
+    let {userId, cvId }= req.query;
+
+
+    const user = await userService.getUserById(userId);
+    
+    if (!user) {
+        throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    }
+
+
+    const CV = await CVService.updateCVById(cvId, req.body);
+
+    
+    res.send(CV);
+})
 
 module.exports = {
     createCV,
     getUserCV,
-    getAUserCV
+    getAUserCV,
+    updateCV
 }
