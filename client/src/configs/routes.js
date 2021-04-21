@@ -4,6 +4,8 @@ import AuthenPage from "../pages/authen";
 import Home from "../pages/home";
 import Jobs from "../pages/jobs";
 import ForgotPassword from "../pages/forgot";
+import Companies from "../pages/company/companies";
+import Company from "../pages/company/company";
 
 const routes = [
   {
@@ -15,6 +17,16 @@ const routes = [
     path: ROUTES.jobs,
     exact: true,
     main: () => <Jobs />,
+  },
+  {
+    path: ROUTES.companies,
+    exact: true,
+    main: () => <Companies />,
+  },
+  {
+    path: ROUTES.company,
+    exact: true,
+    main: () => <Company />,
   },
   {
     path: ROUTES.authen,

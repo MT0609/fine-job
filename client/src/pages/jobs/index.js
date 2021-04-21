@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Container, Grid, Typography } from "@material-ui/core";
+import { Container, Grid } from "@material-ui/core";
 import SearchJobBar from "../../components/search/searchJob";
 import JobList from "../../container/jobs/jobList";
 import JobDetail from "../../container/jobs/jobDetail";

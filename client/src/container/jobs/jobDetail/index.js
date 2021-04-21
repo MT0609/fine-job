@@ -23,7 +23,9 @@ function JobDetail(props) {
             </Grid>
             <Grid item sm={8} style={{ textAlign: "left" }}>
               <Typography variant="h5">{job.title}</Typography>
-              <Link href={`/jobs/${job.company?.id}`}>{job.company?.name}</Link>
+              <Link href={`/company/${job.company?.id}`}>
+                {job.company?.name}
+              </Link>
               <p>
                 <span>Posted on: {new Date(job.posted).toDateString()}</span>
                 <span className={styles.detail__viewcount}>
@@ -64,7 +66,9 @@ function JobDetail(props) {
               <p>Skills</p>
               <ul className={styles.detail__skills}>
                 {job.skills.length &&
-                  job.skills.map((skill, index) => <li>{skill}</li>)}
+                  job.skills.map((skill, index) => (
+                    <li key={index}>{skill}</li>
+                  ))}
               </ul>
             </div>
 
