@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { AppBar, Tabs, Tab, Paper, Container } from "@material-ui/core";
 import TabPanel from "../../components/tabs/tabPanel";
@@ -10,6 +10,10 @@ function Authen() {
   const [value, setValue] = useState(0);
 
   const auth = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (auth.isAuth) window.open("/jobs", "_self");
+  }, []);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

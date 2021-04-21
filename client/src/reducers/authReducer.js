@@ -18,10 +18,13 @@ const authReducer = (state = initialState, action) => {
         signUpStatus: "",
       };
     case USERCONSTANTS.USER_LOGIN_SUCCESS:
-      localStorage.setItem(process.env.REACT_APP_ACCESS_TOKEN, 123456);
+      const user = action.payload.user;
+      const token = action.payload.tokens.access.token;
+      localStorage.setItem(process.env.REACT_APP_ACCESS_TOKEN, token);
+
       return {
         ...state,
-        user: action.payload,
+        user,
         isAuth: true,
         isLoading: false,
         error: "",
@@ -67,9 +70,17 @@ const authReducer = (state = initialState, action) => {
     case USERCONSTANTS.USER_INFO_SUCCESS:
       return {
         ...state,
-        user: null,
+        user: action.payload,
         isLoading: false,
         isAuth: true,
+      };
+
+    case USERCONSTANTS.USER_INFO_FAIL:
+      return {
+        ...state,
+        user: null,
+        isLoading: false,
+        isAuth: false,
       };
 
     default:

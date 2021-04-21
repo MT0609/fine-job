@@ -1,0 +1,27 @@
+.jobList {
+  &__main {
+    padding: 1rem 2rem 0 1rem;
+    border-right: 2px solid #f3f2efa8;
+    text-align: left;
+    cursor: pointer;
+    &:hover {
+      transition: 0.4s ease;
+      background-color: #eff9fc;
+    }
+    &--active {
+      background-color: #e5f5fc;
+    }
+  }
+  &__item {
+    margin-bottom: 1rem;
+  }
+
+  &__caption {
+    font-size: 0.8rem;
+  }
+  &__applicantCount {
+    &::before {
+      content: "  \00b7  ";
+    }
+  }
+}

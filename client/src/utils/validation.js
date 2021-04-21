@@ -6,8 +6,14 @@ const SignInSchema = yup.object().shape({
 });
 
 const SignUpSchema = yup.object().shape({
-  firstName: yup.string().required("Fill in your firstname"),
-  lastName: yup.string().required("Fill in your lastname"),
+  firstName: yup
+    .string()
+    .max(10, "Max 10 characters")
+    .required("Fill in your firstname"),
+  lastName: yup
+    .string()
+    .max(10, "Max 10 characters")
+    .required("Fill in your lastname"),
   email: yup.string().email().required("Enter your email"),
   username: yup.string().required("Fill in your username"),
   sex: yup.string().oneOf(["male", "female"]),

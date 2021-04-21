@@ -1,0 +1,27 @@
+.detail {
+  padding: 1rem 0 1rem 1rem;
+  &__viewcount {
+    &::before {
+      content: "  \00b7  ";
+    }
+  }
+
+  &__main {
+    text-align: left;
+  }
+
+  &__section {
+    margin-top: 1rem;
+    p {
+      font-size: 1.3rem;
+      text-decoration: underline;
+    }
+    span {
+      padding-left: 1rem;
+    }
+  }
+
+  &__skills {
+    padding-left: 2rem;
+  }
+}
