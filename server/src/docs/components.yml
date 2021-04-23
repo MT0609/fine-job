@@ -281,16 +281,32 @@ components:
         blacklisted:
           type: boolean
 
+    Notification:
+      type: object
+      properties:
+        type:
+          type: string
+        url:
+          type: string
+          format: url
+        params:
+          type: object
+          properties:
+            senderID:
+              type: string
+            recvID:
+              type: string
+        status:
+          type: string
+          enum: ['new', 'read', 'hide']
+
       example:
-        userID_1: 607c03860737d93f141c575c
-        userID_2: 607c03350737d93f141c5758
-        message:
-          status: sent
-          msg: I love U
-          time: 2020-05-12T16:18:04.793Z
-          type: text
-          sender: 607c03860737d93f141c575c
-        blacklisted: false
+        type: sendConnReq
+        url: https://fb.com/quocthai.user
+        params:
+          senderID: 607c03860737d93f141c575c
+          recvID: 607c03350737d93f141c5758
+        status: new
 
     AuthTokens:
       type: object
