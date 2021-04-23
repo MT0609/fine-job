@@ -1,0 +1,29 @@
+.talenthome {
+  &__job {
+    padding: 1rem;
+    text-align: left;
+  }
+  &__name {
+    font-weight: bold;
+  }
+  &__caption {
+    font-size: 0.8rem;
+  }
+  &__jobstatus {
+    &--open {
+      color: green;
+    }
+    &--close {
+      color: red;
+    }
+  }
+  &__applicants {
+    &::before {
+      content: "  \00b7  ";
+    }
+  }
+  &__postday {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+}

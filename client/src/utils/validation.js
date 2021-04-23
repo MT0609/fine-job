@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import { JOBTYPES } from "../constants/jobConstants";
 
 const SignInSchema = yup.object().shape({
   username: yup.string().required("Enter your username"),
@@ -17,10 +18,6 @@ const SignUpSchema = yup.object().shape({
   email: yup.string().email().required("Enter your email"),
   username: yup.string().required("Fill in your username"),
   sex: yup.string().oneOf(["male", "female"]),
-  // password: yup
-  //   .string()
-  //   .min(8, "Password must be at least 8 characters")
-  //   .required("Enter your password"),
   password: yup
     .string()
     .required("Please Enter your password")
@@ -34,4 +31,11 @@ const SignUpSchema = yup.object().shape({
     .required("Enter your confirmed password"),
 });
 
-export { SignInSchema, SignUpSchema };
+const PostJobSchema = yup.object().shape({
+  title: yup.string().required("Enter job title"),
+  jobType: yup.mixed().oneOf(JOBTYPES),
+  description: yup.string().required("Write some descriptions"),
+  maxSalary: yup.number().required("Enter job's max salary"),
+});
+
+export { SignInSchema, SignUpSchema, PostJobSchema };

@@ -6,6 +6,9 @@ import Jobs from "../pages/jobs";
 import ForgotPassword from "../pages/forgot";
 import Companies from "../pages/company/companies";
 import Company from "../pages/company/company";
+import TalentMainPage from "../pages/talent";
+import PostJob from "../pages/talent/post";
+import UpdateJob from "../pages/talent/update";
 
 const routes = [
   {
@@ -27,6 +30,21 @@ const routes = [
     path: ROUTES.company,
     exact: true,
     main: () => <Company />,
+  },
+  {
+    path: ROUTES.talent,
+    exact: true,
+    main: () => <TalentMainPage />,
+  },
+  {
+    path: ROUTES.talentfind,
+    exact: true,
+    main: () => <PostJob />,
+  },
+  {
+    path: ROUTES.jobUpdate,
+    exact: true,
+    main: () => <UpdateJob />,
   },
   {
     path: ROUTES.authen,

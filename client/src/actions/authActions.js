@@ -54,6 +54,11 @@ export const getUserData = () => async (dispatch) => {
     const userID = jwt_decode(token)?.sub;
     let result = await authApi.getInfo(userID);
 
+    if (!result) {
+      dispatch({ type: USERCONSTANTS.USER_INFO_FAIL });
+      return;
+    }
+
     dispatch({
       type: USERCONSTANTS.USER_INFO_SUCCESS,
       payload: result,

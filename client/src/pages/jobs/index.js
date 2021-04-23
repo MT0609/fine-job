@@ -23,9 +23,21 @@ function Jobs() {
     <div>
       Some Blow Jobs will go here...
       <SearchJobBar onsearch={handleSearch} />
-      <Container style={{ marginTop: "2rem", backgroundColor: "white" }}>
+      <Container
+        style={{
+          marginTop: "2rem",
+          padding: 0,
+          backgroundColor: "white",
+          boxShadow: "0 3px 8px rgba(0, 0, 0, 0.15)",
+        }}
+      >
         <Grid container justify="space-between">
-          <Grid item xs={12} md={6}>
+          <Grid
+            item
+            xs={12}
+            md={6}
+            style={{ borderRight: "2px solid #F4F4F4" }}
+          >
             {jobs.jobs.length ? (
               <JobList
                 jobs={jobs.jobs}

@@ -44,6 +44,10 @@ function UserSubMenu(props) {
     if (onclose) onclose();
   };
 
+  const onTalentClick = () => {
+    window.open(ROUTES.talent, "_self");
+  };
+
   const onSignOutClick = () => {
     dispatch(signOut());
     window.open(ROUTES.jobs, "_self");
@@ -65,6 +69,12 @@ function UserSubMenu(props) {
             <AccountBox fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="My Profile" />
+        </MenuItem>
+        <MenuItem onClick={onTalentClick}>
+          <ListItemIcon>
+            <ExitToApp fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Manage Posting Job" />
         </MenuItem>
         <MenuItem onClick={onSignOutClick}>
           <ListItemIcon>

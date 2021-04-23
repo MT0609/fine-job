@@ -5,6 +5,7 @@ const initialState = {
   job: {},
   isLoading: false,
   searchChange: false,
+  postStatus: "",
 };
 
 const jobReducer = (state = initialState, action) => {
@@ -37,6 +38,71 @@ const jobReducer = (state = initialState, action) => {
         job: action.payload,
         isLoading: false,
       };
+    case JOBCONSTANTS.JOB_GET_ONE_FAIL:
+      return {
+        ...state,
+        job: {},
+        isLoading: false,
+      };
+
+    case JOBCONSTANTS.JOB_POST_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+        postStatus: "",
+      };
+    case JOBCONSTANTS.JOB_POST_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        postStatus: JOBCONSTANTS.JOB_POST_SUCCESS,
+      };
+    case JOBCONSTANTS.JOB_POST_FAIL:
+      return {
+        ...state,
+        isLoading: false,
+        postStatus: JOBCONSTANTS.JOB_POST_FAIL,
+      };
+
+    case JOBCONSTANTS.JOB_UPDATE_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+        postStatus: "",
+      };
+    case JOBCONSTANTS.JOB_UPDATE_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        postStatus: JOBCONSTANTS.JOB_UPDATE_SUCCESS,
+      };
+    case JOBCONSTANTS.JOB_UPDATE_FAIL:
+      return {
+        ...state,
+        isLoading: false,
+        postStatus: JOBCONSTANTS.JOB_UPDATE_FAIL,
+      };
+
+    case JOBCONSTANTS.JOB_DELETE_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+        postStatus: "",
+      };
+    case JOBCONSTANTS.JOB_DELETE_SUCCESS:
+      return {
+        ...state,
+        jobs: action.payload,
+        isLoading: false,
+        postStatus: JOBCONSTANTS.JOB_DELETE_SUCCESS,
+      };
+    case JOBCONSTANTS.JOB_DELETE_FAIL:
+      return {
+        ...state,
+        isLoading: false,
+        postStatus: JOBCONSTANTS.JOB_DELETE_SUCCESS,
+      };
+
     default:
       return { ...state };
   }

@@ -37,8 +37,9 @@ function JobDetail(props) {
               <Grid item>
                 <Box
                   style={{
-                    padding: "0.3rem",
-                    backgroundColor: "#ff9e34",
+                    padding: "0.3rem 0.5rem",
+                    backgroundColor: "red",
+                    color: "white",
                     width: "fit-content",
                   }}
                 >

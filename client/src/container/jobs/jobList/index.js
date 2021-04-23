@@ -25,7 +25,7 @@ function JobList(props) {
   };
 
   return (
-    <Container style={{ paddingRight: "1rem" }}>
+    <div>
       {jobs.length > 0 &&
         jobs.map((job, index) => (
           <div
@@ -58,7 +58,7 @@ function JobList(props) {
                     {job.company.name}
                   </Link>
                 </Grid>
-                <Grid item>
+                <Grid item style={{ textAlign: "right" }}>
                   {job.job.jobType.length > 0 &&
                     job.job.jobType.map((type, index) => (
                       <Box
@@ -78,9 +78,7 @@ function JobList(props) {
                 </Grid>
               </Grid>
               <p className={styles.jobList__caption}>
-                <span>
-                  Posted {timeDiff(new Date(job.posted), new Date())} ago
-                </span>
+                <span>Posted {timeDiff(new Date(job.posted), new Date())}</span>
                 <span className={styles.jobList__applicantCount}>
                   {job.job.applicantCount} applicants
                 </span>
@@ -89,7 +87,7 @@ function JobList(props) {
             <Divider />
           </div>
         ))}
-    </Container>
+    </div>
   );
 }
 

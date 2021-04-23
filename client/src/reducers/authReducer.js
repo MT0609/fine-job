@@ -32,6 +32,7 @@ const authReducer = (state = initialState, action) => {
     case USERCONSTANTS.USER_LOGIN_FAIL:
       return {
         ...state,
+        isAuth: false,
         isLoading: false,
         error: USERCONSTANTS.USER_LOGIN_FAIL,
       };
