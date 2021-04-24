@@ -3,6 +3,7 @@ const { Job } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const { getCompanyById } = require('../services/company.service');
+const { getUserById } = require('../services/user.service');
 
 /**
  * Create a job
@@ -110,6 +111,74 @@ const deleteJobById = async (jobID) => {
   return job;
 };
 
+/**
+ * Post save job by id
+ * @param {ObjectId} jobID
+ * @param {ObjectId} userID
+ * @returns {Promise<Job>}
+ */
+const postSaveJob = async (jobID, userID) => {
+  try {
+    const job = await getJobById(jobID);
+    const user = await getUserById(userID);
+
+    // Check valid user & job
+    if (!job) {
+      throw new Error('Job not found');
+    }
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // User & job update
+    const jobSnap = {
+      jobID: job._id,
+      name: job.title,
+      job: job.job,
+      locations: job.locations,
+      posted: job.posted,
+      status: job.status,
+    };
+
+    user.savedPosts.push(jobSnap);
+
+    await company.save();
+
+    return {};
+  } catch (error) {
+    throw new ApiError(httpStatus.NOT_FOUND, error.message);
+  }
+};
+
+/**
+ * Post unSave job by id
+ * @param {ObjectId} jobID
+ * @param {ObjectId} userID
+ * @returns {Promise<Job>}
+ */
+const postUnSaveJob = async (jobID, userID) => {
+  try {
+    const job = await getJobById(jobID);
+    const user = await getUserById(userID);
+
+    // Check valid user & job
+    if (!job) {
+      throw new Error('Job not found');
+    }
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    user.savedPosts = user.savedPosts.filter((el) => el.jobID != jobID);
+
+    await user.save();
+
+    return {};
+  } catch (error) {
+    throw new ApiError(httpStatus.NOT_FOUND, error.message);
+  }
+};
+
 module.exports = {
   createJob,
   queryJobs,
@@ -117,4 +186,6 @@ module.exports = {
   getJobByEmail,
   updateJobById,
   deleteJobById,
+  postSaveJob,
+  postUnSaveJob,
 };

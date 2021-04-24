@@ -62,10 +62,24 @@ const deleteCompany = {
   }),
 };
 
+const postFollow = {
+  params: Joi.object().keys({
+    companyID: Joi.string().custom(objectId),
+  }),
+};
+
+const postUnFollow = {
+  params: Joi.object().keys({
+    companyID: Joi.string().custom(objectId),
+  }),
+};
+
 module.exports = {
   createCompany,
   getCompanies,
   getCompany,
   updateCompany,
   deleteCompany,
+  postFollow,
+  postUnFollow,
 };

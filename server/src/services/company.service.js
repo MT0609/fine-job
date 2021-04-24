@@ -2,6 +2,8 @@ const httpStatus = require('http-status');
 const { Company } = require('../models');
 const ApiError = require('../utils/ApiError');
 
+const { getUserById } = require('./user.service');
+
 /**
  * Create a company
  * @param {Object} userBody
@@ -89,6 +91,82 @@ const deleteCompanyById = async (companyID) => {
   return company;
 };
 
+/**
+ * Post follow company by id
+ * @param {ObjectId} companyID
+ * @param {ObjectId} userID
+ * @returns {Promise<Company>}
+ */
+const postFollowCompany = async (companyID, userID) => {
+  try {
+    const company = await getCompanyById(companyID);
+    const user = await getUserById(userID);
+
+    // Check valid user & company
+    if (!company) {
+      throw new Error('Company not found');
+    }
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // User & company update
+    const userSnap = {
+      userID: user._id,
+      name: user.baseInfo.firstName + ' ' + user.baseInfo.lastName,
+      email: user.contact.email,
+      avatar: user.avatar,
+    };
+
+    const companySnap = {
+      companyID: company._id,
+      name: company.name,
+      avatar: company.avatar,
+    };
+
+    company.followers.push(userSnap);
+    user.followings.push(companySnap);
+
+    await company.save();
+    await user.save();
+
+    return {};
+  } catch (error) {
+    throw new ApiError(httpStatus.NOT_FOUND, error.message);
+  }
+};
+
+/**
+ * Post unFollow company by id
+ * @param {ObjectId} companyID
+ * @param {ObjectId} userID
+ * @returns {Promise<Company>}
+ */
+const postUnFollowCompany = async (companyID, userID) => {
+  try {
+    const company = await getCompanyById(companyID);
+    const user = await getUserById(userID);
+
+    // Check valid user & company
+    if (!company) {
+      throw new Error('Company not found');
+    }
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    company.followers = company.followers.filter((el) => el.userID != userID);
+    user.followings = user.followers.filter((el) => el.companyID != companyID);
+
+    await company.save();
+    await user.save();
+
+    return {};
+  } catch (error) {
+    throw new ApiError(httpStatus.NOT_FOUND, error.message);
+  }
+};
+
 module.exports = {
   createCompany,
   queryCompanies,
@@ -96,4 +174,6 @@ module.exports = {
   getCompanyByEmail,
   updateCompanyById,
   deleteCompanyById,
+  postFollowCompany,
+  postUnFollowCompany,
 };
