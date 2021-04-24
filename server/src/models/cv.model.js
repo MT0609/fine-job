@@ -53,7 +53,7 @@ const cvSchema = mongoose.Schema(
         type: Array,
       },
       skills: {
-        type: String,
+        type: Array,
       },
     },
     blacklisted: {
