@@ -162,7 +162,7 @@ const userSchema = mongoose.Schema(
         default: [],
         //Hoat dong tinh nguyen
     },
-    skill: {
+    skills: {
         type: Array,
         default: [],
         //cac ki nang ngoai

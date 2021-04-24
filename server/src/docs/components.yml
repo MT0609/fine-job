@@ -292,6 +292,75 @@ components:
           sender: 607c03860737d93f141c575c
         blacklisted: false
 
+    CV:
+      type: object
+      properties:
+        title:
+          type: string
+        lastEdited:
+          type: string
+          format: date-time
+        userID:
+          type: string
+        blacklisted:
+          type: boolean
+        userSnapShort:
+          type: object
+          properties:
+            baseInfo:
+              type: object  
+            contact:
+              type: object
+            about:
+              type: string
+            featured:
+              type: array
+            experiences:
+              type: array
+            education:
+              type: array
+            licenseAndCert:
+              type: array  
+            volunteer:
+              type: array 
+            skills:
+              type: array 
+        
+
+      example:
+        title: Front End developer
+        lastEdited: 2021-04-24T03:35:34.277+00:00
+        userID: 60799d72625d953cf0844c47
+        blacklisted: false
+        userSnapShort:
+          baseInfo: 
+            firstName: Thai
+            lastName: Nguyen
+            dob: 11/06/2000
+          contact: 
+            email: thainguyen@gmail.com
+            about: Hon 5 nam kinh nghiem lam backend va 8 nam kinh nghiem lam frontend cung nhu kha nang speaking tieng anh thuong thua
+            featured: 
+              - title: site
+                url: https://javhd.win/
+              - title: blog
+                url: https://fb.com/
+            experiences: 
+              - formerJob: Lao cong 
+                location: vng cooperations
+            education:
+              - highSchool: Quoc Hoc hue
+                location: Hue, Viet Nam
+              - university: Dai hoc khoa hoc tu nhien
+                location: Ho Chi Minh, Viet Nam
+            licenseAndCert:
+              - language: English
+                title: Toeic 990
+            skills:
+              - title: football sport
+                accomplishment: a quan world cup 2020 giai ao lang
+        
+
     AuthTokens:
       type: object
       properties:
