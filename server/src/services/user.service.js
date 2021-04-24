@@ -116,7 +116,7 @@ const formatUser = (user) => {
       firstName: user.firstName,
       lastName: user.lastName,
       sex: user.sex,
-      deadLine: user.deadLine,
+      headLine: user.headLine,
       education: user.education,
       country: user.country,
       location: user.location,
