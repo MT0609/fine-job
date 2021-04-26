@@ -34,11 +34,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function PostJob() {
-  useEffect(() => {
-    const token = localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN);
-    if (!token || !jwt_decode(token)?.sub) window.open("/jobs", "_self");
-  }, []);
-
   const classes = useStyles();
 
   const dispatch = useDispatch();

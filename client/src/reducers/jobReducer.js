@@ -92,7 +92,6 @@ const jobReducer = (state = initialState, action) => {
     case JOBCONSTANTS.JOB_DELETE_SUCCESS:
       return {
         ...state,
-        jobs: action.payload,
         isLoading: false,
         postStatus: JOBCONSTANTS.JOB_DELETE_SUCCESS,
       };

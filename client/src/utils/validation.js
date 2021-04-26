@@ -1,12 +1,12 @@
 import * as yup from "yup";
 import { JOBTYPES } from "../constants/jobConstants";
 
-const SignInSchema = yup.object().shape({
+export const SignInSchema = yup.object().shape({
   username: yup.string().required("Enter your username"),
   password: yup.string().required("Enter your password"),
 });
 
-const SignUpSchema = yup.object().shape({
+export const SignUpSchema = yup.object().shape({
   firstName: yup
     .string()
     .max(10, "Max 10 characters")
@@ -31,11 +31,24 @@ const SignUpSchema = yup.object().shape({
     .required("Enter your confirmed password"),
 });
 
-const PostJobSchema = yup.object().shape({
+export const PostJobSchema = yup.object().shape({
   title: yup.string().required("Enter job title"),
   jobType: yup.mixed().oneOf(JOBTYPES),
   description: yup.string().required("Write some descriptions"),
   maxSalary: yup.number().required("Enter job's max salary"),
 });
 
-export { SignInSchema, SignUpSchema, PostJobSchema };
+export const PostResumeSchema = yup.object().shape({
+  title: yup.string().required("Enter cv's title"),
+});
+
+export const CVBasicUpdateSchema = yup.object().shape({
+  firstName: yup.string().required("Enter your first name"),
+  lastName: yup.string().required("Enter your last name"),
+  email: yup.string().required("Enter your email"),
+  phone: yup.string().required("Enter your phone"),
+});
+
+export const CVAboutUpdateSchema = yup.object().shape({
+  about: yup.string(),
+});

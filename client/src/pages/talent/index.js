@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-// import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -14,14 +13,10 @@ import {
 } from "@material-ui/core";
 import { Add, Edit, RemoveCircle } from "@material-ui/icons";
 import { getMyPostingJobs, deleteJob } from "../../actions/jobActions";
+import * as JOBCONSTANTS from "./../../constants/jobConstants";
 import styles from "./index.module.scss";
 
-function TalentMainPage() {
-  useEffect(() => {
-    const token = localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN);
-    if (!token || !jwt_decode(token)?.sub) window.open("/jobs", "_self");
-  }, []);
-
+function TalentHomePage() {
   const state = useSelector((state) => state.job);
   const jobs = state?.jobs;
 
@@ -31,8 +26,17 @@ function TalentMainPage() {
     dispatch(getMyPostingJobs());
   }, [dispatch]);
 
-  const handleDeleteJob = (id) => {
-    dispatch(deleteJob(id));
+  const [deletedJobs, setDeletedJobs] = useState([]);
+
+  const handleDeleteJob = async (id) => {
+    const result = await dispatch(deleteJob(id));
+    if (result?.status === JOBCONSTANTS.JOB_DELETE_SUCCESS) {
+      let newDeletedJobs = [...deletedJobs];
+      if (!newDeletedJobs.includes(id)) newDeletedJobs.push(id);
+      setDeletedJobs(newDeletedJobs);
+      return;
+    }
+    alert("Cannot delete job! Try again!");
   };
 
   return (
@@ -65,9 +69,16 @@ function TalentMainPage() {
             </Grid>
           </Grid>
           <Divider />
-          {jobs.map((job, index) => (
-            <div key={index}>
-              <div className={styles.talenthome__job}>
+          {jobs.map((job) => (
+            <div
+              key={job.id}
+              className={`${
+                deletedJobs.includes(job.id)
+                  ? `${styles["talenthome__job--hide"]}`
+                  : ""
+              }`}
+            >
+              <div className={`${styles["talenthome__job"]}`}>
                 <Grid container spacing={2}>
                   <Grid item>
                     <Avatar
@@ -145,4 +156,4 @@ function TalentMainPage() {
   );
 }
 
-export default TalentMainPage;
+export default TalentHomePage;

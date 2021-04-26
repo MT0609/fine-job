@@ -178,7 +178,6 @@ export const deleteJob = (id) => async (dispatch) => {
 
     dispatch({
       type: JOBCONSTANTS.JOB_DELETE_SUCCESS,
-      payload: [],
     });
 
     return {
