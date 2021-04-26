@@ -76,6 +76,7 @@ function Header() {
                 </button>
                 <Paper className={styles.header__userIcon__submenu}>
                   <UserSubMenu
+                    user={auth.user}
                     anchorEl={dropdownAnchor}
                     open={Boolean(dropdownAnchor)}
                     onclose={handleClose}

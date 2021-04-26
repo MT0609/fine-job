@@ -1,0 +1,60 @@
+@import "./../../../utils/scss/mixins.scss";
+
+.company {
+  &__sections {
+    margin-bottom: 1rem;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid #e2e1de;
+    &--left {
+      padding: 1rem;
+      text-align: left;
+    }
+    &--title {
+      margin-bottom: 1rem;
+      font-weight: bold;
+      font-size: 1.3rem;
+    }
+  }
+  &__head {
+    &__employees {
+      &::before {
+        content: "  \00B7  ";
+      }
+    }
+    &__buttons {
+      @include flexbox();
+
+      button {
+        @include flexbox();
+        font-size: 1rem;
+        border-radius: 30px;
+        border: 1px solid #0a66c2;
+        padding: 0.3rem 1rem;
+      }
+    }
+
+    //buttons
+    &__follow {
+      color: #0a66c2;
+    }
+    &__visit {
+      font-weight: bold;
+      color: white;
+      background-color: #0a66c2;
+    }
+  }
+  &__avatars {
+    position: relative;
+    &--background {
+      width: 100%;
+    }
+    &--avatar {
+      position: absolute;
+      bottom: -30%;
+      left: 10%;
+      width: 100px;
+      height: 100px;
+    }
+  }
+}
