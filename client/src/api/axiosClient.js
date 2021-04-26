@@ -12,7 +12,7 @@ const axiosClient = axios.create({
 axiosClient.interceptors.request.use(async (config) => {
   const token =
     localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN) || null;
-  config.headers["authorization"] = `Bearer ${token}`;
+  config.headers["Authorization"] = `Bearer ${token}`;
   return config;
 });
 
@@ -32,21 +32,24 @@ axiosClient.interceptors.response.use(
         return;
       }
       axiosClient
-        .post("/users/login/refresh", {
-          refreshToken: localStorage.getItem(
-            process.env.REACT_APP_REFRESH_TOKEN
-          ),
+        .post("/v1/auth/refresh-tokens", {
+          refreshToken:
+            localStorage.getItem(process.env.REACT_APP_REFRESH_TOKEN) || 1,
         })
         .then((res) => {
-          if (res && res.msg === "success") {
-            localStorage.setItem("token", res.token);
+          if (res && res.access) {
+            localStorage.setItem(
+              process.env.REACT_APP_ACCESS_TOKEN,
+              res.access.tokens
+            );
             axios.defaults.headers.common[
               "Authorization"
-            ] = `Bearer ${res.token}`;
+            ] = `Bearer ${res.access.tokens}`;
             axiosClient(originalRequest);
           }
         })
         .catch((error) => {
+          console.log(error);
           localStorage.removeItem(process.env.REACT_APP_ACCESS_TOKEN);
           localStorage.removeItem(process.env.REACT_APP_REFRESH_TOKEN);
         });

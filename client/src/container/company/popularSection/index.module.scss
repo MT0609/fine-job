@@ -1,0 +1,19 @@
+@import "../../../utils/scss/mixins.scss";
+
+.company {
+  &__sections {
+    margin-bottom: 1rem;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid #e2e1de;
+    &--left {
+      padding: 1rem;
+      text-align: left;
+    }
+    &--title {
+      margin-bottom: 1rem;
+      font-weight: bold;
+      font-size: 1.3rem;
+    }
+  }
+}
