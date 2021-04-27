@@ -1,6 +1,6 @@
 import jwt_decode from "jwt-decode";
 import authApi from "../api/authApi";
-import * as USERCONSTANTS from "../constants/userConstants";
+import * as USERCONSTANTS from "../constants/authConstants";
 
 export const signIn = (data) => async (dispatch) => {
   try {

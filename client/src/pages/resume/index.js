@@ -13,7 +13,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { Add, Edit, RemoveCircle } from "@material-ui/icons";
 import { getAllResume, createResume } from "../../actions/resumeActions";
-import TitleFieldDialog from "../../components/resume/create/titleDialog";
+import TitleFieldDialog from "../../container/resume/create/titleDialog";
 import * as RESUMECONSTANTS from "./../../constants/resumeConstants";
 import styles from "./index.module.scss";
 

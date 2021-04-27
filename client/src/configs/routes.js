@@ -1,4 +1,5 @@
 import { Route, Redirect } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 import { ROUTES } from "../constants/routes";
 import AuthenPage from "../pages/authen";
 import Home from "../pages/home";
@@ -11,13 +12,19 @@ import PostJob from "../pages/talent/post";
 import UpdateJob from "../pages/talent/update";
 import ResumeHomePage from "../pages/resume";
 import ResumeUpdate from "../pages/resume/update";
-import jwt_decode from "jwt-decode";
+import Profile from "../pages/profile";
 
 const routes = [
   {
     path: ROUTES.home,
     exact: true,
     main: () => <Home />,
+  },
+  {
+    path: ROUTES.profile,
+    exact: true,
+    authen: true,
+    main: () => <Profile />,
   },
   {
     path: ROUTES.authen,
@@ -92,7 +99,7 @@ const renderRoutes = (routes) => {
               process.env.REACT_APP_ACCESS_TOKEN
             );
 
-            if (!token && authen === false) return <Component {...props} />;
+            if (!token && authen !== true) return <Component {...props} />;
 
             const user = jwt_decode(token);
 

@@ -11,10 +11,6 @@ function Authen() {
 
   const auth = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (auth.isAuth) window.open("/jobs", "_self");
-  }, [auth.isAuth]);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };

@@ -11,11 +11,11 @@ import {
 } from "@material-ui/core";
 import { Email, Phone, Edit } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
-import CVBasicInfoUpdate from "../../../components/resume/update/basicUpdate";
-import CVAboutUpdate from "../../../components/resume/update/aboutUpdate";
-import CVExpUpdate from "../../../components/resume/update/expUpdate";
-import CVEduUpdate from "../../../components/resume/update/eduUpdate";
-import CVSkillUpdate from "../../../components/resume/update/skillUpdate";
+import CVBasicInfoUpdate from "../../../container/resume/update/basicUpdate";
+import CVAboutUpdate from "../../../container/resume/update/aboutUpdate";
+import CVExpUpdate from "../../../container/resume/update/expUpdate";
+import CVEduUpdate from "../../../container/resume/update/eduUpdate";
+import CVSkillUpdate from "../../../container/resume/update/skillUpdate";
 import { JOBSKILLS } from "../../../constants/jobConstants";
 import * as RESUMECONSTANTS from "../../../constants/resumeConstants";
 import { getResume, updateResume } from "../../../actions/resumeActions";

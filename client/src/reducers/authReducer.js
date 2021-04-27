@@ -1,4 +1,4 @@
-import * as USERCONSTANTS from "../constants/userConstants";
+import * as AUTHCONSTANTS from "../constants/authConstants";
 
 const initialState = {
   isAuth: false,
@@ -10,14 +10,14 @@ const initialState = {
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
-    case USERCONSTANTS.USER_LOGIN_REQUEST:
+    case AUTHCONSTANTS.USER_LOGIN_REQUEST:
       return {
         ...state,
         isLoading: true,
         error: "",
         signUpStatus: "",
       };
-    case USERCONSTANTS.USER_LOGIN_SUCCESS:
+    case AUTHCONSTANTS.USER_LOGIN_SUCCESS:
       const user = action.payload.user;
       const token = action.payload.tokens.access.token;
       localStorage.setItem(process.env.REACT_APP_ACCESS_TOKEN, token);
@@ -29,36 +29,36 @@ const authReducer = (state = initialState, action) => {
         isLoading: false,
         error: "",
       };
-    case USERCONSTANTS.USER_LOGIN_FAIL:
+    case AUTHCONSTANTS.USER_LOGIN_FAIL:
       return {
         ...state,
         isAuth: false,
         isLoading: false,
-        error: USERCONSTANTS.USER_LOGIN_FAIL,
+        error: AUTHCONSTANTS.USER_LOGIN_FAIL,
       };
 
-    case USERCONSTANTS.USER_REGISTER_REQUEST:
+    case AUTHCONSTANTS.USER_REGISTER_REQUEST:
       return {
         ...state,
         isLoading: true,
         error: "",
         signUpStatus: "",
       };
-    case USERCONSTANTS.USER_REGISTER_SUCCESS:
+    case AUTHCONSTANTS.USER_REGISTER_SUCCESS:
       return {
         ...state,
         isLoading: false,
         error: "",
-        signUpStatus: USERCONSTANTS.USER_REGISTER_SUCCESS,
+        signUpStatus: AUTHCONSTANTS.USER_REGISTER_SUCCESS,
       };
-    case USERCONSTANTS.USER_REGISTER_FAIL:
+    case AUTHCONSTANTS.USER_REGISTER_FAIL:
       return {
         ...state,
         isLoading: false,
-        error: USERCONSTANTS.USER_REGISTER_FAIL,
+        error: AUTHCONSTANTS.USER_REGISTER_FAIL,
       };
 
-    case USERCONSTANTS.USER_LOGOUT:
+    case AUTHCONSTANTS.USER_LOGOUT:
       localStorage.removeItem(process.env.REACT_APP_ACCESS_TOKEN);
       localStorage.removeItem(process.env.REACT_APP_REFRESH_TOKEN);
       return {
@@ -68,7 +68,7 @@ const authReducer = (state = initialState, action) => {
         isAuth: false,
       };
 
-    case USERCONSTANTS.USER_INFO_SUCCESS:
+    case AUTHCONSTANTS.USER_INFO_SUCCESS:
       return {
         ...state,
         user: action.payload,
@@ -76,7 +76,7 @@ const authReducer = (state = initialState, action) => {
         isAuth: true,
       };
 
-    case USERCONSTANTS.USER_INFO_FAIL:
+    case AUTHCONSTANTS.USER_INFO_FAIL:
       return {
         ...state,
         user: null,
