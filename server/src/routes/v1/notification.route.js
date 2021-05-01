@@ -24,6 +24,14 @@ router
   .route('/:notificationID')
   .get(validate(notificationValidation.getNotification), notificationController.getNotification);
 
+router
+  .route('/:notificationID/hide')
+  .post(auth(), validate(notificationValidation.postHide), notificationController.postHide);
+
+router
+  .route('/:notificationID/show')
+  .post(auth(), validate(notificationValidation.postShow), notificationController.postShow);
+
 module.exports = router;
 
 /**

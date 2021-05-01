@@ -18,7 +18,25 @@ const getNotification = catchAsync(async (req, res) => {
   res.send(notification);
 });
 
+const postHide = catchAsync(async (req, res) => {
+  const notification = await notificationService.postHideNotification(req.params.notificationID);
+  if (!notification) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Notification not found');
+  }
+  res.send(notification);
+});
+
+const postShow = catchAsync(async (req, res) => {
+  const notification = await notificationService.postShowNotification(req.params.notificationID);
+  if (!notification) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Notification not found');
+  }
+  res.send(notification);
+});
+
 module.exports = {
   createNotification,
   getNotification,
+  postHide,
+  postShow,
 };

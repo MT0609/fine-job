@@ -18,7 +18,21 @@ const getNotification = {
   }),
 };
 
+const postHide = {
+  params: Joi.object().keys({
+    notificationID: Joi.string().custom(objectId),
+  }),
+};
+
+const postShow = {
+  params: Joi.object().keys({
+    notificationID: Joi.string().custom(objectId),
+  }),
+};
+
 module.exports = {
   createNotification,
   getNotification,
+  postHide,
+  postShow,
 };
