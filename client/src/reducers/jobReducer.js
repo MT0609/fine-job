@@ -4,8 +4,10 @@ const initialState = {
   jobs: [],
   job: {},
   isLoading: false,
-  searchChange: false,
   postStatus: "",
+  limit: 2,
+  totalPages: 1,
+  page: 1,
 };
 
 const jobReducer = (state = initialState, action) => {
@@ -14,16 +16,18 @@ const jobReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: true,
+        jobs: [],
         job: {},
-        searchChange: true,
       };
     case JOBCONSTANTS.JOB_GET_ALL_SUCCESS:
       return {
         ...state,
-        jobs: action.payload,
+        jobs: action.payload?.results,
         job: {},
         isLoading: false,
-        searchChange: false,
+        page: action.payload?.page,
+        totalPages: action.payload?.totalPages,
+        limit: action.payload?.limit,
       };
 
     case JOBCONSTANTS.JOB_GET_ONE_REQUEST:

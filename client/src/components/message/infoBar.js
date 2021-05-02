@@ -14,7 +14,11 @@ function InfoBar(props) {
       container
       justify="space-between"
       alignItems="center"
-      style={{ padding: "5px 10px", borderBottom: "2px solid #E5E5E5 " }}
+      style={{
+        padding: "5px 10px",
+        borderBottom: "2px solid #E5E5E5",
+        cursor: "pointer",
+      }}
       onClick={onMsgBarClick}
     >
       <Grid item>

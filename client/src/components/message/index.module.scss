@@ -14,11 +14,11 @@
     top: 0;
     right: 0;
     visibility: hidden;
+    &:hover {
+      visibility: visible;
+    }
   }
   &__text:hover + .message__delete {
-    visibility: visible;
-  }
-  .message__delete:hover {
     visibility: visible;
   }
 }

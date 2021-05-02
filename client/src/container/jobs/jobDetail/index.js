@@ -22,11 +22,13 @@ function JobDetail(props) {
               />
             </Grid>
             <Grid item sm={8} style={{ textAlign: "left" }}>
-              <Typography variant="h5">{job.title}</Typography>
+              <Typography variant="h5" style={{ lineHeight: 1 }}>
+                {job.title}
+              </Typography>
               <Link href={`/company/${job.company?.id}`}>
                 {job.company?.name}
               </Link>
-              <p>
+              <p className={styles.detail__subheader}>
                 <span>Posted on: {new Date(job.posted).toDateString()}</span>
                 <span className={styles.detail__viewcount}>
                   {job.viewCount} views
@@ -57,11 +59,16 @@ function JobDetail(props) {
                 </Grid>
                 <Grid item>
                   {job.locations.map((location, index) => (
-                    <p>{location}</p>
+                    <p key={index}>{location}</p>
                   ))}
                 </Grid>
               </Grid>
             )}
+
+            <div className={styles.detail__section}>
+              <p>Description</p>
+              <span>{job.description}</span>
+            </div>
 
             <div className={styles.detail__section}>
               <p>Skills</p>
@@ -74,13 +81,8 @@ function JobDetail(props) {
             </div>
 
             <div className={styles.detail__section}>
-              <p>Description</p>
-              <span>{job.description}</span>
-            </div>
-
-            <div className={styles.detail__section}>
-              <p>Description</p>
-              <span>{job.description}</span>
+              <p>Employment Type</p>
+              <span>{job.job.jobType[0]}</span>
             </div>
 
             <div className={styles.detail__section}>
