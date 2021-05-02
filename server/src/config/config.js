@@ -62,6 +62,10 @@ module.exports = {
     from: envVars.EMAIL_FROM,
   },
   cloudinary: {
-    id: envVars.CLOUDINARY_URL
-  }
+    id: envVars.CLOUDINARY_URL,
+  },
+  webPush: {
+    publicVapidKey: envVars.PUBLIC_VAPID_KEY,
+    privateVapidKey: envVars.PRIVATE_VAPID_KEY,
+  },
 };
