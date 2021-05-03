@@ -28,9 +28,18 @@ async function send() {
 
   // Send Push Notification
   console.log('Sending Push...');
+
+  const body = {
+    subscription: subscription,
+    body: {
+      title: 'Fetch subscribe',
+      body: 'Fetch body',
+    },
+  };
+
   await fetch('/subscribe', {
     method: 'POST',
-    body: JSON.stringify(subscription),
+    body: JSON.stringify(body),
     headers: {
       'content-type': 'application/json',
     },

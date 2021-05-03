@@ -260,6 +260,9 @@ components:
           type: string
         userID_2:
           type: string
+        lastModified:
+          type: string
+          format: date-time
         message:
           type: array
           items:
@@ -276,7 +279,7 @@ components:
               type:
                 type: string
                 enum: ['text', 'file']
-              sender:
+              senderID:
                 type: string
         blacklisted:
           type: boolean
