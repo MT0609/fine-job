@@ -15,7 +15,7 @@ function CompanyHeadContainer(props) {
             className={styles["company__avatars--background"]}
             src={
               company.backgroundAvt ||
-              "https://media-exp1.licdn.com/dms/image/C511BAQE35QoQIuQGNw/company-background_10000/0/1583747843273?e=1619085600&v=beta&t=pUvOgybj1qmMpLByPba5LEZ_248iZc7Op2PvwUwQKMA"
+              "https://media-exp1.licdn.com/dms/image/C4E1BAQFcckDwSlhOVg/company-background_10000/0/1579811796958?e=1620230400&v=beta&t=ythL-MIfV1O6AiyeFpZ1fyISu-PRNPaUIidDQT0ipSI"
             }
             alt="background"
           />
@@ -28,42 +28,45 @@ function CompanyHeadContainer(props) {
             alt="avatar"
           />
         </div>
-        <Typography variant="h5">{company.name}</Typography>
-        <p>{company.headLine}</p>
 
-        {company.locations && company.locations.length ? (
-          <Grid container spacing={3}>
-            <Grid item>
-              <LocationOn />
-            </Grid>
-            <Grid item>
-              {company.locations.map((location, index) => (
-                <p key={index}>{location}</p>
-              ))}
-            </Grid>
-          </Grid>
-        ) : (
-          ""
-        )}
+        <div className={styles.company__introtext}>
+          <Typography variant="h5">{company.name}</Typography>
+          <p>{company.headLine}</p>
 
-        <p>
-          {company.followers ? (
-            <span>{company.followers.length} followers</span>
+          {company.locations && company.locations.length ? (
+            <Grid container spacing={3}>
+              <Grid item>
+                <LocationOn />
+              </Grid>
+              <Grid item>
+                {company.locations.map((location, index) => (
+                  <p key={index}>{location}</p>
+                ))}
+              </Grid>
+            </Grid>
           ) : (
             ""
           )}
-          {company.employees ? (
-            <span className={styles.company__head__employees}>
-              {company.employees.length} employees
-            </span>
-          ) : (
-            ""
-          )}
-        </p>
+
+          <p>
+            {company.followers ? (
+              <span>{company.followers.length} followers</span>
+            ) : (
+              ""
+            )}
+            {company.employees ? (
+              <span className={styles.company__head__employees}>
+                {company.employees.length} employees
+              </span>
+            ) : (
+              ""
+            )}
+          </p>
+        </div>
 
         <Grid
           container
-          style={{ margin: "0.5rem", width: "100%" }}
+          style={{ padding: "1rem 0" }}
           spacing={2}
           className={styles.company__head__buttons}
         >

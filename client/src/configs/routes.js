@@ -1,18 +1,22 @@
-import { Route, Redirect } from "react-router-dom";
+import React, { Suspense, lazy } from "react";
+import { Route, Redirect, Switch, BrowserRouter } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { ROUTES } from "../constants/routes";
 import AuthenPage from "../pages/authen";
 import Home from "../pages/home";
 import Jobs from "../pages/jobs";
-import ForgotPassword from "../pages/forgot";
-import Companies from "../pages/company/companies";
-import Company from "../pages/company/company";
 import TalentMainPage from "../pages/talent";
-import PostJob from "../pages/talent/post";
-import UpdateJob from "../pages/talent/update";
-import ResumeHomePage from "../pages/resume";
-import ResumeUpdate from "../pages/resume/update";
 import Profile from "../pages/profile";
+import Loading from "../components/loading/circular";
+
+const ForgotPassword = lazy(() => import("../pages/forgot"));
+const Companies = lazy(() => import("../pages/company/companies"));
+const Company = lazy(() => import("../pages/company/company"));
+const PostJob = lazy(() => import("../pages/talent/post"));
+const UpdateJob = lazy(() => import("../pages/talent/update"));
+const ResumeHomePage = lazy(() => import("../pages/resume"));
+const ResumeUpdate = lazy(() => import("../pages/resume/update"));
+const NotFound = lazy(() => import("../pages/notfound"));
 
 const routes = [
   {
@@ -86,39 +90,51 @@ const routes = [
 ];
 
 const renderRoutes = (routes) => {
-  return routes.map((route, index) => {
-    const { path, exact, main: Component, authen = "none" } = route;
-    return (
-      <Route
-        key={index}
-        path={path}
-        exact={exact}
-        render={(props) => {
-          try {
-            const token = localStorage.getItem(
-              process.env.REACT_APP_ACCESS_TOKEN
+  return (
+    <BrowserRouter>
+      <Suspense fallback={<Loading />}>
+        <Switch>
+          {routes.map((route, index) => {
+            const { path, exact, main: Component, authen = "none" } = route;
+            return (
+              <Route
+                key={index}
+                path={path}
+                exact={exact}
+                render={(props) => {
+                  try {
+                    const token = localStorage.getItem(
+                      process.env.REACT_APP_ACCESS_TOKEN
+                    );
+
+                    if (!token && authen !== true)
+                      return <Component {...props} />;
+
+                    const user = jwt_decode(token);
+
+                    if (authen === false && user.sub) {
+                      return <Redirect to="/jobs" />;
+                    }
+
+                    if (authen === true && (!user || !user.sub))
+                      return <Redirect to="/authen" />;
+
+                    return <Component {...props} />;
+                  } catch (error) {
+                    localStorage.clear();
+                    return <Redirect to="/authen" />;
+                  }
+                }}
+              />
             );
-
-            if (!token && authen !== true) return <Component {...props} />;
-
-            const user = jwt_decode(token);
-
-            if (authen === false && user.sub) {
-              return <Redirect to="/jobs" />;
-            }
-
-            if (authen === true && (!user || !user.sub))
-              return <Redirect to="/authen" />;
-          } catch (error) {
-            localStorage.clear();
-            return <Redirect to="/authen" />;
-          }
-
-          return <Component {...props} />;
-        }}
-      />
-    );
-  });
+          })}
+          <Route>
+            <NotFound />
+          </Route>
+        </Switch>
+      </Suspense>
+    </BrowserRouter>
+  );
 };
 
 export { routes, renderRoutes };

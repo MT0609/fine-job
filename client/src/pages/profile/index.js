@@ -49,7 +49,7 @@ function Profile() {
                 className={styles["profile__avatars--background"]}
                 src={
                   user.backgroundAvt ||
-                  "https://media-exp1.licdn.com/dms/image/C4E1BAQFcckDwSlhOVg/company-background_10000/0/1579811796958?e=1619514000&v=beta&t=HhCwqCKBhQCfsuCfOmDZWPaIvLNCGxU21jFtPurCp6o"
+                  "https://media-exp1.licdn.com/dms/image/C4E1BAQFcckDwSlhOVg/company-background_10000/0/1579811796958?e=1620230400&v=beta&t=ythL-MIfV1O6AiyeFpZ1fyISu-PRNPaUIidDQT0ipSI"
                 }
                 alt="background"
               />
@@ -124,10 +124,6 @@ function Profile() {
                       />
                     </>
                   )}
-
-                  {user.baseInfo?.education.map((edu, index) => (
-                    <p key={index}>{edu}</p>
-                  ))}
                 </Grid>
               </Grid>
             </div>

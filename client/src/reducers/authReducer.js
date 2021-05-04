@@ -20,7 +20,9 @@ const authReducer = (state = initialState, action) => {
     case AUTHCONSTANTS.USER_LOGIN_SUCCESS:
       const user = action.payload.user;
       const token = action.payload.tokens.access.token;
+      const refreshToken = action.payload.tokens.refresh.token;
       localStorage.setItem(process.env.REACT_APP_ACCESS_TOKEN, token);
+      localStorage.setItem(process.env.REACT_APP_REFRESH_TOKEN, refreshToken);
 
       return {
         ...state,

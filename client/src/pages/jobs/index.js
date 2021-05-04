@@ -1,8 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Container, Grid, Typography } from "@material-ui/core";
+import { Container, Grid, Typography, useMediaQuery } from "@material-ui/core";
+import { useTheme } from "@material-ui/core/styles";
 import SearchJobBar from "../../components/search/searchJob";
+import CircularLoading from "../../components/loading/circular";
+import JobDetailDialog from "../../container/jobs/jobDetail/dialog";
 import JobList from "../../container/jobs/jobList";
 import JobDetail from "../../container/jobs/jobDetail";
 import { getJobs, getJobDetail } from "../../actions/jobActions";
@@ -14,20 +17,34 @@ function Jobs() {
   const history = useHistory();
 
   useEffect(() => {
-    handleAddressBarSearch();
-  }, []);
+    handleAddressBarSearch(keyword, page);
+  }, [keyword, page]);
 
   const jobs = useSelector((state) => state.job);
   const job = jobs.job;
 
+  const [jobDetailDialog, setJobDetailDialog] = useState(false);
+
+  const theme = useTheme();
+  const jobDetailDialogAllow = useMediaQuery(theme.breakpoints.down("sm"));
+  const jobDetailGridAllow = useMediaQuery(theme.breakpoints.up("sm"));
+
   const dispatch = useDispatch();
 
-  const handleAddressBarSearch = (title = keyword, pg = page, limit = 5) => {
+  useEffect(() => {
+    dispatch(getJobDetail(jobs.jobs?.[0]?.id));
+  }, [dispatch, jobs.jobs]); // show job detail on page first load
+
+  const handleAddressBarSearch = (title = keyword, pg = page) => {
     let queryParams = new URLSearchParams(window.location.search);
     if (!title) queryParams.delete("keyword");
     else queryParams.set("keyword", title);
-    if (!pg) queryParams.set("page", 1);
-    else queryParams.set("page", pg);
+
+    const numbersReg = /^[0-9]+$/; // page only contain number
+    if (!pg || !numbersReg.test(pg)) {
+      queryParams.set("page", 1);
+      pg = 1;
+    } else queryParams.set("page", pg);
     history.push(`/jobs?${queryParams}`);
     dispatch(getJobs(title, pg));
   };
@@ -43,6 +60,7 @@ function Jobs() {
 
   const handleJobClick = (id) => {
     dispatch(getJobDetail(id));
+    if (jobDetailDialogAllow) setJobDetailDialog(true);
   };
 
   const handlePageChange = async (page) => {
@@ -80,14 +98,33 @@ function Jobs() {
               ""
             )}
           </Grid>
-          <Grid item xs={0} md={6}>
-            {job && job !== "null" && job !== "undefined" ? (
-              <JobDetail job={job} />
-            ) : (
-              ""
-            )}
-          </Grid>
+          {jobDetailGridAllow && (
+            <Grid item xs={0} md={6}>
+              {jobs.isLoading && <CircularLoading />}
+
+              {!jobs.isLoading &&
+                job &&
+                job !== "null" &&
+                job !== "undefined" && <JobDetail job={job} />}
+
+              {!jobs.isLoading &&
+              jobs.jobs.length &&
+              (!job || job === "null" || job === "undefined") ? (
+                <Typography variant="h5" style={{ paddingTop: "1rem" }}>
+                  No matching job found
+                </Typography>
+              ) : (
+                ""
+              )}
+            </Grid>
+          )}
         </Grid>
+
+        <JobDetailDialog
+          job={job}
+          show={jobDetailDialog && jobDetailDialogAllow}
+          close={() => setJobDetailDialog(false)}
+        />
       </Container>
 
       {!jobs.isLoading && jobs.jobs.length === 0 && (

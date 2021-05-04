@@ -59,7 +59,6 @@ function UserSubMenu(props) {
 
   const onSignOutClick = () => {
     dispatch(signOut());
-    window.open(ROUTES.jobs, "_self");
   };
 
   return (

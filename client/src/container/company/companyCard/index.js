@@ -5,7 +5,7 @@ import {
   CardContent,
   CardMedia,
   Typography,
-  Grid,
+  Box,
   Divider,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -16,12 +16,13 @@ function CompanyCard(props) {
 
   const useStyles = makeStyles((theme) => ({
     root: {
-      width: 250,
-      maxWidth: 345,
+      height: "100%",
+      maxWidth: 300,
     },
     media: {
       height: 0,
       paddingTop: "50%", // 16:9
+      fontSize: "1rem",
     },
     expand: {
       transform: "rotate(0deg)",
@@ -62,19 +63,23 @@ function CompanyCard(props) {
             {headLine}
           </Typography>
 
-          <Grid container alignItems="center" spacing={1}>
-            <Grid item>
-              <Work />
-            </Grid>
-            <Grid item>Insdustry: {industry}</Grid>
-          </Grid>
+          <Box display="flex" alignItems="flex-start">
+            <Work />
+            <Box ml={1} style={{ textAlign: "left" }}>
+              Insdustry: {industry}
+            </Box>
+          </Box>
 
-          <Grid container alignItems="center" spacing={1}>
-            <Grid item>
-              <LocationCity />
-            </Grid>
-            <Grid item>{headQuarter}</Grid>
-          </Grid>
+          <Box
+            display="flex"
+            alignItems="flex-start"
+            justifyContent="flex-start"
+          >
+            <LocationCity />
+            <Box ml={1} style={{ textAlign: "left" }}>
+              {headQuarter}
+            </Box>
+          </Box>
         </CardContent>
       </CardActionArea>
     </Card>

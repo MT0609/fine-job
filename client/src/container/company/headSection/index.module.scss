@@ -16,6 +16,7 @@
       font-size: 1.3rem;
     }
   }
+
   &__head {
     &__employees {
       &::before {
@@ -33,7 +34,6 @@
         padding: 0.3rem 1rem;
       }
     }
-
     //buttons
     &__follow {
       color: #0a66c2;
@@ -44,10 +44,13 @@
       background-color: #0a66c2;
     }
   }
+
   &__avatars {
+    margin-bottom: 4rem;
     position: relative;
     &--background {
       width: 100%;
+      min-height: 10rem;
     }
     &--avatar {
       position: absolute;
@@ -56,5 +59,10 @@
       width: 100px;
       height: 100px;
     }
+  }
+
+  &__introtext {
+    text-align: left;
+    padding-left: 2rem;
   }
 }

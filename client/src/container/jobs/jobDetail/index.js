@@ -10,8 +10,8 @@ function JobDetail(props) {
     <>
       {job.company && (
         <div className={styles.detail}>
-          <Grid container spacing={3}>
-            <Grid item sm={1}>
+          <Grid container spacing={2}>
+            <Grid item>
               <Avatar
                 variant="square"
                 alt="Company"

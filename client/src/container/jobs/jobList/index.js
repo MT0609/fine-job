@@ -7,6 +7,8 @@ import {
   Box,
   Divider,
 } from "@material-ui/core";
+import { useMediaQuery } from "@material-ui/core";
+import { useTheme } from "@material-ui/core/styles";
 import Pagination from "@material-ui/lab/Pagination";
 import { timeDiff } from "../../../utils/time";
 import styles from "./index.module.scss";
@@ -16,18 +18,23 @@ function JobList(props) {
 
   const [jobSelection, setJobSelection] = useState(jobs[0]?.id || "");
 
-  useEffect(() => {
-    if (onclick) {
-      onclick(jobSelection);
-    }
-  }, [jobSelection]); // them cai change nay thi setpage bi lag/loi
+  const theme = useTheme();
+  const jobSelectHightlight = useMediaQuery(theme.breakpoints.up("sm"));
+  // useEffect(() => {
+  //   if (onclick) {
+  //     onclick(jobSelection);
+  //   }
+  // }, [jobSelection]);
 
-  useEffect(() => {
-    setJobSelection(jobs[0]?.id);
-  }, [currentPage]);
+  // useEffect(() => {
+  //   setJobSelection(jobs[0]?.id);
+  // }, [currentPage]);
 
   const onJobClick = (id) => {
     setJobSelection(id);
+    if (onclick) {
+      onclick(id);
+    }
   };
 
   const usePrevious = (value) => {
@@ -49,8 +56,10 @@ function JobList(props) {
         {jobs.length > 0 &&
           jobs.map((job, index) => (
             <div
-              className={`${styles.jobList__main} ${
-                jobSelection === job.id && `${styles["jobList__main--active"]}`
+              className={`${styles.jobList__main}${
+                jobSelection === job.id && jobSelectHightlight
+                  ? ` ${styles["jobList__main--active"]}`
+                  : ""
               }`}
               onClick={() => onJobClick(job.id)}
             >
@@ -77,7 +86,7 @@ function JobList(props) {
                     >
                       {job.title}
                     </Typography>
-                    <Link href={`/jobs/${job.company.id}`}>
+                    <Link href={`/company/${job.company.id}`}>
                       {job.company.name}
                     </Link>
                   </Grid>

@@ -107,7 +107,7 @@ function TalentHomePage() {
                       </span>
                     </p>
                   </Grid>
-                  <Grid item xs style={{ textAlign: "right" }}>
+                  <Grid item md style={{ textAlign: "right" }}>
                     <Link href={`/talent/post/${job.id}/update`}>
                       <Button style={{ color: "#0A66C2" }}>
                         <Edit />
