@@ -80,7 +80,7 @@ function SignUp() {
                 autoFocus
               />
               <Box className={styles.error}>
-                {errors.firstName && <span>* {errors.firstName.message}</span>}
+                {errors.lastName && <span>* {errors.lastName.message}</span>}
               </Box>
             </Grid>
           </Grid>

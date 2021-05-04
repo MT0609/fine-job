@@ -6,8 +6,8 @@ const  CVService = require('../services/cv.service');
 
 const createCV = catchAsync(async (req, res) => {
 
-    
-    let userID = req.params.userId;
+
+    const userID = req.user._id;
 
     const user = await userService.getUserById(userID);
     
@@ -15,24 +15,24 @@ const createCV = catchAsync(async (req, res) => {
         throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
     }
     
-    const CV = CVService.createCVbyUserandTitle(user, req.body.title);
-
+    const CV = await CVService.createCVbyUserandTitle(user, req.body.title);
+  
     res.status(httpStatus.CREATED).send(CV);
 })
 
 const getUserCV = catchAsync(async(req, res) => {
 
-    let {userId, cvId }= req.query;
+    let {cvId }= req.query;
+    const userID = req.user._id;
 
-
-    const user = await userService.getUserById(userId);
+    const user = await userService.getUserById(userID);
     
     if (!user) {
         throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
     }
     
     if (cvId === undefined || cvId === null || cvId === ''){
-        const CVs = await CVService.getAllCVbyUserId(userId);
+        const CVs = await CVService.getAllCVbyUserId(userID);
         
         return res.send(CVs);
     }
@@ -64,10 +64,10 @@ const getAUserCV = catchAsync(async(req, res) => {
 
 const updateCV = catchAsync(async (req, res) => {
 
-    let {userId, cvId }= req.query;
-
-
-    const user = await userService.getUserById(userId);
+    let { cvId }= req.query;
+    const userID = req.user._id;
+    
+    const user = await userService.getUserById(userID);
     
     if (!user) {
         throw new ApiError(httpStatus.NOT_FOUND, 'User not found');

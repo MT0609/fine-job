@@ -1,11 +1,62 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Container, Grid } from "@material-ui/core";
 import SearchJobBar from "../../components/search/searchJob";
+import JobList from "../../container/jobs/jobList";
+import JobDetail from "../../container/jobs/jobDetail";
+import { getJobs, getJobDetail } from "../../actions/jobActions";
 
 function Jobs() {
+  const jobs = useSelector((state) => state.job);
+  const job = jobs.job;
+  const dispatch = useDispatch();
+
+  const handleSearch = (title) => {
+    dispatch(getJobs(title));
+  };
+
+  const handleJobClick = (id) => {
+    dispatch(getJobDetail(id));
+  };
+
   return (
     <div>
       Some Blow Jobs will go here...
-      <SearchJobBar />
+      <SearchJobBar onsearch={handleSearch} />
+      <Container
+        style={{
+          marginTop: "2rem",
+          padding: 0,
+          backgroundColor: "white",
+          boxShadow: "0 3px 8px rgba(0, 0, 0, 0.15)",
+        }}
+      >
+        <Grid container justify="space-between">
+          <Grid
+            item
+            xs={12}
+            md={6}
+            style={{ borderRight: "2px solid #F4F4F4" }}
+          >
+            {jobs.jobs.length ? (
+              <JobList
+                jobs={jobs.jobs}
+                onclick={handleJobClick}
+                change={jobs.searchChange}
+              />
+            ) : (
+              ""
+            )}
+          </Grid>
+          <Grid item xs={0} md={6}>
+            {job && job !== "null" && job !== "undefined" ? (
+              <JobDetail job={job} />
+            ) : (
+              ""
+            )}
+          </Grid>
+        </Grid>
+      </Container>
     </div>
   );
 }
