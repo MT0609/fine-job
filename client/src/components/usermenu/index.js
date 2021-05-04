@@ -18,6 +18,11 @@ const StyledMenu = withStyles({
     borderRadius: "5px",
     border: "1px solid #d3d4d5",
     boxShadow: "-5px 5px 5px rgba(0, 0, 0, 0.034)",
+    "& .MuiListItem-root": {},
+    "& .MuiListItemIcon-root": {
+      minWidth: "fit-content",
+      marginRight: "1rem",
+    },
   },
 })((props) => (
   <Menu
@@ -48,9 +53,12 @@ function UserSubMenu(props) {
     window.open(ROUTES.talent, "_self");
   };
 
+  const onProfileClick = () => {
+    window.open(`/profile/${user.id}`, "_self");
+  };
+
   const onSignOutClick = () => {
     dispatch(signOut());
-    window.open(ROUTES.jobs, "_self");
   };
 
   return (
@@ -61,17 +69,25 @@ function UserSubMenu(props) {
         open={open}
         onClose={handleClose}
       >
-        <Typography style={{ fontWeight: "bold" }}>
+        <Typography
+          style={{
+            fontWeight: "bold",
+            pointerEvents: "none",
+            marginLeft: "1rem",
+          }}
+        >
           {user?.baseInfo?.firstName} {user?.baseInfo?.lastName}
         </Typography>
-        <MenuItem>
+        <MenuItem onClick={onProfileClick}>
           <ListItemIcon>
             <AccountBox fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="My Profile" />
         </MenuItem>
         <MenuItem onClick={onTalentClick}>
-          <ListItemIcon>
+          <ListItemIcon
+            style={{ minWidth: "fit-content", marginRight: "1rem" }}
+          >
             <ExitToApp fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Manage Posting Job" />

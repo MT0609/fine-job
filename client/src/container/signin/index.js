@@ -8,7 +8,7 @@ import LoadingButton from "@material-ui/lab/LoadingButton";
 import { signIn } from "../../actions/authActions";
 import { SignInSchema } from "../../utils/validation";
 import { ROUTES } from "../../constants/routes";
-import * as USERCONSTANTS from "../../constants/userConstants";
+import * as AUTHCONSTANTS from "../../constants/authConstants";
 
 import styles from "./signIn.module.scss";
 
@@ -35,7 +35,7 @@ function SignIn() {
   return (
     <Container maxWidth="sm">
       <form onSubmit={handleSubmit(onSubmit)}>
-        {auth.error === USERCONSTANTS.USER_LOGIN_FAIL && (
+        {auth.error === AUTHCONSTANTS.USER_LOGIN_FAIL && (
           <Typography
             style={{ textAlign: "left", color: "red", fontStyle: "italic" }}
           >

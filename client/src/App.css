@@ -8,3 +8,21 @@
   z-index: -1;
   min-height: 100vh;
 }
+
+.App__message {
+  position: fixed;
+  right: 5%;
+  bottom: 0;
+}
+
+@media screen and (max-width: 800px) {
+  .App__message {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .App__main {
+    padding: 5rem 1rem 1rem 1rem;
+  }
+}

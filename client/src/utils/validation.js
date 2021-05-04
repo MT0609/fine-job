@@ -52,3 +52,8 @@ export const CVBasicUpdateSchema = yup.object().shape({
 export const CVAboutUpdateSchema = yup.object().shape({
   about: yup.string(),
 });
+
+export const ProfileUpdateSchema = yup.object().shape({
+  firstName: yup.string().required("Enter your first name"),
+  lastName: yup.string().required("Enter your last name"),
+});
