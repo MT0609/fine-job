@@ -17,11 +17,17 @@ const cpUpload = upload.fields([
   { name: 'photos', maxCount: 8 },
 ]);
 
+router.route('/').get(auth(), validate(messageValidation.getListUserMessages), messageController.getListUserMessages);
+
 router
-  .route('/')
-  .post(auth(), validate(messageValidation.createMessage), senderInTwoUser, messageController.createMessage)
-  .get(auth(), validate(messageValidation.getMessages), senderInTwoUser, messageController.getMessages)
-  .delete(auth(), validate(messageValidation.deleteMessage), senderInTwoUser, messageController.deleteMessage);
+  .route('/:partnerID')
+  .post(auth(), validate(messageValidation.createMessage), messageController.createMessage)
+  .get(auth(), validate(messageValidation.getMessages), messageController.getMessages)
+  .delete(auth(), validate(messageValidation.deleteConversation), messageController.deleteConversation);
+
+router
+  .route('/:partnerID/:msgID')
+  .delete(auth(), validate(messageValidation.deleteMessage), messageController.deleteMessage);
 
 module.exports = router;
 
@@ -35,67 +41,13 @@ module.exports = router;
 /**
  * @swagger
  * /messages:
- *   post:
- *     summary: Create a message
- *     description: User can create other messages.
- *     tags: [Messages]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - userID_1
- *               - userID_2
- *               - message
- *             properties:
- *               userID_1:
- *                 type: string
- *                 description: User ID 1
- *               userID_2:
- *                 type: string
- *                 description: User ID 2
- *               message:
- *                 type: string
- *                 default: I love U
- *                 description: Message (null value for file upload)
- *
- *             example:
- *               userID_1: 607c03860737d93f141c575c
- *               userID_2: 607c03350737d93f141c5758
- *               message: I love U
- *     responses:
- *       "201":
- *         description: Created
- *         content:
- *           application/json:
- *             schema:
- *                $ref: '#/components/schemas/Message'
- *       "401":
- *         $ref: '#/components/responses/Unauthorized'
- *       "403":
- *         $ref: '#/components/responses/Forbidden'
- *
  *   get:
- *     summary: Get all message
- *     description: Get personal messages.
+ *     summary: Get list user messages
+ *     description: Get list user personal messages.
  *     tags: [Messages]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: query
- *         name: userID_1
- *         schema:
- *           type: string
- *         description: User ID 1
- *       - in: query
- *         name: userID_2
- *         schema:
- *           type: string
- *         description: User ID 2
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -126,24 +78,114 @@ module.exports = router;
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
+ */
+
+/**
+ * @swagger
+ * /messages/{partnerID}:
+ *   post:
+ *     summary: Create a message
+ *     description: User can create other messages.
+ *     tags: [Messages]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - partnerID
+ *               - message
+ *             properties:
+ *               partnerID:
+ *                 type: string
+ *                 description: Partner ID
+ *               message:
+ *                 type: string
+ *                 default: I love U
+ *                 description: Message (null value for file upload)
  *
- *   delete:
- *     summary: Delete a message
- *     description: Users can delete own messages.
+ *             example:
+ *               partnerID: 607c03860737d93f141c575c
+ *               message: I love U
+ *     responses:
+ *       "201":
+ *         description: Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Message'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *
+ *   get:
+ *     summary: Get a conversation
+ *     description: Users can get own conversations.
  *     tags: [Messages]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
- *         name: userID_1
+ *         name: partnerID
  *         schema:
  *           type: string
- *         description: User ID 1
+ *         description: Partner ID
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Messages'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *
+ *   delete:
+ *     summary: Delete a conversation
+ *     description: Users can delete own conversations.
+ *     tags: [Messages]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
  *       - in: query
- *         name: userID_2
+ *         name: partnerID
  *         schema:
  *           type: string
- *         description: User ID 2
+ *         description: Partner ID
+ *     responses:
+ *       "200":
+ *         description: No content
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /messages/{partnerID}/{msgID}:
+ *   delete:
+ *     summary: Delete a message
+ *     description: Users can delete own conversations.
+ *     tags: [Messages]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: partnerID
+ *         schema:
+ *           type: string
+ *         description: Partner ID
  *       - in: query
  *         name: msgID
  *         schema:

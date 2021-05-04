@@ -27,6 +27,10 @@ router
   .patch(auth(), cpUpload, validate(companyValidation.updateCompany), companyController.updateCompany)
   .delete(auth(), validate(companyValidation.deleteCompany), companyController.deleteCompany);
 
+router.route('/:companyID/follow').post(auth(), validate(companyValidation.postFollow), companyController.postFollow);
+
+router.route('/:companyID/unFollow').post(auth(), validate(companyValidation.postUnFollow), companyController.postUnFollow);
+
 module.exports = router;
 
 /**
@@ -303,4 +307,53 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
+ *
+ * /companies/{id}/follow:
+ *   post:
+ *     summary: Post follow company
+ *     description: Follow a company
+ *     tags: [Companies]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Company id
+ *     responses:
+ *       "200":
+ *         description: No content
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *
+ * /companies/{id}/unFollow:
+ *   post:
+ *     summary: Post unFollow company
+ *     description: UnFollow a company
+ *     tags: [Companies]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Company id
+ *     responses:
+ *       "200":
+ *         description: No content
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *
  */

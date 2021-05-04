@@ -41,12 +41,16 @@ const messageSchema = mongoose.Schema(
           type: String,
           enum: enumMessageType,
         },
-        sender: {
+        senderID: {
           type: String,
           required: true,
         },
       },
     ],
+    lastModified: {
+      type: Date,
+      default: new Date(),
+    },
     blacklisted: {
       type: Boolean,
       default: false,
@@ -60,6 +64,10 @@ const messageSchema = mongoose.Schema(
 // add plugin that converts mongoose to json
 messageSchema.plugin(toJSON);
 messageSchema.plugin(paginate);
+
+messageSchema.pre('updateOne', function () {
+  this.set({ lastModified: new Date() });
+});
 
 /**
  * @typedef Message
