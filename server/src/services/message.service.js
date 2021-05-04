@@ -2,6 +2,8 @@ const httpStatus = require('http-status');
 const { Message } = require('../models');
 const ApiError = require('../utils/ApiError');
 
+const { getUserById } = require('./user.service');
+
 /**
  * Create a message (current sup for text msg)
  * @param {Object} userBody
@@ -149,12 +151,33 @@ const queryListUserMessages = async (filter, options) => {
   // filter.messages = { $slice: [(options.page - 1) * options.limit, options.limit] };
   const { senderID: userID_1 } = filter;
   try {
-    const message = await Message.find({
+    const messages = await Message.find({
       $or: [{ userID_1: userID_1 }, { userID_2: userID_1 }],
-    }).sort({ lastModified: 'asc' });
-    return message;
+    })
+      .sort({ lastModified: 'desc' })
+      .limit(options.limit);
+
+    // Get base partner info
+    const listPartnerID = messages.map((el) => (el.userID_1 === userID_1 ? el.userID_2 : el.userID_1));
+    const listLatestMessages = messages.map((el) => el.messages.slice(-1));
+    const listPartnerBaseInfo = await Promise.all(
+      listPartnerID.map(async (partnerID) => {
+        const user = await getUserById(partnerID);
+        return { ...user.baseInfo, avatar: user.avatar };
+      })
+    );
+
+    return listPartnerID.map((id, index) => {
+      const ret = {};
+      // object return
+      ret.partnerID = id;
+      ret.latestMessage = listLatestMessages[index];
+      ret.partnerBaseInfo = listPartnerBaseInfo[index];
+      console.log(listPartnerBaseInfo[index]);
+      return ret;
+    });
   } catch (error) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Message not found');
+    throw new ApiError(httpStatus.NOT_FOUND, error.message);
   }
 };
 
