@@ -37,7 +37,7 @@ async function send() {
     },
   };
 
-  await fetch('/subscribe', {
+  await fetch('/v1/subscriptions', {
     method: 'POST',
     body: JSON.stringify(body),
     headers: {

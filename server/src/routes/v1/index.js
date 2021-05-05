@@ -6,6 +6,7 @@ const cvRoute = require('./cv.route');
 const jobRoute = require('./job.route');
 const messageRoute = require('./message.route');
 const notificationRoute = require('./notification.route');
+const subscriptionRoute = require('./subscription.route');
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
 
@@ -39,6 +40,10 @@ const defaultRoutes = [
   {
     path: '/notifications',
     route: notificationRoute,
+  },
+  {
+    path: '/subscriptions',
+    route: subscriptionRoute,
   },
   // {
   //   path: '/jobs',

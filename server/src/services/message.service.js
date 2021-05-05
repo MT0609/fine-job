@@ -1,4 +1,5 @@
 const httpStatus = require('http-status');
+const mongoose = require('mongoose');
 const { Message } = require('../models');
 const ApiError = require('../utils/ApiError');
 
@@ -158,7 +159,7 @@ const queryListUserMessages = async (filter, options) => {
       .limit(options.limit);
 
     // Get base partner info
-    const listPartnerID = messages.map((el) => (el.userID_1 === userID_1 ? el.userID_2 : el.userID_1));
+    const listPartnerID = messages.map((el) => (el.userID_1 == userID_1 ? el.userID_2 : el.userID_1));
     const listLatestMessages = messages.map((el) => el.messages.slice(-1));
     const listPartnerBaseInfo = await Promise.all(
       listPartnerID.map(async (partnerID) => {
