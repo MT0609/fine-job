@@ -17,3 +17,12 @@
     }
   }
 }
+
+@media screen and (max-width: 1000px) {
+  .company {
+    &__container {
+      width: 100%;
+      margin: auto;
+    }
+  }
+}

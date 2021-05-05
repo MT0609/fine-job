@@ -16,7 +16,7 @@ import {
 import LoadingButton from "@material-ui/lab/LoadingButton";
 import { SignUpSchema } from "../../utils/validation";
 import { signUp } from "../../actions/authActions";
-import * as USERCONSTANTS from "../../constants/userConstants";
+import * as AUTHCONSTANTS from "../../constants/authConstants";
 
 import styles from "./signUp.module.scss";
 
@@ -36,7 +36,7 @@ function SignUp() {
   return (
     <Container maxWidth="sm">
       <form onSubmit={handleSubmit(onSubmit)}>
-        {auth.error === USERCONSTANTS.USER_REGISTER_FAIL && (
+        {auth.error === AUTHCONSTANTS.USER_REGISTER_FAIL && (
           <Typography
             style={{ textAlign: "left", color: "red", fontStyle: "italic" }}
           >
@@ -44,7 +44,7 @@ function SignUp() {
           </Typography>
         )}
 
-        {auth.signUpStatus === USERCONSTANTS.USER_REGISTER_SUCCESS && (
+        {auth.signUpStatus === AUTHCONSTANTS.USER_REGISTER_SUCCESS && (
           <Typography
             style={{ textAlign: "left", color: "green", fontStyle: "italic" }}
           >

@@ -1,0 +1,28 @@
+.bubble {
+  width: 20rem;
+  background-color: white;
+  border: 1px solid #cecece;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  box-shadow: -1px 5px 3px #cccccc, 1px 5px 3px #cccccc;
+  transition: all 0.3s ease-in-out;
+  &--minimize {
+    width: 13rem;
+    background-color: white;
+    border: 1px solid #cecece;
+    box-shadow: -1px 5px 3px #cccccc, 1px 5px 3px #cccccc;
+    transition: all 0.3s ease-in-out;
+  }
+
+  &__message {
+    &--minimize {
+      max-height: 0;
+      transition: all 0.3s ease-in-out;
+    }
+
+    &--maximize {
+      max-height: 23rem;
+      transition: all 0.3s ease-in-out;
+    }
+  }
+}
