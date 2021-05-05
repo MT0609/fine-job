@@ -17,11 +17,13 @@ const cpUpload = upload.fields([
   { name: 'photos', maxCount: 8 },
 ]);
 
-router.route('/').get(auth(), validate(messageValidation.getListUserMessages), messageController.getListUserMessages);
+router
+  .route('/')
+  .get(auth(), validate(messageValidation.getListUserMessages), messageController.getListUserMessages)
+  .post(auth(), validate(messageValidation.createMessage), messageController.createMessage);
 
 router
   .route('/:partnerID')
-  .post(auth(), validate(messageValidation.createMessage), messageController.createMessage)
   .get(auth(), validate(messageValidation.getMessages), messageController.getMessages)
   .delete(auth(), validate(messageValidation.deleteConversation), messageController.deleteConversation);
 
@@ -78,11 +80,6 @@ module.exports = router;
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
- */
-
-/**
- * @swagger
- * /messages/{partnerID}:
  *   post:
  *     summary: Create a message
  *     description: User can create other messages.
@@ -122,6 +119,11 @@ module.exports = router;
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
  *
+ */
+
+/**
+ * @swagger
+ * /messages/{partnerID}:
  *   get:
  *     summary: Get a conversation
  *     description: Users can get own conversations.
