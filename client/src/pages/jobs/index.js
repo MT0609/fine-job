@@ -32,7 +32,7 @@ function Jobs() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getJobDetail(jobs.jobs?.[0]?.id));
+    if (jobs.jobs?.[0]?.id) dispatch(getJobDetail(jobs.jobs[0].id));
   }, [dispatch, jobs.jobs]); // show job detail on page first load
 
   const handleAddressBarSearch = (title = keyword, pg = page) => {

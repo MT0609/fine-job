@@ -2,8 +2,35 @@ import messageApi from "../api/messageApi";
 import * as MESSAGECONSTANTS from "../constants/messageConstants";
 import jwt_decode from "jwt-decode";
 
-export const getMessage = (receiptID) => async (dispatch) => {
-  // params: {title, limit, ...}
+export const getAllMessages = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: MESSAGECONSTANTS.MESSAGE_GET_ALL_REQUEST,
+    });
+
+    const token = localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN);
+    if (!token || !jwt_decode(token)?.sub) {
+      dispatch({
+        type: MESSAGECONSTANTS.MESSAGE_GET_ALL_FAIL,
+      });
+      return;
+    }
+
+    let result = await messageApi.getAll();
+
+    dispatch({
+      type: MESSAGECONSTANTS.MESSAGE_GET_ALL_SUCCESS,
+      payload: result,
+    });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: MESSAGECONSTANTS.MESSAGE_GET_ALL_FAIL,
+    });
+  }
+};
+
+export const getMessage = (partnerID) => async (dispatch) => {
   try {
     dispatch({
       type: MESSAGECONSTANTS.MESSAGE_GET_ONE_REQUEST,
@@ -17,13 +44,7 @@ export const getMessage = (receiptID) => async (dispatch) => {
       return;
     }
 
-    const senderID = jwt_decode(token).sub;
-
-    console.log(senderID, receiptID);
-
-    let result = await messageApi.getOne(senderID, receiptID);
-
-    console.log(result);
+    let result = await messageApi.getOne(partnerID);
 
     dispatch({
       type: MESSAGECONSTANTS.MESSAGE_GET_ONE_SUCCESS,
@@ -37,28 +58,13 @@ export const getMessage = (receiptID) => async (dispatch) => {
   }
 };
 
-export const sendMessage = (msg, receiptID) => async (dispatch) => {
-  // params: {title, limit, ...}
+export const sendMessage = (partnerID, message) => async (dispatch) => {
   try {
     dispatch({
       type: MESSAGECONSTANTS.MESSAGE_SEND_ONE_REQUEST,
     });
 
-    const token = localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN);
-    if (!token || !jwt_decode(token)?.sub) {
-      dispatch({
-        type: MESSAGECONSTANTS.MESSAGE_SEND_ONE_FAIL,
-      });
-      return;
-    }
-
-    const senderID = jwt_decode(token).sub;
-
-    console.log(senderID, receiptID);
-
-    let result = await messageApi.send(senderID, receiptID, msg);
-
-    console.log(result);
+    let result = await messageApi.send(partnerID, message);
 
     dispatch({
       type: MESSAGECONSTANTS.MESSAGE_SEND_ONE_SUCCESS,
@@ -72,8 +78,7 @@ export const sendMessage = (msg, receiptID) => async (dispatch) => {
   }
 };
 
-export const deleteMessage = (msgID, receiptID) => async (dispatch) => {
-  // params: {title, limit, ...}
+export const deleteMessage = (partnerID, msgID) => async (dispatch) => {
   try {
     dispatch({
       type: MESSAGECONSTANTS.MESSAGE_DELETE_ONE_REQUEST,
@@ -87,11 +92,7 @@ export const deleteMessage = (msgID, receiptID) => async (dispatch) => {
       return;
     }
 
-    const senderID = jwt_decode(token).sub;
-
-    console.log(senderID, receiptID);
-
-    let result = await messageApi.delete(senderID, receiptID, msgID);
+    let result = await messageApi.delete(partnerID, msgID);
 
     dispatch({
       type: MESSAGECONSTANTS.MESSAGE_DELETE_ONE_SUCCESS,
@@ -103,4 +104,33 @@ export const deleteMessage = (msgID, receiptID) => async (dispatch) => {
       type: MESSAGECONSTANTS.MESSAGE_DELETE_ONE_FAIL,
     });
   }
+};
+
+export const deleteConversation = (partnerID) => async (dispatch) => {
+  try {
+    dispatch({
+      type: MESSAGECONSTANTS.MESSAGE_DELETE_CONVERSATION_REQUEST,
+    });
+
+    let result = await messageApi.deleteConversation(partnerID);
+
+    console.log(result);
+
+    dispatch({
+      type: MESSAGECONSTANTS.MESSAGE_DELETE_CONVERSATION_SUCCESS,
+      payload: result,
+    });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: MESSAGECONSTANTS.MESSAGE_DELETE_CONVERSATION_FAIL,
+    });
+  }
+};
+
+export const closeActiveBubbleMessage = (msgID) => (dispatch) => {
+  dispatch({
+    type: MESSAGECONSTANTS.MESSAGE_CLOSE_ACTIVE_BUBBLE,
+    payload: msgID,
+  });
 };

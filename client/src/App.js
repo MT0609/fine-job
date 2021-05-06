@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserData } from "./actions/authActions";
 import Header from "./components/header";
 import { renderRoutes, routes } from "./configs/routes";
-import MessageBubble from "./container/message/tab/bubble";
+import MessageBubbleContainer from "./container/message/bubbleContainer";
 import "./App.css";
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
 
         {auth.isAuth && (
           <div className="App__message">
-            <MessageBubble />
+            <MessageBubbleContainer />
           </div>
         )}
       </main>
