@@ -174,7 +174,6 @@ const queryListUserMessages = async (filter, options) => {
       ret.partnerID = id;
       ret.latestMessage = listLatestMessages[index];
       ret.partnerBaseInfo = listPartnerBaseInfo[index];
-      console.log(listPartnerBaseInfo[index]);
       return ret;
     });
   } catch (error) {
