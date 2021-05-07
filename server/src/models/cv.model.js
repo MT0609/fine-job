@@ -37,19 +37,19 @@ const cvSchema = mongoose.Schema(
       about: {
         type: String,
       },
-      featured: {
+      features: {
         type: Array,
       },
       experiences: {
         type: Array,
       },
-      education: {
+      educations: {
         type: Array,
       },
-      licenseAndCert: {
+      licenseAndCerts: {
         type: Array,
       },
-      volunteer: {
+      volunteers: {
         type: Array,
       },
       skills: {

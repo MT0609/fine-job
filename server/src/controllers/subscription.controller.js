@@ -15,7 +15,7 @@ const createSubscription = catchAsync(async (req, res) => {
 
   webPush.sendNotification(subs, payload);
 
-  subs.userID = req.user?.id || null;
+  //subs.userID = req.user?.id || null;
 
   const subscription = await subscriptionService.createSubscription(subs);
   res.status(httpStatus.CREATED).send(subscription);

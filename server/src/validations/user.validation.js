@@ -42,9 +42,9 @@ const updateUser = {
       lastName: Joi.string(),
       dob: Joi.date().raw(),
       country: Joi.string(),
-      location: Joi.string(),
+      locations: Joi.string(),
       industry: Joi.string(),
-
+      educations: Joi.string()
     })
     .min(1),
 };
