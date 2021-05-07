@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import jwt_decode from "jwt-decode";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Avatar,
@@ -108,13 +107,16 @@ function TalentHomePage() {
                       </span>
                     </p>
                   </Grid>
-                  <Grid item xs style={{ textAlign: "right" }}>
+                  <Grid item md style={{ textAlign: "right" }}>
                     <Link href={`/talent/post/${job.id}/update`}>
-                      <Button>
+                      <Button style={{ color: "#0A66C2" }}>
                         <Edit />
                       </Button>
                     </Link>
-                    <Button onClick={() => handleDeleteJob(job.id)}>
+                    <Button
+                      style={{ color: "red" }}
+                      onClick={() => handleDeleteJob(job.id)}
+                    >
                       <RemoveCircle />
                     </Button>
                   </Grid>

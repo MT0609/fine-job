@@ -27,6 +27,9 @@ router
   .patch(auth(), validate(jobValidation.updateJob), jobController.updateJob)
   .delete(auth(), validate(jobValidation.deleteJob), jobController.deleteJob);
 
+router.route('/:jobID/save').post(auth(), validate(jobValidation.postSave), jobController.postSave);
+router.route('/:jobID/unSave').post(auth(), validate(jobValidation.postUnSave), jobController.postUnSave);
+
 module.exports = router;
 
 /**
@@ -297,4 +300,53 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
+ *
+ * /jobs/{id}/save:
+ *   post:
+ *     summary: Post save job
+ *     description: Save a job
+ *     tags: [Jobs]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Job id
+ *     responses:
+ *       "200":
+ *         description: No content
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *
+ * /jobs/{id}/unSave:
+ *   post:
+ *     summary: Post unSave job
+ *     description: UnSave a job
+ *     tags: [Jobs]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Job id
+ *     responses:
+ *       "200":
+ *         description: No content
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *
  */

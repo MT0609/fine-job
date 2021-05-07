@@ -2,8 +2,7 @@ import jobApi from "../api/jobApi";
 import * as JOBCONSTANTS from "../constants/jobConstants";
 import jwt_decode from "jwt-decode";
 
-export const getJobs = (title) => async (dispatch) => {
-  // params: {title, limit, ...}
+export const getJobs = (title, page = 1, limit = 5) => async (dispatch) => {
   try {
     dispatch({
       type: JOBCONSTANTS.JOB_GET_ALL_REQUEST,
@@ -11,12 +10,14 @@ export const getJobs = (title) => async (dispatch) => {
 
     const params = {};
     if (title) params.title = title;
+    if (limit) params.limit = limit;
+    if (page) params.page = page;
 
     let result = await jobApi.getAll(params);
 
     dispatch({
       type: JOBCONSTANTS.JOB_GET_ALL_SUCCESS,
-      payload: result.results,
+      payload: result,
     });
   } catch (error) {
     console.log(error);
@@ -40,12 +41,14 @@ export const getMyPostingJobs = (title) => async (dispatch) => {
 
     const token = localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN);
 
-    let myJobs = result.results;
-    myJobs = myJobs.filter((job) => job.creator === jwt_decode(token)?.sub);
+    let myJobs = result.results.filter(
+      (job) => job.creator === jwt_decode(token)?.sub
+    );
+    result.results = myJobs;
 
     dispatch({
       type: JOBCONSTANTS.JOB_GET_ALL_SUCCESS,
-      payload: myJobs,
+      payload: result,
     });
   } catch (error) {
     console.log(error);

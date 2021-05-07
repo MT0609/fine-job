@@ -260,6 +260,9 @@ components:
           type: string
         userID_2:
           type: string
+        lastModified:
+          type: string
+          format: date-time
         message:
           type: array
           items:
@@ -276,21 +279,64 @@ components:
               type:
                 type: string
                 enum: ['text', 'file']
-              sender:
+              senderID:
                 type: string
         blacklisted:
           type: boolean
 
+    Notification:
+      type: object
+      properties:
+        type:
+          type: string
+        url:
+          type: string
+          format: url
+        params:
+          type: object
+          properties:
+            senderID:
+              type: string
+            recvID:
+              type: string
+        status:
+          type: string
+          enum: ['new', 'read', 'hide']
+
       example:
-        userID_1: 607c03860737d93f141c575c
-        userID_2: 607c03350737d93f141c5758
-        message:
-          status: sent
-          msg: I love U
-          time: 2020-05-12T16:18:04.793Z
-          type: text
-          sender: 607c03860737d93f141c575c
-        blacklisted: false
+        type: sendConnReq
+        url: https://fb.com/quocthai.user
+        params:
+          senderID: 607c03860737d93f141c575c
+          recvID: 607c03350737d93f141c5758
+        status: new
+
+    Subscription:
+      type: object
+      properties:
+        userID:
+          type: string
+        endpoint:
+          type: string
+          format: url
+        expirationTime:
+          type: string
+          format: date-time
+        keys:
+          type: object
+          properties:
+            auth:
+              type: string
+            p256dh:
+              type: string
+
+      example:
+        userID: 6079d3b5bee9390730603276
+        endpoint: https://fcm.googleapis.com/fcm/send/dyJONEtNwOA:APA91bFZtkXe9QurMci5MzczI-VG
+        expirationTime: part-time
+        keys:
+          auth: ONEtNwOA:APA91bFZtkXe9QurMci5MzzI-VG
+          p256dh: dyJONEtNwOA:APA91bFZtkXe9Q9098hakjdjhasjgdh1827hkasjdhaskdjhajkslcakjsc
 
     CV:
       type: object
@@ -308,7 +354,7 @@ components:
           type: object
           properties:
             baseInfo:
-              type: object  
+              type: object
             contact:
               type: object
             about:
@@ -320,12 +366,11 @@ components:
             education:
               type: array
             licenseAndCert:
-              type: array  
+              type: array
             volunteer:
-              type: array 
+              type: array
             skills:
-              type: array 
-        
+              type: array
 
       example:
         title: Front End developer
@@ -333,20 +378,20 @@ components:
         userID: 60799d72625d953cf0844c47
         blacklisted: false
         userSnapShort:
-          baseInfo: 
+          baseInfo:
             firstName: Thai
             lastName: Nguyen
             dob: 11/06/2000
-          contact: 
+          contact:
             email: thainguyen@gmail.com
             about: Hon 5 nam kinh nghiem lam backend va 8 nam kinh nghiem lam frontend cung nhu kha nang speaking tieng anh thuong thua
-            featured: 
+            featured:
               - title: site
                 url: https://javhd.win/
               - title: blog
                 url: https://fb.com/
-            experiences: 
-              - formerJob: Lao cong 
+            experiences:
+              - formerJob: Lao cong
                 location: vng cooperations
             education:
               - highSchool: Quoc Hoc hue
@@ -359,7 +404,6 @@ components:
             skills:
               - title: football sport
                 accomplishment: a quan world cup 2020 giai ao lang
-        
 
     AuthTokens:
       type: object

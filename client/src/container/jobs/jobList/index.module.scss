@@ -1,7 +1,11 @@
 .jobList {
+  &__container {
+    max-height: 25rem;
+    height: 25rem;
+    overflow-y: auto;
+  }
   &__main {
     padding: 1rem 2rem 0 1rem;
-    // border-right: 2px solid #f3f2efa8;
     text-align: left;
     cursor: pointer;
     &:hover {
@@ -23,5 +27,11 @@
     &::before {
       content: "  \00b7  ";
     }
+  }
+
+  &__paginate {
+    margin: 1rem auto;
+    display: flex;
+    justify-content: center;
   }
 }

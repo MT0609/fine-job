@@ -54,10 +54,24 @@ const deleteJob = {
   }),
 };
 
+const postSave = {
+  params: Joi.object().keys({
+    jobID: Joi.string().custom(objectId),
+  }),
+};
+
+const postUnSave = {
+  params: Joi.object().keys({
+    jobID: Joi.string().custom(objectId),
+  }),
+};
+
 module.exports = {
   createJob,
   getJobs,
   getJob,
   updateJob,
   deleteJob,
+  postSave,
+  postUnSave,
 };

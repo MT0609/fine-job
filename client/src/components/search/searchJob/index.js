@@ -3,7 +3,7 @@ import { Container, Grid } from "@material-ui/core";
 import { Search } from "@material-ui/icons";
 import styles from "./search.module.scss";
 
-function SearchJobBar({ onsearch }) {
+function SearchJobBar({ defaultValue = "", onsearch }) {
   const searchInput = useRef(null);
 
   useEffect(() => {
@@ -15,21 +15,24 @@ function SearchJobBar({ onsearch }) {
   };
 
   const handleSearch = () => {
-    if (onsearch) onsearch(searchInput.current.value);
+    if (onsearch) {
+      onsearch(searchInput.current.value);
+    }
   };
 
   return (
     <Container>
       <Grid container spacing={3}>
-        <Grid item>
+        <Grid item md={5}>
           <div className={styles.searchbar}>
             <button onClick={setInputFocus} className={styles.searchbar__icon}>
               <Search />
             </button>
             <input
+              defaultValue={defaultValue}
               ref={searchInput}
               type="text"
-              placeholder="Look up some f...g jobs"
+              placeholder="Search jobs by name"
               className={styles.searchbar__input}
             />
           </div>

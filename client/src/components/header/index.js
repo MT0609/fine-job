@@ -44,7 +44,8 @@ function Header() {
             </li>
             <li
               className={
-                `${firstPathName}` === ROUTES.jobs.replace("/", "")
+                `${firstPathName}` === ROUTES.jobs.replace("/", "") ||
+                `${firstPathName}` === ROUTES.home.replace("/", "")
                   ? styles["header__links--active"]
                   : ""
               }

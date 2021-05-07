@@ -50,10 +50,22 @@ const deleteJob = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const postSave = catchAsync(async (req, res) => {
+  await jobService.postSaveJob(req.params.jobID, req.user.id);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
+const postUnSave = catchAsync(async (req, res) => {
+  await jobService.postUnSaveJob(req.params.jobID, req.user.id);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 module.exports = {
   createJob,
   getJobs,
   getJob,
   updateJob,
   deleteJob,
+  postSave,
+  postUnSave,
 };

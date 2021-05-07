@@ -78,10 +78,22 @@ const deleteCompany = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const postFollow = catchAsync(async (req, res) => {
+  await companyService.postFollowCompany(req.params.companyID, req.user.id);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
+const postUnFollow = catchAsync(async (req, res) => {
+  await companyService.postUnFollowCompany(req.params.companyID, req.user.id);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 module.exports = {
   createCompany,
   getCompanies,
   getCompany,
   updateCompany,
   deleteCompany,
+  postFollow,
+  postUnFollow,
 };
