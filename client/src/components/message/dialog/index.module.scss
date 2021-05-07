@@ -1,6 +1,6 @@
 .messages {
-  height: 20rem;
-  overflow: auto;
+  height: 50vh;
+  overflow-y: auto;
   border-bottom: 1px solid #cecece;
   &__time {
     font-size: 0.8rem;

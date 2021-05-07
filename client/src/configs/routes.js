@@ -16,6 +16,7 @@ const PostJob = lazy(() => import("../pages/talent/post"));
 const UpdateJob = lazy(() => import("../pages/talent/update"));
 const ResumeHomePage = lazy(() => import("../pages/resume"));
 const ResumeUpdate = lazy(() => import("../pages/resume/update"));
+const MessagePage = lazy(() => import("../pages/message"));
 const NotFound = lazy(() => import("../pages/notfound"));
 
 const routes = [
@@ -80,6 +81,12 @@ const routes = [
     exact: true,
     authen: true,
     main: () => <ResumeUpdate />,
+  },
+  {
+    path: ROUTES.messages,
+    exact: true,
+    authen: true,
+    main: () => <MessagePage />,
   },
   {
     path: ROUTES.forgot,

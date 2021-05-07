@@ -10,7 +10,6 @@ const initialState = {
 
 const messageReducer = (state = initialState, action) => {
   let newActiveMessageArray = [];
-  let index;
 
   switch (action.type) {
     case MESSAGECONSTANTS.MESSAGE_GET_ALL_REQUEST:
@@ -36,17 +35,10 @@ const messageReducer = (state = initialState, action) => {
         isLoading: true,
       };
     case MESSAGECONSTANTS.MESSAGE_GET_ONE_SUCCESS:
-      newActiveMessageArray = [...state.activeBubbleMessages];
-      index = newActiveMessageArray.findIndex(
-        (item) => item?.id === action.payload?.id
-      );
-      if (index === -1) newActiveMessageArray.unshift(action.payload);
-      else newActiveMessageArray[index] = action.payload;
-      if (newActiveMessageArray.length > 2) newActiveMessageArray.pop();
       return {
         ...state,
-        activeBubbleMessages: newActiveMessageArray,
-        message: action.payload,
+        message: action.payload?.message,
+        activeBubbleMessages: action.payload?.activeBubbleMessages,
         isLoading: false,
       };
     case MESSAGECONSTANTS.MESSAGE_GET_ONE_FAIL:
@@ -61,16 +53,10 @@ const messageReducer = (state = initialState, action) => {
         isLoading: true,
       };
     case MESSAGECONSTANTS.MESSAGE_SEND_ONE_SUCCESS:
-      newActiveMessageArray = [...state.activeBubbleMessages];
-      index = newActiveMessageArray.findIndex(
-        (item) => item?.id === action.payload?.id
-      );
-      if (index === -1) newActiveMessageArray.push(action.payload);
-      else newActiveMessageArray[index] = action.payload;
       return {
         ...state,
-        activeBubbleMessages: newActiveMessageArray,
-        message: action.payload,
+        message: action.payload?.message,
+        activeBubbleMessages: action.payload?.activeBubbleMessages,
         isLoading: false,
       };
     case MESSAGECONSTANTS.MESSAGE_SEND_ONE_FAIL:
@@ -85,16 +71,10 @@ const messageReducer = (state = initialState, action) => {
         isLoading: true,
       };
     case MESSAGECONSTANTS.MESSAGE_DELETE_ONE_SUCCESS:
-      newActiveMessageArray = [...state.activeBubbleMessages];
-      index = newActiveMessageArray.findIndex(
-        (item) => item?.id === action.payload?.id
-      );
-      if (index === -1) newActiveMessageArray.push(action.payload);
-      else newActiveMessageArray[index] = action.payload;
       return {
         ...state,
-        activeBubbleMessages: newActiveMessageArray,
-        message: action.payload,
+        activeBubbleMessages: action.payload?.activeBubbleMessages,
+        message: action.payload?.message,
         isLoading: false,
       };
     case MESSAGECONSTANTS.MESSAGE_DELETE_ONE_FAIL:
@@ -116,7 +96,7 @@ const messageReducer = (state = initialState, action) => {
       return {
         ...state,
         activeBubbleMessages: newActiveMessageArray,
-        message: action.payload,
+        message: {},
         isLoading: false,
       };
     case MESSAGECONSTANTS.MESSAGE_DELETE_CONVERSATION_FAIL:
@@ -126,13 +106,9 @@ const messageReducer = (state = initialState, action) => {
       };
 
     case MESSAGECONSTANTS.MESSAGE_CLOSE_ACTIVE_BUBBLE:
-      newActiveMessageArray = [...state.activeBubbleMessages];
-      newActiveMessageArray = newActiveMessageArray.filter(
-        (item) => item?.id !== action.payload
-      );
       return {
         ...state,
-        activeBubbleMessages: newActiveMessageArray,
+        activeBubbleMessages: action.payload,
       };
 
     default:

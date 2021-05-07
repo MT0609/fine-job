@@ -9,6 +9,7 @@ export const ROUTES = {
   resume: "/resume",
   resumeUpdate: "/resume/:id",
   jobUpdate: "/talent/post/:id/update",
+  messages: "/messages",
   authen: "/authen",
   forgot: "/authen/forgot",
 };

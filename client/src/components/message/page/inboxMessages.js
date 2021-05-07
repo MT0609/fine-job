@@ -7,6 +7,8 @@ import styles from "./index.module.scss";
 function InboxMessages(props) {
   const { messages = [], ondelete } = props;
 
+  const auth = useSelector((state) => state.auth);
+
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -14,8 +16,6 @@ function InboxMessages(props) {
   };
 
   useEffect(scrollToBottom, [messages.length]);
-
-  const auth = useSelector((state) => state.auth);
 
   const deleteMessage = (id) => {
     if (ondelete) ondelete(id);
