@@ -1,10 +1,16 @@
 import React from "react";
-import { Grid, Typography } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Divider, Grid, Typography } from "@material-ui/core";
+import { AppBar, Tabs, Tab } from "@material-ui/core";
 import { Add, OpenInNew, LocationOn } from "@material-ui/icons";
 import styles from "./index.module.scss";
 
 function CompanyHeadContainer(props) {
-  const { company } = props;
+  const { company, tabValue, onTabChange } = props;
+
+  const auth = useSelector((state) => state.auth);
+
   return (
     <div>
       <section
@@ -15,7 +21,7 @@ function CompanyHeadContainer(props) {
             className={styles["company__avatars--background"]}
             src={
               company.backgroundAvt ||
-              "https://media-exp1.licdn.com/dms/image/C4E1BAQFcckDwSlhOVg/company-background_10000/0/1579811796958?e=1620230400&v=beta&t=ythL-MIfV1O6AiyeFpZ1fyISu-PRNPaUIidDQT0ipSI"
+              "https://media-exp1.licdn.com/dms/image/C561BAQFgkUdG1rCrfw/company-background_10000/0/1570717328875?e=1620568800&v=beta&t=y3vgufzvLRh7wHIxNXyjotCBITG3MD2TBJB3tSWxvLI"
             }
             alt="background"
           />
@@ -64,18 +70,16 @@ function CompanyHeadContainer(props) {
           </p>
         </div>
 
-        <Grid
-          container
-          style={{ padding: "1rem 0" }}
-          spacing={2}
-          className={styles.company__head__buttons}
-        >
-          <Grid item>
-            <button className={styles.company__head__follow}>
-              <Add style={{ marginRight: "0.5rem" }} />
-              Follow
-            </button>
-          </Grid>
+        <Grid container spacing={2} className={styles.company__head__buttons}>
+          {auth.isAuth && (
+            <Grid item>
+              <button className={styles.company__head__follow}>
+                <Add style={{ marginRight: "0.5rem" }} />
+                Follow
+              </button>
+            </Grid>
+          )}
+
           <Grid item>
             <a
               href={
@@ -92,6 +96,38 @@ function CompanyHeadContainer(props) {
             </a>
           </Grid>
         </Grid>
+
+        <Divider />
+
+        <AppBar
+          position="static"
+          style={{
+            background: "transparent",
+            color: "black",
+            boxShadow: "none",
+          }}
+        >
+          <Tabs
+            value={tabValue}
+            onChange={(e, value) => {
+              if (onTabChange) onTabChange(e, value);
+            }}
+            TabIndicatorProps={{ style: { background: "blue" } }}
+          >
+            <Tab
+              style={{ fontWeight: "bold" }}
+              label="Home"
+              component={Link}
+              to={`/company/${company.id}`}
+            />
+            <Tab
+              style={{ fontWeight: "bold" }}
+              label="Jobs"
+              component={Link}
+              to={`/company/${company.id}/jobs`}
+            />
+          </Tabs>
+        </AppBar>
       </section>
     </div>
   );

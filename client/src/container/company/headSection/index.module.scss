@@ -24,7 +24,9 @@
       }
     }
     &__buttons {
+      padding: 1rem 2rem;
       @include flexbox();
+      justify-content: flex-start;
 
       button {
         @include flexbox();
@@ -39,6 +41,7 @@
       color: #0a66c2;
     }
     &__visit {
+      text-decoration: none;
       font-weight: bold;
       color: white;
       background-color: #0a66c2;
@@ -50,12 +53,12 @@
     position: relative;
     &--background {
       width: 100%;
-      min-height: 10rem;
+      height: 10rem;
     }
     &--avatar {
       position: absolute;
-      bottom: -30%;
-      left: 10%;
+      bottom: -20%;
+      left: 2rem;
       width: 100px;
       height: 100px;
     }

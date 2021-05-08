@@ -3,6 +3,8 @@ import * as COMPANYCONSTANTS from "../constants/companyConstants";
 const initialState = {
   companies: [],
   company: {},
+  currentPage: 0,
+  totalPages: 0,
   isLoading: false,
 };
 
@@ -17,7 +19,9 @@ const companyReducer = (state = initialState, action) => {
     case COMPANYCONSTANTS.C0MPANY_GET_ALL_SUCCESS:
       return {
         ...state,
-        companies: action.payload,
+        companies: action.payload?.results,
+        currentPage: action.payload?.page,
+        totalPages: action.payload?.totalPages,
         isLoading: false,
       };
     case COMPANYCONSTANTS.COMPANY_GET_ALL_FAIL:

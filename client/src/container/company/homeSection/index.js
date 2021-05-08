@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./index.module.scss";
 
-function popularSection(props) {
+function HomeSection(props) {
   const { title, content, list } = props;
   return (
     <section
@@ -20,4 +20,4 @@ function popularSection(props) {
   );
 }
 
-export default popularSection;
+export default HomeSection;
