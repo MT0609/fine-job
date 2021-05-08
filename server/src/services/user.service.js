@@ -19,7 +19,7 @@ const createUser = async (userBody) => {
   var newUser = formatUser(userBody);
 
   const user = await User.create(newUser);
-  await sendEmail(newUser.contact.email, 'Verify your account!', 'Click below button to verify account!');
+  await sendEmail(newUser.contacts.email, 'Verify your account!', 'Click below button to verify account!');
   
   return user;
 };
@@ -76,6 +76,7 @@ const updateUserById = async (userId, updateBody) => {
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
+ 
   if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
@@ -83,8 +84,10 @@ const updateUserById = async (userId, updateBody) => {
   let changeUser = formatUser(updateBody);
   
   let newUser = mergeDeep(user, changeUser);
+  console.log(newUser);
   //de giu lai thanh phan user
   Object.assign(user, newUser);
+  
   await user.save();
   return user;
 };
@@ -117,20 +120,20 @@ const formatUser = (user) => {
       lastName: user.lastName,
       sex: user.sex,
       headLine: user.headLine,
-      education: user.education,
+      educations: user.educations,
       country: user.country,
-      location: user.location,
+      locations: user.locations,
       industry: user.industry,
       dob: user.dob,
   }
   
-  let contact = {
+  let contacts = {
       email: user.email,
       phone: user.phone,
 
   }
   Object.keys(baseInfo).forEach(key => baseInfo[key] === undefined ? delete baseInfo[key] : {});
-  Object.keys(contact).forEach(key => contact[key] === undefined ? delete contact[key] : {});
+  Object.keys(contacts).forEach(key => contacts[key] === undefined ? delete contacts[key] : {});
 
   function deleteProps (obj, prop) {
     for (const p of prop) {
@@ -138,11 +141,11 @@ const formatUser = (user) => {
     }    
   }
 
-  //deleteProps(user, ['firstName', 'lastName', 'sex', 'deadLine', 'education', 'country', 'location', 'industry', 'dob']);
+  //deleteProps(user, ['firstName', 'lastName', 'sex', 'deadLine', 'educations', 'country', 'locations', 'industry', 'dob']);
   //deleteProps(user, ['phone', 'email']);
   let newUser = {
     baseInfo: baseInfo, 
-    contact: contact,
+    contacts: contacts,
   }
   
   newUser = Object.assign(newUser, user);

@@ -46,7 +46,7 @@ const userSchema = mongoose.Schema(
           type: String,
           default: '',
       },
-      education:{
+      educations:{
           type: Array,
           default: [],
           // luu object gom avt cua truong hoc va thong tin co ban
@@ -55,7 +55,7 @@ const userSchema = mongoose.Schema(
           type: String,
           default: "",
       },
-      location: {
+      locations: {
           type: String,
           default: "",
       },
@@ -89,7 +89,7 @@ const userSchema = mongoose.Schema(
 
     },
     ///--------------------------------------------
-    contact: {
+    contacts: {
       
        
        email: {
@@ -115,13 +115,13 @@ const userSchema = mongoose.Schema(
         type: String,
         default: '',
     },
-    connection: {
+    connections: {
 
         type: Array,
         default: [],
         //mot object lu user_id cua ban be
     },
-    fetured: {
+    features: {
 
         type: String,
         default: '',
@@ -133,30 +133,30 @@ const userSchema = mongoose.Schema(
         default: [],
         //profileViewCount, articleCount, searchApperanceCount
     },
-    experience: {
+    experiences: {
 
         type: Array,
         default: [],
         //luu kinh nghiem cua nguoi do, nhung job da lam
     },
-    following: {
+    followings: {
 
         type: Array,
         default: [],
     },
-    savePost: {
+    savePosts: {
 
         type: Array,
         default: [],
         //save cac bai post tuyen dung
     },
-    licenseAndCert: {
+    licenseAndCerts: {
 
         type: Array,
         default: [],
         //cac giay chung nhan
     },
-    volunteer: {
+    volunteers: {
 
         type: Array,
         default: [],
@@ -191,7 +191,19 @@ const userSchema = mongoose.Schema(
     enum: enumUser,
     default: 'candidate',
   },
-
+  likes: {
+    type: Array,
+    default: [],
+ 
+  },
+  notficaions: {
+    type: Array,
+    default: [],
+  },
+  activities: {
+    type: Array,
+    default: [],
+  },
   passwordResetToken: {
     type: String,
     //default: randomPassword(10),
