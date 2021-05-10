@@ -44,7 +44,7 @@ const updateUser = {
       country: Joi.string(),
       locations: Joi.string(),
       industry: Joi.string(),
-      educations: Joi.string()
+      educations: Joi.string(),
     })
     .min(1),
 };
@@ -55,10 +55,52 @@ const deleteUser = {
   }),
 };
 
+const sendConnReq = {
+  params: Joi.object().keys({
+    receiverID: Joi.string().custom(objectId),
+  }),
+  body: Joi.object().keys({
+    url: Joi.string().required(),
+    icon: Joi.string().required(),
+  }),
+};
+
+const acceptConnReq = {
+  params: Joi.object().keys({
+    receiverID: Joi.string().custom(objectId),
+  }),
+  query: {
+    notificationID: Joi.string().custom(objectId),
+  },
+};
+
+const refuseConnReq = {
+  params: Joi.object().keys({
+    receiverID: Joi.string().custom(objectId),
+  }),
+};
+
+const deleteConnReq = {
+  params: Joi.object().keys({
+    receiverID: Joi.string().custom(objectId),
+  }),
+};
+
+const deleteFriend = {
+  params: Joi.object().keys({
+    receiverID: Joi.string().custom(objectId),
+  }),
+};
+
 module.exports = {
   createUser,
   getUsers,
   getUser,
   updateUser,
   deleteUser,
+  sendConnReq,
+  acceptConnReq,
+  refuseConnReq,
+  deleteConnReq,
+  deleteFriend,
 };

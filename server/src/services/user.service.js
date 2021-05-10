@@ -3,8 +3,12 @@ const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { sendEmail } = require('./email.service');
 
-
-
+const {
+  createNotification,
+  getNotificationById,
+  postHideNotification,
+  postShowNotification,
+} = require('./notification.service');
 
 /**
  * Create a user
@@ -19,8 +23,8 @@ const createUser = async (userBody) => {
   var newUser = formatUser(userBody);
 
   const user = await User.create(newUser);
-  await sendEmail(newUser.contacts.email, 'Verify your account!', 'Click below button to verify account!');
-  
+  await sendEmail(newUser.contact.email, 'Verify your account!', 'Click below button to verify account!');
+
   return user;
 };
 
@@ -61,7 +65,7 @@ const getUserByEmail = async (email) => {
  * @param {string} username
  * @returns {Promise<User>}
  */
- const getUserByUsername = async (username) => {
+const getUserByUsername = async (username) => {
   return User.findOne({ username });
 };
 
@@ -76,18 +80,18 @@ const updateUserById = async (userId, updateBody) => {
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
- 
+
   if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
 
   let changeUser = formatUser(updateBody);
-  
+
   let newUser = mergeDeep(user, changeUser);
   console.log(newUser);
   //de giu lai thanh phan user
   Object.assign(user, newUser);
-  
+
   await user.save();
   return user;
 };
@@ -106,61 +110,57 @@ const deleteUserById = async (userId) => {
   return user;
 };
 
-
 /**
- * format object body to user 
+ * format object body to user
  * @param {object} user
  * @returns {object} newUser
  */
 
 const formatUser = (user) => {
-  
   var baseInfo = {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      sex: user.sex,
-      headLine: user.headLine,
-      educations: user.educations,
-      country: user.country,
-      locations: user.locations,
-      industry: user.industry,
-      dob: user.dob,
-  }
-  
-  let contacts = {
-      email: user.email,
-      phone: user.phone,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    sex: user.sex,
+    headLine: user.headLine,
+    educations: user.educations,
+    country: user.country,
+    locations: user.locations,
+    industry: user.industry,
+    dob: user.dob,
+  };
 
-  }
-  Object.keys(baseInfo).forEach(key => baseInfo[key] === undefined ? delete baseInfo[key] : {});
-  Object.keys(contacts).forEach(key => contacts[key] === undefined ? delete contacts[key] : {});
+  let contact = {
+    email: user.email,
+    phone: user.phone,
+  };
+  Object.keys(baseInfo).forEach((key) => (baseInfo[key] === undefined ? delete baseInfo[key] : {}));
+  Object.keys(contact).forEach((key) => (contact[key] === undefined ? delete contact[key] : {}));
 
-  function deleteProps (obj, prop) {
+  function deleteProps(obj, prop) {
     for (const p of prop) {
-        (p in obj) && (delete obj[p]);
-    }    
+      p in obj && delete obj[p];
+    }
   }
 
   //deleteProps(user, ['firstName', 'lastName', 'sex', 'deadLine', 'educations', 'country', 'locations', 'industry', 'dob']);
   //deleteProps(user, ['phone', 'email']);
   let newUser = {
-    baseInfo: baseInfo, 
-    contacts: contacts,
-  }
-  
+    baseInfo: baseInfo,
+    contact: contact,
+  };
+
   newUser = Object.assign(newUser, user);
 
-
   return newUser;
-}
+};
 
 /**
  * Simple object check.
  * @param item
  * @returns {boolean}
  */
- function isObject (item) {
-  return (item && typeof item === 'object' && !Array.isArray(item));
+function isObject(item) {
+  return item && typeof item === 'object' && !Array.isArray(item);
 }
 
 /**
@@ -168,7 +168,7 @@ const formatUser = (user) => {
  * @param target
  * @param ...sources
  */
-const mergeDeep  = (target, ...sources) =>{
+const mergeDeep = (target, ...sources) => {
   if (!sources.length) return target;
   const source = sources.shift();
 
@@ -184,7 +184,245 @@ const mergeDeep  = (target, ...sources) =>{
   }
 
   return mergeDeep(target, ...sources);
-}
+};
+
+/**
+ * Send connection req
+ * @param {Object} userBody
+ * @param {Object} sender
+ * @param {ObjectId} receiverID
+ * @returns {Promise<Job>}
+ */
+const sendConnReq = async (userBody, sender, receiverID) => {
+  try {
+    const receiver = await getUserById(receiverID);
+
+    if (!receiver) {
+      throw new Error('User not found');
+    }
+
+    // Already have the connection
+    const isFriend = sender.connections.filter((el) => el.id == receiverID);
+    if (isFriend.length >= 1) return {};
+
+    // Sent the connection request
+    const isSent = sender.activities.filter(
+      (el) =>
+        el.info.sender.id.toString() === sender._id.toString() &&
+        el.info.receiver.id.toString() === receiver._id.toString() &&
+        el.type === 'sendConnReq'
+    );
+    if (isSent.length >= 1) return {};
+
+    const activity = { ...userBody };
+    activity.status = 'new';
+    activity.type = 'sendConnReq';
+    activity.params = [sender._id, receiver._id];
+    activity.info = {
+      sender: {
+        id: sender._id,
+        avatar: sender.avatar,
+        name: sender.name,
+      },
+      receiver: {
+        id: receiver._id,
+        avatar: receiver.avatar,
+        name: receiver.name,
+      },
+    };
+
+    const notification = await createNotification(activity);
+
+    sender.activities.unshift(activity);
+    receiver.notifications.unshift(notification);
+
+    await sender.save();
+    await receiver.save();
+
+    return {};
+  } catch (error) {
+    throw new ApiError(httpStatus.NOT_FOUND, error.message);
+  }
+};
+
+/**
+ * Accept connection req
+ * @param {Object} userBody
+ * @param {Object} sender
+ * @param {ObjectId} receiverID
+ * @param {ObjectId} notificationID
+ * @returns {Promise<Job>}
+ */
+const acceptConnReq = async (userBody, sender, receiverID, notificationID) => {
+  try {
+    const receiver = await getUserById(receiverID);
+    const notification = await getNotificationById(notificationID);
+
+    if (!receiver) {
+      throw new Error('User not found');
+    }
+    if (!notification) {
+      throw new Error('Notification not found');
+    }
+
+    // Already have the connection
+    const isFriend = sender.connections.filter((el) => el.id == receiverID);
+    if (isFriend.length >= 1) return {};
+
+    // Create object activity
+    const activity = { ...userBody };
+    activity.status = 'new';
+    activity.type = 'acceptConnReq';
+    activity.params = [sender._id, receiver._id];
+    activity.info = {
+      sender: {
+        id: sender._id,
+        avatar: sender.avatar,
+        name: `${sender.firstName} ${sender.lastName}`,
+      },
+      receiver: {
+        id: receiver._id,
+        avatar: receiver.avatar,
+        name: `${receiver.firstName} ${receiver.lastName}`,
+      },
+    };
+
+    sender.activities.unshift(activity);
+    notification.status = 'new';
+    receiver.notifications.unshift(notification);
+
+    // Make a new connection
+    const senderInfo = {
+      id: sender._id,
+      name: sender.name,
+      avatar: sender.avatar,
+    };
+
+    const receiverInfo = {
+      id: receiver._id,
+      name: receiver.name,
+      avatar: receiver.avatar,
+    };
+
+    sender.connections.unshift(receiverInfo);
+    receiver.connections.unshift(senderInfo);
+
+    await sender.save();
+    await receiver.save();
+    await notification.save();
+
+    return {};
+  } catch (error) {
+    throw new ApiError(httpStatus.NOT_FOUND, error.message);
+  }
+};
+
+/**
+ * Refuse connection req
+ * @param {Object} userBody
+ * @param {Object} sender
+ * @param {ObjectId} receiverID
+ * @param {ObjectId} notificationID
+ * @returns {Promise<Job>}
+ */
+const refuseConnReq = async (userBody, sender, receiverID, notificationID) => {
+  try {
+    const receiver = await getUserById(receiverID);
+    const notification = await getNotificationById(notificationID);
+
+    if (!receiver) {
+      throw new Error('User not found');
+    }
+    if (!notification) {
+      throw new Error('Notification not found');
+    }
+
+    // Already have the connection
+    const isFriend = sender.connections.filter((el) => el.id == receiverID);
+    if (isFriend.length >= 1) return {};
+
+    // Create object activity
+    const activity = { ...userBody };
+    activity.status = 'read';
+    activity.type = 'refuseConnReq';
+    activity.params = [sender._id, receiver._id];
+    activity.info = {
+      sender: {
+        id: sender._id,
+        avatar: sender.avatar,
+        name: sender.name,
+      },
+      receiver: {
+        id: receiver._id,
+        avatar: receiver.avatar,
+        name: receiver.name,
+      },
+    };
+
+    sender.activities.unshift(activity);
+    notification.status = 'new';
+    notification.type = 'refuseConnReq';
+
+    await sender.save();
+    await notification.save();
+
+    return {};
+  } catch (error) {
+    throw new ApiError(httpStatus.NOT_FOUND, error.message);
+  }
+};
+
+/**
+ * Delete connection req
+ * @param {Object} userBody
+ * @param {Object} sender
+ * @param {ObjectId} receiverID
+ * @param {ObjectId} notificationID
+ * @returns {Promise<Job>}
+ */
+const deleteConnReq = async (userBody, sender, receiverID, notificationID) => {
+  try {
+    const receiver = await getUserById(receiverID);
+    const notification = await getNotificationById(notificationID);
+
+    if (!receiver) {
+      throw new Error('User not found');
+    }
+    if (!notification) {
+      throw new Error('Notification not found');
+    }
+
+    // Already have the connection
+    const isFriend = sender.connections.filter((el) => el.id == receiverID);
+    if (isFriend.length >= 1) return {};
+
+    // Create object activity
+    const activity = { ...userBody };
+    activity.status = 'hide';
+    activity.type = 'deleteConnReq';
+    activity.params = [sender._id, receiver._id];
+    activity.info = {
+      sender: {
+        id: sender._id,
+        avatar: sender.avatar,
+        name: sender.name,
+      },
+      receiver: {
+        id: receiver._id,
+        avatar: receiver.avatar,
+        name: receiver.name,
+      },
+    };
+
+    sender.activities.unshift(activity);
+
+    await sender.save();
+
+    return {};
+  } catch (error) {
+    throw new ApiError(httpStatus.NOT_FOUND, error.message);
+  }
+};
 
 module.exports = {
   createUser,
@@ -195,5 +433,9 @@ module.exports = {
   updateUserById,
   deleteUserById,
   formatUser,
-  mergeDeep
+  mergeDeep,
+  sendConnReq,
+  acceptConnReq,
+  refuseConnReq,
+  deleteConnReq,
 };

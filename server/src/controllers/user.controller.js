@@ -34,10 +34,40 @@ const deleteUser = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const sendConnReq = catchAsync(async (req, res) => {
+  await userService.sendConnReq(req.body, req.user, req.params.receiverID);
+  res.status(httpStatus.CREATED).send({});
+});
+
+const acceptConnReq = catchAsync(async (req, res) => {
+  await userService.acceptConnReq(req.body, req.user, req.params.receiverID, req.query.notificationID);
+  res.status(httpStatus.CREATED).send({});
+});
+
+const refuseConnReq = catchAsync(async (req, res) => {
+  await userService.refuseConnReq(req.body, req.user, req.params.receiverID, req.query.notificationID);
+  res.status(httpStatus.CREATED).send({});
+});
+
+const deleteConnReq = catchAsync(async (req, res) => {
+  await userService.deleteConnReq(req.body, req.user, req.params.receiverID, req.query.notificationID);
+  res.status(httpStatus.CREATED).send({});
+});
+
+const deleteFriend = catchAsync(async (req, res) => {
+  await userService.deleteFriend(req.body, req.user, req.params.receiverID, req.query.notificationID);
+  res.status(httpStatus.CREATED).send({});
+});
+
 module.exports = {
   createUser,
   getUsers,
   getUser,
   updateUser,
   deleteUser,
+  sendConnReq,
+  acceptConnReq,
+  refuseConnReq,
+  deleteConnReq,
+  deleteFriend,
 };
