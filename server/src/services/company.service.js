@@ -70,8 +70,6 @@ const updateCompanyById = async (companyID, updateBody) => {
 
   company.baseInfo.specialties = updateBody.specialties.split(',');
 
-  console.log(updateBody);
-
   Object.assign(company, updateBody);
   await company.save();
   return company;
@@ -110,11 +108,15 @@ const postFollowCompany = async (companyID, userID) => {
       throw new Error('User not found');
     }
 
+    // is following
+    const isFollowing = user.followings.filter((el) => el.companyID == companyID);
+    if (isFollowing.length >= 1) return {};
+
     // User & company update
     const userSnap = {
       userID: user._id,
       name: user.baseInfo.firstName + ' ' + user.baseInfo.lastName,
-      email: user.contact.email,
+      email: user.contacts.email,
       avatar: user.avatar,
     };
 
@@ -122,6 +124,7 @@ const postFollowCompany = async (companyID, userID) => {
       companyID: company._id,
       name: company.name,
       avatar: company.avatar,
+      baseInfo: company.baseInfo,
     };
 
     company.followers.push(userSnap);
@@ -156,7 +159,7 @@ const postUnFollowCompany = async (companyID, userID) => {
     }
 
     company.followers = company.followers.filter((el) => el.userID != userID);
-    user.followings = user.followers.filter((el) => el.companyID != companyID);
+    user.followings = user.followings.filter((el) => el.companyID != companyID);
 
     await company.save();
     await user.save();

@@ -19,7 +19,15 @@ const createNotification = async (userBody) => {
  * @returns {Promise<Notification>}
  */
 const getNotificationById = async (id) => {
-  return Notification.findById(id);
+  try {
+    const notification = await Notification.findById(id);
+    notification.status = 'read';
+
+    await notification.save();
+    return notification;
+  } catch (error) {
+    throw new ApiError(httpStatus.NOT_FOUND, error.message);
+  }
 };
 
 /**

@@ -130,6 +130,10 @@ const postSaveJob = async (jobID, userID) => {
       throw new Error('User not found');
     }
 
+    // is saved
+    const isSaved = user.savePosts.filter((el) => el.jobID == jobID);
+    if (isSaved.length >= 1) return {};
+
     // User & job update
     const jobSnap = {
       jobID: job._id,
@@ -140,9 +144,9 @@ const postSaveJob = async (jobID, userID) => {
       status: job.status,
     };
 
-    user.savedPosts.push(jobSnap);
+    user.savePosts.push(jobSnap);
 
-    await company.save();
+    await user.save();
 
     return {};
   } catch (error) {
@@ -169,7 +173,7 @@ const postUnSaveJob = async (jobID, userID) => {
       throw new Error('User not found');
     }
 
-    user.savedPosts = user.savedPosts.filter((el) => el.jobID != jobID);
+    user.savePosts = user.savePosts.filter((el) => el.jobID != jobID);
 
     await user.save();
 

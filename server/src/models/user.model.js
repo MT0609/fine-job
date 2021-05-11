@@ -8,65 +8,63 @@ const { roles } = require('../config/roles');
 //const { randomPassword } = require('./../utils/passport');
 
 const enumUser = {
-	values: ['candidate', 'employer', 'admin'],
-	message: `Quyền người dùng phải là 'candidate', 'employer', 'admin'!`,
+  values: ['candidate', 'employer', 'admin'],
+  message: `Quyền người dùng phải là 'candidate', 'employer', 'admin'!`,
 };
-
 
 const enumStatus = {
-	values: ['open', 'close'],
-	message: `Trạng thái phải là 'open' or 'close'!`,
+  values: ['open', 'close'],
+  message: `Trạng thái phải là 'open' or 'close'!`,
 };
 
-
 const enumSex = {
-	values: ['male', 'female', 'other'],
-	message: `Trạng thái phải là 'male', 'female', 'other'!`,
+  values: ['male', 'female', 'other'],
+  message: `Trạng thái phải là 'male', 'female', 'other'!`,
 };
 
 const userSchema = mongoose.Schema(
   {
-    baseInfo :{
+    baseInfo: {
       firstName: {
-          type: String,
-          required: [true, 'Họ là bắt buộc!'],
-          trim: true,
+        type: String,
+        required: [true, 'Họ là bắt buộc!'],
+        trim: true,
       },
       lastName: {
-          type: String,
-          required: [true, 'Tên là bắt buộc!'],
-          trim: true,
+        type: String,
+        required: [true, 'Tên là bắt buộc!'],
+        trim: true,
       },
       sex: {
-          type: String,
-          enum: enumSex,
-          required: true,
+        type: String,
+        enum: enumSex,
+        required: true,
       },
-      headLine:{
-          type: String,
-          default: '',
+      headLine: {
+        type: String,
+        default: '',
       },
-      educations:{
-          type: Array,
-          default: [],
-          // luu object gom avt cua truong hoc va thong tin co ban
+      educations: {
+        type: Array,
+        default: [],
+        // luu object gom avt cua truong hoc va thong tin co ban
       },
       country: {
-          type: String,
-          default: "",
+        type: String,
+        default: '',
       },
       locations: {
-          type: String,
-          default: "",
+        type: String,
+        default: '',
       },
       industry: {
-          type: String,
-          default: "",
+        type: String,
+        default: '',
       },
-      dob:{
-          type: Date,
-          required: true,
-      } 
+      dob: {
+        type: Date,
+        required: true,
+      },
     },
     isEmailVerified: {
       type: Boolean,
@@ -74,107 +72,91 @@ const userSchema = mongoose.Schema(
     },
 
     backgroundAvt: {
-        type: String,
-        default: "",
+      type: String,
+      default: '',
     },
-  
-    avatar: {
-    type: String,
-    default: '',
-    },
- 
-    status:{
-        type: String,
-        enum: enumStatus,
 
+    avatar: {
+      type: String,
+      default: '',
+    },
+
+    status: {
+      type: String,
+      enum: enumStatus,
     },
     ///--------------------------------------------
-    contacts: {
-      
-       
-       email: {
-          type: String,
-          unique: true,
-          trim: true,
-          lowercase: true,
-          validate(value) {
-            if (!validator.isEmail(value)) {
-              throw new Error('Invalid email');
-            }
-          },
+    contact: {
+      email: {
+        type: String,
+        unique: true,
+        trim: true,
+        lowercase: true,
+        validate(value) {
+          if (!validator.isEmail(value)) {
+            throw new Error('Invalid email');
+          }
         },
-        phone: {
-
-          type: String,
-          default: '',
-        }   
-  
-    
+      },
+      phone: {
+        type: String,
+        default: '',
+      },
     },
     about: {
-        type: String,
-        default: '',
+      type: String,
+      default: '',
     },
     connections: {
-
-        type: Array,
-        default: [],
-        //mot object lu user_id cua ban be
+      type: Array,
+      default: [],
+      //mot object lu user_id cua ban be
     },
     features: {
-
-        type: String,
-        default: '',
-        //link blog, site
+      type: String,
+      default: '',
+      //link blog, site
     },
     dashboard: {
-
-        type: Array,
-        default: [],
-        //profileViewCount, articleCount, searchApperanceCount
+      type: Array,
+      default: [],
+      //profileViewCount, articleCount, searchApperanceCount
     },
     experiences: {
-
-        type: Array,
-        default: [],
-        //luu kinh nghiem cua nguoi do, nhung job da lam
+      type: Array,
+      default: [],
+      //luu kinh nghiem cua nguoi do, nhung job da lam
     },
     followings: {
-
-        type: Array,
-        default: [],
+      type: Array,
+      default: [],
     },
     savePosts: {
-
-        type: Array,
-        default: [],
-        //save cac bai post tuyen dung
+      type: Array,
+      default: [],
+      //save cac bai post tuyen dung
     },
     licenseAndCerts: {
-
-        type: Array,
-        default: [],
-        //cac giay chung nhan
+      type: Array,
+      default: [],
+      //cac giay chung nhan
     },
     volunteers: {
-
-        type: Array,
-        default: [],
-        //Hoat dong tinh nguyen
+      type: Array,
+      default: [],
+      //Hoat dong tinh nguyen
     },
     skills: {
-        type: Array,
-        default: [],
-        //cac ki nang ngoai
+      type: Array,
+      default: [],
+      //cac ki nang ngoai
     },
     username: {
-
-        type: String,
-        required: true,
-        unique: true,
+      type: String,
+      required: true,
+      unique: true,
     },
     password: {
-
       type: String,
       required: true,
       trim: true,
@@ -183,57 +165,51 @@ const userSchema = mongoose.Schema(
         if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
           throw new Error('Password must contain at least one letter and one number');
         }
-
+      },
     },
+    roles: {
+      type: String,
+      enum: enumUser,
+      default: 'candidate',
     },
-  roles: {
-    type: String,
-    enum: enumUser,
-    default: 'candidate',
-  },
-  likes: {
-    type: Array,
-    default: [],
- 
-  },
-  notficaions: {
-    type: Array,
-    default: [],
-  },
-  activities: {
-    type: Array,
-    default: [],
-  },
-  passwordResetToken: {
-    type: String,
-    //default: randomPassword(10),
-  },
-  passwordResetExpires: {
-    type: Date,
-    default: Date.now(),
-  },
-  google: {
-    type: Object,
-    default: {
-      id: '',
-      token: '',
+    likes: {
+      type: Array,
+      default: [],
+    },
+    notifications: {
+      type: Array,
+      default: [],
+    },
+    activities: {
+      type: Array,
+      default: [],
+    },
+    passwordResetToken: {
+      type: String,
+      //default: randomPassword(10),
+    },
+    passwordResetExpires: {
+      type: Date,
+      default: Date.now(),
+    },
+    google: {
+      type: Object,
+      default: {
+        id: '',
+        token: '',
+      },
+    },
+    facebook: {
+      type: Object,
+      default: {
+        id: '',
+        token: '',
+      },
     },
   },
-  facebook: {
-    type: Object,
-    default: {
-      id: '',
-      token: '',
-    },
-  },
-      
-      
-    
-      
-    },
-    {
-      timestamps: true,
-    }
+  {
+    timestamps: true,
+  }
 );
 
 // add plugin that converts mongoose to json
@@ -268,9 +244,6 @@ userSchema.pre('save', async function (next) {
   }
   next();
 });
-
-
-
 
 /**
  * @typedef User
