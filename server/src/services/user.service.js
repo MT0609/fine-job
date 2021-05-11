@@ -222,12 +222,12 @@ const sendConnReq = async (userBody, sender, receiverID) => {
       sender: {
         id: sender._id,
         avatar: sender.avatar,
-        name: sender.name,
+        name: `${sender.firstName} ${sender.lastName}`,
       },
       receiver: {
         id: receiver._id,
         avatar: receiver.avatar,
-        name: receiver.name,
+        name: `${receiver.firstName} ${receiver.lastName}`,
       },
     };
 
@@ -287,8 +287,16 @@ const acceptConnReq = async (userBody, sender, receiverID, notificationID) => {
       },
     };
 
-    sender.activities.unshift(activity);
+    // Update notification
+    const index = sender.notifications.findIndex((el) => el._id.toString() === notificationID.toString());
+    if (index >= 0) {
+      sender.markModified('notifications');
+      sender.notifications[index].status = 'read';
+      sender.notifications[index].type = 'acceptConnReq';
+    }
     notification.status = 'new';
+    notification.type = 'acceptConnReq';
+    sender.activities.unshift(activity);
     receiver.notifications.unshift(notification);
 
     // Make a new connection
@@ -318,61 +326,6 @@ const acceptConnReq = async (userBody, sender, receiverID, notificationID) => {
 };
 
 /**
- * Refuse connection req
- * @param {Object} userBody
- * @param {Object} sender
- * @param {ObjectId} receiverID
- * @param {ObjectId} notificationID
- * @returns {Promise<Job>}
- */
-const refuseConnReq = async (userBody, sender, receiverID, notificationID) => {
-  try {
-    const receiver = await getUserById(receiverID);
-    const notification = await getNotificationById(notificationID);
-
-    if (!receiver) {
-      throw new Error('User not found');
-    }
-    if (!notification) {
-      throw new Error('Notification not found');
-    }
-
-    // Already have the connection
-    const isFriend = sender.connections.filter((el) => el.id == receiverID);
-    if (isFriend.length >= 1) return {};
-
-    // Create object activity
-    const activity = { ...userBody };
-    activity.status = 'read';
-    activity.type = 'refuseConnReq';
-    activity.params = [sender._id, receiver._id];
-    activity.info = {
-      sender: {
-        id: sender._id,
-        avatar: sender.avatar,
-        name: sender.name,
-      },
-      receiver: {
-        id: receiver._id,
-        avatar: receiver.avatar,
-        name: receiver.name,
-      },
-    };
-
-    sender.activities.unshift(activity);
-    notification.status = 'new';
-    notification.type = 'refuseConnReq';
-
-    await sender.save();
-    await notification.save();
-
-    return {};
-  } catch (error) {
-    throw new ApiError(httpStatus.NOT_FOUND, error.message);
-  }
-};
-
-/**
  * Delete connection req
  * @param {Object} userBody
  * @param {Object} sender
@@ -392,31 +345,89 @@ const deleteConnReq = async (userBody, sender, receiverID, notificationID) => {
       throw new Error('Notification not found');
     }
 
-    // Already have the connection
-    const isFriend = sender.connections.filter((el) => el.id == receiverID);
-    if (isFriend.length >= 1) return {};
-
     // Create object activity
     const activity = { ...userBody };
-    activity.status = 'hide';
+    activity.status = 'new';
     activity.type = 'deleteConnReq';
     activity.params = [sender._id, receiver._id];
     activity.info = {
       sender: {
         id: sender._id,
         avatar: sender.avatar,
-        name: sender.name,
+        name: `${sender.firstName} ${sender.lastName}`,
       },
       receiver: {
         id: receiver._id,
         avatar: receiver.avatar,
-        name: receiver.name,
+        name: `${receiver.firstName} ${receiver.lastName}`,
       },
     };
+
+    // Update notification
+    const index = sender.notifications.findIndex((el) => el._id.toString() === notificationID.toString());
+    if (index >= 0) {
+      sender.markModified('notifications');
+      sender.notifications[index].status = 'hide';
+      sender.notifications[index].type = 'deleteConnReq';
+    }
+    notification.status = 'hide';
+    notification.type = 'deleteConnReq';
+    sender.activities.unshift(activity);
+
+    await sender.save();
+    await notification.save();
+
+    return {};
+  } catch (error) {
+    throw new ApiError(httpStatus.NOT_FOUND, error.message);
+  }
+};
+
+/**
+ * Delete friend
+ * @param {Object} userBody
+ * @param {Object} sender
+ * @param {ObjectId} receiverID
+ * @returns {Promise<Job>}
+ */
+const deleteFriend = async (userBody, sender, receiverID) => {
+  try {
+    const receiver = await getUserById(receiverID);
+
+    if (!receiver) {
+      throw new Error('User not found');
+    }
+
+    // Already haven't the connection
+    const isFriend = sender.connections.filter((el) => el.id == receiverID);
+    if (!isFriend.length >= 1) return {};
+
+    // Create object activity
+    const activity = { ...userBody };
+    activity.status = 'new';
+    activity.type = 'deleteFriend';
+    activity.params = [sender._id, receiver._id];
+    activity.info = {
+      sender: {
+        id: sender._id,
+        avatar: sender.avatar,
+        name: `${sender.firstName} ${sender.lastName}`,
+      },
+      receiver: {
+        id: receiver._id,
+        avatar: receiver.avatar,
+        name: `${receiver.firstName} ${receiver.lastName}`,
+      },
+    };
+
+    // Update connection
+    sender.connections = sender.connections.filter((el) => el.id.toString() !== receiver._id.toString());
+    receiver.connections = receiver.connections.filter((el) => el.id.toString() !== sender._id.toString());
 
     sender.activities.unshift(activity);
 
     await sender.save();
+    await receiver.save();
 
     return {};
   } catch (error) {
@@ -436,6 +447,6 @@ module.exports = {
   mergeDeep,
   sendConnReq,
   acceptConnReq,
-  refuseConnReq,
   deleteConnReq,
+  deleteFriend,
 };

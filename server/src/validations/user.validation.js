@@ -74,12 +74,6 @@ const acceptConnReq = {
   },
 };
 
-const refuseConnReq = {
-  params: Joi.object().keys({
-    receiverID: Joi.string().custom(objectId),
-  }),
-};
-
 const deleteConnReq = {
   params: Joi.object().keys({
     receiverID: Joi.string().custom(objectId),
@@ -100,7 +94,6 @@ module.exports = {
   deleteUser,
   sendConnReq,
   acceptConnReq,
-  refuseConnReq,
   deleteConnReq,
   deleteFriend,
 };

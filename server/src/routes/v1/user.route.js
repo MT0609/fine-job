@@ -24,15 +24,10 @@ router
   .post(auth(), validate(userValidation.acceptConnReq), userController.acceptConnReq);
 
 router
-  .route('/:receiverID/refuseConnReq')
-  .post(auth(), validate(userValidation.refuseConnReq), userController.refuseConnReq);
-
-router
   .route('/:receiverID/deleteConnReq')
   .post(auth(), validate(userValidation.deleteConnReq), userController.deleteConnReq);
 
-router.route('/:receiverID/deleteFriend');
-//.post(auth(), validate(userValidation.deleteFriend), userController.deleteFriend);
+router.route('/:receiverID/deleteFriend').post(auth(), validate(userValidation.deleteFriend), userController.deleteFriend);
 
 module.exports = router;
 
@@ -369,37 +364,6 @@ module.exports = router;
 
 /**
  * @swagger
- * /users/{id}/refuseConnReq:
- *   post:
- *     summary: Refuse connection req
- *     description: Refuse req make a new friend
- *     tags: [Users]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Receiver id
- *       - in: query
- *         name: notificationID
- *         description: NotificationID
- *
- *     responses:
- *       "200":
- *         description: No content
- *       "401":
- *         $ref: '#/components/responses/Unauthorized'
- *       "403":
- *         $ref: '#/components/responses/Forbidden'
- *       "404":
- *         $ref: '#/components/responses/NotFound'
- */
-
-/**
- * @swagger
  * /users/{id}/deleteConnReq:
  *   post:
  *     summary: Delete connection req
@@ -439,6 +403,12 @@ module.exports = router;
  *     security:
  *       - bearerAuth: []
  *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Receiver id
  *     responses:
  *       "200":
  *         description: No content

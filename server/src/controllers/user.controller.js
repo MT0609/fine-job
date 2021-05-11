@@ -44,18 +44,13 @@ const acceptConnReq = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send({});
 });
 
-const refuseConnReq = catchAsync(async (req, res) => {
-  await userService.refuseConnReq(req.body, req.user, req.params.receiverID, req.query.notificationID);
-  res.status(httpStatus.CREATED).send({});
-});
-
 const deleteConnReq = catchAsync(async (req, res) => {
   await userService.deleteConnReq(req.body, req.user, req.params.receiverID, req.query.notificationID);
   res.status(httpStatus.CREATED).send({});
 });
 
 const deleteFriend = catchAsync(async (req, res) => {
-  await userService.deleteFriend(req.body, req.user, req.params.receiverID, req.query.notificationID);
+  await userService.deleteFriend(req.body, req.user, req.params.receiverID);
   res.status(httpStatus.CREATED).send({});
 });
 
@@ -67,7 +62,6 @@ module.exports = {
   deleteUser,
   sendConnReq,
   acceptConnReq,
-  refuseConnReq,
   deleteConnReq,
   deleteFriend,
 };
