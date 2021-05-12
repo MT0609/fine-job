@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const { toJSON, paginate } = require('./plugins');
 
 const enumNotificationType = {
-  values: ['sendConnReq', 'acceptConnReq', 'postJob', 'closeJob', 'applyJob', 'followCompany'],
-  message: `Notification must be 'sendConnReq', 'acceptConnReq', 'postJob', 'closeJob', 'applyJob' or 'followCompany'!`,
+  values: ['sendConnReq', 'acceptConnReq', 'deleteConnReq', 'unFriend', 'postJob', 'closeJob', 'applyJob', 'followCompany'],
+  message: `Notification must be 'sendConnReq', 'acceptConnReq', 'deleteConnReq', 'unFriend', 'postJob', 'closeJob', 'applyJob' or 'followCompany'!`,
 };
 
 const enumNotificationStatus = {
@@ -23,10 +23,17 @@ const notifySchema = mongoose.Schema(
     params: {
       type: Object,
     },
+    icon: {
+      type: String,
+    },
     status: {
       type: String,
       default: 'new',
       enum: enumNotificationStatus,
+    },
+    info: {
+      type: Object,
+      default: {},
     },
   },
   {

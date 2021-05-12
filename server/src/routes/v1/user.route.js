@@ -17,6 +17,18 @@ router
   .patch(auth('updateUser'), validate(userValidation.updateUser), userController.updateUser)
   .delete(auth('manageUsers'), validate(userValidation.deleteUser), userController.deleteUser);
 
+router.route('/:receiverID/sendConnReq').post(auth(), validate(userValidation.sendConnReq), userController.sendConnReq);
+
+router
+  .route('/:receiverID/acceptConnReq')
+  .post(auth(), validate(userValidation.acceptConnReq), userController.acceptConnReq);
+
+router
+  .route('/:receiverID/deleteConnReq')
+  .post(auth(), validate(userValidation.deleteConnReq), userController.deleteConnReq);
+
+router.route('/:receiverID/deleteFriend').post(auth(), validate(userValidation.deleteFriend), userController.deleteFriend);
+
 module.exports = router;
 
 /**
@@ -55,7 +67,7 @@ module.exports = router;
  *               lastName:
  *                  type: string
  *                  description: Last name
- *               userName: 
+ *               userName:
  *                  type: string
  *                  description: must be unique
  *               email:
@@ -72,7 +84,7 @@ module.exports = router;
  *                  enum: [candidate, employer, admin]
  *             example:
  *               firstName: Hai thanh dep trai
- *               lastName:  Khoai to               
+ *               lastName:  Khoai to
  *               email: thanhprovl@example.com
  *               password: password1
  *               role: candidate
@@ -110,7 +122,7 @@ module.exports = router;
  *       - in: query
  *         name: role
  *         schema:
- *           type: string          
+ *           type: string
  *         description: User role
  *       - in: query
  *         name: sortBy
@@ -261,6 +273,142 @@ module.exports = router;
  *         schema:
  *           type: string
  *         description: User id
+ *     responses:
+ *       "200":
+ *         description: No content
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /users/{id}/sendConnReq:
+ *   post:
+ *     summary: Send connection req
+ *     description: Send req make a new friend
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Receiver id
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - url
+ *               - icon
+ *             properties:
+ *               url:
+ *                  type: string
+ *                  description: Redirect url when click activity/notification
+ *               icon:
+ *                  type: string
+ *                  description: Options
+ *             example:
+ *               url:  https://fine-job/users/nguyen-quoc-thai
+ *               icon: https://static.thenounproject.com/png/2235846-200.png
+
+ *     responses:
+ *       "201":
+ *         description: Created
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /users/{id}/acceptConnReq:
+ *   post:
+ *     summary: Accept connection req
+ *     description: Accept req make a new friend
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Receiver id
+ *       - in: query
+ *         name: notificationID
+ *         description: NotificationID
+ *
+ *     responses:
+ *       "200":
+ *         description: No content
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /users/{id}/deleteConnReq:
+ *   post:
+ *     summary: Delete connection req
+ *     description: Delete req make a new friend
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Receiver id
+ *       - in: query
+ *         name: notificationID
+ *         description: NotificationID
+ *
+ *     responses:
+ *       "200":
+ *         description: No content
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /users/{id}/deleteFriend:
+ *   post:
+ *     summary: Delete friend
+ *     description: Delete a friend
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Receiver id
  *     responses:
  *       "200":
  *         description: No content

@@ -132,7 +132,15 @@ const queryMessages = async (filter, options) => {
         { userID_1: userID_2, userID_2: userID_1 },
       ],
     });
-    return message;
+
+    const partnerInfo = await getUserById(userID_2);
+
+    const ret = message._doc;
+    ret.partnerInfo = partnerInfo.baseInfo;
+    ret.avatar = partnerInfo.avatar;
+    ret.partnerID = userID_2;
+
+    return ret;
   } catch (error) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Message not found');
   }
@@ -174,7 +182,6 @@ const queryListUserMessages = async (filter, options) => {
       ret.partnerID = id;
       ret.latestMessage = listLatestMessages[index];
       ret.partnerBaseInfo = listPartnerBaseInfo[index];
-      console.log(listPartnerBaseInfo[index]);
       return ret;
     });
   } catch (error) {
