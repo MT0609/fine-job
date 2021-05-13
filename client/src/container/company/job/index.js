@@ -1,8 +1,16 @@
 import React from "react";
 import { Avatar, Box, Link, Grid, IconButton, Paper } from "@material-ui/core";
-import { BookmarkBorder } from "@material-ui/icons";
+import { BookmarkBorder, Bookmark } from "@material-ui/icons";
 
-function CompanyJobs({ company }) {
+function CompanyJobs({ company, onSave, onUnSave, user }) {
+  const onSaveClick = (jobID) => {
+    if (onSave) onSave(jobID);
+  };
+
+  const onUnSaveClick = (jobID) => {
+    if (onUnSave) onUnSave(jobID);
+  };
+
   return (
     <div>
       {company && company.jobs?.length ? (
@@ -19,7 +27,10 @@ function CompanyJobs({ company }) {
                 sm={4}
                 style={{ position: "relative" }}
               >
-                <Link href={`/jobs/${job.id}`}>
+                <Link
+                  href={`/jobs/${job.id}`}
+                  style={{ textDecoration: "none" }}
+                >
                   <Paper
                     key={index}
                     style={{
@@ -44,16 +55,35 @@ function CompanyJobs({ company }) {
                     <p>{job.description}</p>
                   </Paper>
                 </Link>
-                <IconButton
-                  style={{
-                    position: "absolute",
-                    right: 5,
-                    top: 10,
-                    padding: "0.5rem",
-                  }}
-                >
-                  <BookmarkBorder />
-                </IconButton>
+
+                {user.isAuth &&
+                  (user.user?.savePosts?.some(
+                    (item) => item.jobID === job.id
+                  ) ? (
+                    <IconButton
+                      style={{
+                        position: "absolute",
+                        right: 5,
+                        top: 10,
+                        padding: "0.5rem",
+                      }}
+                      onClick={() => onUnSaveClick(job.id)}
+                    >
+                      <Bookmark />
+                    </IconButton>
+                  ) : (
+                    <IconButton
+                      style={{
+                        position: "absolute",
+                        right: 5,
+                        top: 10,
+                        padding: "0.5rem",
+                      }}
+                      onClick={() => onSaveClick(job.id)}
+                    >
+                      <BookmarkBorder />
+                    </IconButton>
+                  ))}
               </Grid>
             ))}
           </Grid>

@@ -15,10 +15,25 @@ function Jobs() {
   const keyword = new URLSearchParams(search).get("keyword") || "";
   const page = new URLSearchParams(search).get("page") || 1;
   const history = useHistory();
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    const handleAddressBarSearch = (title = keyword, pg = page) => {
+      let queryParams = new URLSearchParams(window.location.search);
+      if (!title) queryParams.delete("keyword");
+      else queryParams.set("keyword", title);
+
+      const numbersReg = /^[0-9]+$/; // page only contain number
+      if (!pg || !numbersReg.test(pg) || pg < 1) {
+        queryParams.set("page", 1);
+        pg = 1;
+      } else queryParams.set("page", pg);
+      history.replace(`/jobs?${queryParams}`);
+      dispatch(getJobs(title, pg));
+    };
+
     handleAddressBarSearch(keyword, page);
-  }, [keyword, page]);
+  }, [keyword, page, dispatch, history]);
 
   const jobs = useSelector((state) => state.job);
   const job = jobs.job;
@@ -29,25 +44,9 @@ function Jobs() {
   const jobDetailDialogAllow = useMediaQuery(theme.breakpoints.down("sm"));
   const jobDetailGridAllow = useMediaQuery(theme.breakpoints.up("sm"));
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
     if (jobs.jobs?.[0]?.id) dispatch(getJobDetail(jobs.jobs[0].id));
   }, [dispatch, jobs.jobs]); // show job detail on page first load
-
-  const handleAddressBarSearch = (title = keyword, pg = page) => {
-    let queryParams = new URLSearchParams(window.location.search);
-    if (!title) queryParams.delete("keyword");
-    else queryParams.set("keyword", title);
-
-    const numbersReg = /^[0-9]+$/; // page only contain number
-    if (!pg || !numbersReg.test(pg)) {
-      queryParams.set("page", 1);
-      pg = 1;
-    } else queryParams.set("page", pg);
-    history.push(`/jobs?${queryParams}`);
-    dispatch(getJobs(title, pg));
-  };
 
   const handleInputSearch = (title) => {
     let queryParams = new URLSearchParams(window.location.search);
@@ -64,7 +63,10 @@ function Jobs() {
   };
 
   const handlePageChange = async (page) => {
-    handleAddressBarSearch(keyword, page);
+    let queryParams = new URLSearchParams(window.location.search);
+    queryParams.set("page", page);
+    history.push(`/jobs?${queryParams}`);
+    dispatch(getJobs(keyword, page));
   };
 
   return (

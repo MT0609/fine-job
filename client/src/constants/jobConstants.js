@@ -18,6 +18,12 @@ export const JOB_DELETE_REQUEST = "JOB_DELETE_REQUEST";
 export const JOB_DELETE_SUCCESS = "JOB_DELETE_SUCCESS";
 export const JOB_DELETE_FAIL = "JOB_DELETE_FAIL";
 
+export const JOB_SAVE_SUCCESS = "JOB_SAVE_SUCCESS";
+export const JOB_SAVE_FAIL = "JOB_SAVE_FAIL";
+
+export const JOB_UNSAVE_SUCCESS = "JOB_UNSAVE_SUCCESS";
+export const JOB_UNSAVE_FAIL = "JOB_UNSAVE_FAIL";
+
 export const JOBTYPES = [
   "full-time",
   "part-time",

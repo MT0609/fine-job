@@ -1,15 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { Divider, Grid, Typography } from "@material-ui/core";
 import { AppBar, Tabs, Tab } from "@material-ui/core";
-import { Add, OpenInNew, LocationOn } from "@material-ui/icons";
+import { Add, Check, OpenInNew, LocationOn } from "@material-ui/icons";
 import styles from "./index.module.scss";
 
 function CompanyHeadContainer(props) {
-  const { company, tabValue, onTabChange } = props;
+  const { company, tabValue, onTabChange, user, onFollow, onUnFollow } = props;
 
-  const auth = useSelector((state) => state.auth);
+  const handleOnFollowClick = () => {
+    if (onFollow) onFollow();
+  };
+
+  const handleOnUnFollowClick = () => {
+    if (onUnFollow) onUnFollow();
+  };
 
   return (
     <div>
@@ -70,15 +75,31 @@ function CompanyHeadContainer(props) {
           </p>
         </div>
 
-        <Grid container spacing={2} className={styles.company__head__buttons}>
-          {auth.isAuth && (
-            <Grid item>
-              <button className={styles.company__head__follow}>
-                <Add style={{ marginRight: "0.5rem" }} />
-                Follow
-              </button>
-            </Grid>
-          )}
+        <Grid container spacing={3} className={styles.company__head__buttons}>
+          {user.isAuth &&
+            (company.followers?.some(
+              (follower) => follower.userID === user.user?.id
+            ) ? (
+              <Grid item>
+                <button
+                  className={styles.company__head__follow}
+                  onClick={handleOnUnFollowClick}
+                >
+                  <Check style={{ marginRight: "0.5rem" }} />
+                  <span>Following</span>
+                </button>
+              </Grid>
+            ) : (
+              <Grid item>
+                <button
+                  className={styles.company__head__follow}
+                  onClick={handleOnFollowClick}
+                >
+                  <Add style={{ marginRight: "0.5rem" }} />
+                  <span>Follow</span>
+                </button>
+              </Grid>
+            ))}
 
           <Grid item>
             <a

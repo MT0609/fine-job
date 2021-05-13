@@ -32,13 +32,19 @@
         @include flexbox();
         font-size: 1rem;
         border-radius: 30px;
-        border: 1px solid #0a66c2;
         padding: 0.3rem 1rem;
       }
     }
     //buttons
     &__follow {
       color: #0a66c2;
+      border: 1px solid #0a66c2;
+      background-color: transparent;
+      transition: all 0.2s ease-in-out;
+      &:hover {
+        box-shadow: inset 0px 0px 0px 1px #0a66c2;
+        background-color: #e2f0fe;
+      }
     }
     &__visit {
       text-decoration: none;
@@ -54,6 +60,7 @@
     &--background {
       width: 100%;
       height: 10rem;
+      min-height: 10rem;
     }
     &--avatar {
       position: absolute;

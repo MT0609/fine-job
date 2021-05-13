@@ -15,8 +15,6 @@ export const getCompanies = (name, page = 1, limit = 3) => async (dispatch) => {
 
     let result = await companyApi.getAll(params);
 
-    console.log(result);
-
     dispatch({
       type: COMPANYCONSTANTS.C0MPANY_GET_ALL_SUCCESS,
       payload: result,
@@ -46,6 +44,44 @@ export const getCompanyDetail = (id) => async (dispatch) => {
     console.log(error);
     dispatch({
       type: COMPANYCONSTANTS.COMPANY_GET_ONE_FAIL,
+    });
+  }
+};
+
+export const followCompany = (companyID) => async (dispatch) => {
+  try {
+    let result = await companyApi.follow(companyID);
+    if (result)
+      dispatch({
+        type: COMPANYCONSTANTS.C0MPANY_FOLLOW_ONE_SUCCESS,
+      });
+    else
+      dispatch({
+        type: COMPANYCONSTANTS.C0MPANY_FOLLOW_ONE_FAIL,
+      });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: COMPANYCONSTANTS.C0MPANY_FOLLOW_ONE_FAIL,
+    });
+  }
+};
+
+export const UnFollowCompany = (companyID) => async (dispatch) => {
+  try {
+    let result = await companyApi.unFollow(companyID);
+    if (result)
+      dispatch({
+        type: COMPANYCONSTANTS.C0MPANY_UNFOLLOW_ONE_SUCCESS,
+      });
+    else
+      dispatch({
+        type: COMPANYCONSTANTS.C0MPANY_UNFOLLOW_ONE_FAIL,
+      });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: COMPANYCONSTANTS.C0MPANY_UNFOLLOW_ONE_FAIL,
     });
   }
 };

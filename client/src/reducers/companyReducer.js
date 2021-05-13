@@ -6,6 +6,8 @@ const initialState = {
   currentPage: 0,
   totalPages: 0,
   isLoading: false,
+  followStatus: "",
+  unFollowStatus: "",
 };
 
 const companyReducer = (state = initialState, action) => {
@@ -48,6 +50,32 @@ const companyReducer = (state = initialState, action) => {
         ...state,
         company: {},
         isLoading: false,
+      };
+
+    case COMPANYCONSTANTS.C0MPANY_FOLLOW_ONE_SUCCESS:
+      return {
+        ...state,
+        unFollowStatus: "",
+        followStatus: COMPANYCONSTANTS.C0MPANY_FOLLOW_ONE_SUCCESS,
+      };
+    case COMPANYCONSTANTS.C0MPANY_FOLLOW_ONE_FAIL:
+      return {
+        ...state,
+        unFollowStatus: "",
+        followStatus: COMPANYCONSTANTS.C0MPANY_FOLLOW_ONE_FAIL,
+      };
+
+    case COMPANYCONSTANTS.C0MPANY_UNFOLLOW_ONE_SUCCESS:
+      return {
+        ...state,
+        followStatus: "",
+        unFollowStatus: COMPANYCONSTANTS.C0MPANY_UNFOLLOW_ONE_SUCCESS,
+      };
+    case COMPANYCONSTANTS.C0MPANY_UNFOLLOW_ONE_FAIL:
+      return {
+        ...state,
+        followStatus: "",
+        unFollowStatus: COMPANYCONSTANTS.C0MPANY_UNFOLLOW_ONE_FAIL,
       };
     default:
       return {

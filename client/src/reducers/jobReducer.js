@@ -8,6 +8,8 @@ const initialState = {
   limit: 2,
   totalPages: 1,
   page: 1,
+  saveStatus: "",
+  unSaveStatus: "",
 };
 
 const jobReducer = (state = initialState, action) => {
@@ -106,6 +108,31 @@ const jobReducer = (state = initialState, action) => {
         postStatus: JOBCONSTANTS.JOB_DELETE_SUCCESS,
       };
 
+    case JOBCONSTANTS.JOB_SAVE_SUCCESS:
+      return {
+        ...state,
+        unSaveStatus: "",
+        saveStatus: JOBCONSTANTS.JOB_SAVE_SUCCESS,
+      };
+    case JOBCONSTANTS.JOB_SAVE_FAIL:
+      return {
+        ...state,
+        unSaveStatus: "",
+        saveStatus: JOBCONSTANTS.JOB_SAVE_FAIL,
+      };
+
+    case JOBCONSTANTS.JOB_UNSAVE_SUCCESS:
+      return {
+        ...state,
+        saveStatus: "",
+        unSaveStatus: JOBCONSTANTS.JOB_UNSAVE_SUCCESS,
+      };
+    case JOBCONSTANTS.JOB_UNSAVE_FAIL:
+      return {
+        ...state,
+        saveStatus: "",
+        unSaveStatus: JOBCONSTANTS.JOB_UNSAVE_FAIL,
+      };
     default:
       return { ...state };
   }

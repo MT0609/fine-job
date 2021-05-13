@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Box, Avatar, Typography } from "@material-ui/core";
 import { LocationOn, Cancel } from "@material-ui/icons";
 import CircularLoading from "../../../components/loading/circular";
-import { getJobDetail } from "../../../actions/jobActions";
+import { getJobDetail, saveJob, unSaveJob } from "../../../actions/jobActions";
 import { timeDiff } from "../../../utils/time";
 import styles from "./index.module.scss";
 
@@ -15,11 +15,21 @@ function JobView() {
   const jobState = useSelector((state) => state.job);
   const job = jobState.job;
 
+  const auth = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getJobDetail(id));
-  }, [id, dispatch]);
+  }, [id, dispatch, jobState.saveStatus, jobState.unSaveStatus]);
+
+  const handleSaveJob = () => {
+    dispatch(saveJob(id));
+  };
+
+  const handleUnSaveJob = () => {
+    dispatch(unSaveJob(id));
+  };
 
   return (
     <div className={styles.container}>
@@ -76,6 +86,25 @@ function JobView() {
                   </Box>
                 </p>
               )}
+
+              <Box mt={1}>
+                {auth.isAuth &&
+                  (auth.user?.savePosts?.some((job) => job.jobID === id) ? (
+                    <button
+                      onClick={handleUnSaveJob}
+                      className={styles.section__save}
+                    >
+                      Unsave
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleSaveJob}
+                      className={styles.section__save}
+                    >
+                      Save
+                    </button>
+                  ))}
+              </Box>
             </section>
 
             <section className={styles.section}>

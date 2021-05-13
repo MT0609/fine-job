@@ -10,6 +10,7 @@ import Profile from "../pages/profile";
 import Loading from "../components/loading/circular";
 
 const JobView = lazy(() => import("../pages/jobs/job"));
+const MyJob = lazy(() => import("../pages/jobs/myJob"));
 const Companies = lazy(() => import("../pages/company/companies"));
 const Company = lazy(() => import("../pages/company/company"));
 const PostJob = lazy(() => import("../pages/talent/post"));
@@ -42,6 +43,12 @@ const routes = [
     path: ROUTES.jobs,
     exact: true,
     main: () => <Jobs />,
+  },
+  {
+    path: ROUTES.myJobs,
+    exact: false,
+    authen: true,
+    main: () => <MyJob />,
   },
   {
     path: ROUTES.job,

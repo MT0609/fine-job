@@ -33,4 +33,16 @@
       color: #d81920;
     }
   }
+
+  &__save {
+    color: #0a66c2;
+    border-radius: 30px;
+    border: 1px solid #0a66c2;
+    padding: 0.3rem 1rem;
+    transition: 0.2s all ease-in-out;
+    &:hover {
+      background-color: #e2f0fe;
+      box-shadow: inset 0px 0px 0px 1px #0a66c2;
+    }
+  }
 }
