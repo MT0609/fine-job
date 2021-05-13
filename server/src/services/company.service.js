@@ -116,7 +116,7 @@ const postFollowCompany = async (companyID, userID) => {
     const userSnap = {
       userID: user._id,
       name: user.baseInfo.firstName + ' ' + user.baseInfo.lastName,
-      email: user.contacts.email,
+      email: user.contact.email,
       avatar: user.avatar,
     };
 

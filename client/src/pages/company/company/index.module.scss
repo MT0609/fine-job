@@ -2,14 +2,14 @@
 
 .company {
   &__container {
-    width: 60%;
+    width: 65%;
     margin: auto;
   }
 
   &__seemore {
+    margin-top: 1rem;
     a {
       display: flex;
-      text-decoration: none;
       font-weight: bold;
       span {
         margin-left: 0.5rem;

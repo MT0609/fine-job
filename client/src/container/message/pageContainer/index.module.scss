@@ -1,0 +1,31 @@
+.messageList {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  &__items {
+    flex: 1;
+    overflow-y: auto;
+  }
+  &__item {
+    padding: 0.5rem;
+    text-align: left;
+    border-bottom: 2px solid rgb(235, 235, 235);
+    cursor: pointer;
+    &--active {
+      background-color: #e5f5fc;
+    }
+    &:hover {
+      background-color: #f1f6fc;
+    }
+  }
+}
+
+.message {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 9% 82% 9%;
+  &__main {
+    height: 100%;
+  }
+}

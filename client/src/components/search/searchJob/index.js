@@ -34,6 +34,11 @@ function SearchJobBar({ defaultValue = "", onsearch }) {
               type="text"
               placeholder="Search jobs by name"
               className={styles.searchbar__input}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch();
+                }
+              }}
             />
           </div>
         </Grid>

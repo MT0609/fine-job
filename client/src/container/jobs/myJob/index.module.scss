@@ -1,0 +1,16 @@
+.myjob {
+  &__item {
+    padding: 1rem;
+    text-align: left;
+  }
+  &__name {
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  &__status {
+    &--close {
+      color: red;
+    }
+  }
+}

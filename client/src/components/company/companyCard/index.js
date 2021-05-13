@@ -17,7 +17,7 @@ function CompanyCard(props) {
   const useStyles = makeStyles((theme) => ({
     root: {
       height: "100%",
-      maxWidth: 300,
+      width: "100%",
     },
     media: {
       height: 0,

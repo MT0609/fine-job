@@ -50,6 +50,8 @@ export const signOut = () => {
 
 export const getUserData = () => async (dispatch) => {
   try {
+    dispatch({ type: USERCONSTANTS.USER_INFO_REQUEST });
+
     const token = localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN);
     const userID = jwt_decode(token)?.sub;
     let result = await authApi.getInfo(userID);
