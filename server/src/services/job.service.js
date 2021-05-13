@@ -5,6 +5,27 @@ const ApiError = require('../utils/ApiError');
 const { getCompanyById } = require('../services/company.service');
 const { getUserById } = require('../services/user.service');
 
+// Start elastic mapping
+Job.createMapping(function (err, mapping) {
+  if (err) console.log('Mapping error: ', err);
+  else console.log('Mapping success: ', mapping);
+});
+
+const stream = Job.synchronize();
+let count = 0;
+
+stream.on('data', function () {
+  count++;
+});
+
+stream.on('close', function () {
+  console.log(`Jobs indexed ${count} documents`);
+});
+
+stream.on('error', function (err) {
+  console.log('Stream error: ', err);
+});
+
 /**
  * Create a job
  * @param {Object} userBody
@@ -183,6 +204,43 @@ const postUnSaveJob = async (jobID, userID) => {
   }
 };
 
+/**
+ * Query for jobs
+ * @param {Object} filter - Mongo filter
+ * @param {Object} options - Query options
+ * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
+ * @param {number} [options.limit] - Maximum number of results per page (default = 10)
+ * @param {number} [options.page] - Current page (default = 1)
+ * @param {Object} res - Respond variable
+ * @returns {Promise<QueryResult>}
+ */
+const searchJobs = (filter, options, res) => {
+  try {
+    Job.search(
+      {
+        query_string: {
+          query: filter.q,
+        },
+      },
+      {
+        // sort: options.sortBy || 'createdAt:desc',
+        size: options.limit || 10,
+        from: (options.page - 1) * options.limit || 0,
+        hydrate: true,
+      },
+      function (err, results) {
+        if (err) {
+          console.log('Search failed: ', err);
+          throw new Error(err.message);
+        }
+        res.status(200).send(results.hits.hits);
+      }
+    );
+  } catch (error) {
+    throw new ApiError(httpStatus.NOT_FOUND, error.message);
+  }
+};
+
 module.exports = {
   createJob,
   queryJobs,
@@ -192,4 +250,5 @@ module.exports = {
   deleteJobById,
   postSaveJob,
   postUnSaveJob,
+  searchJobs,
 };

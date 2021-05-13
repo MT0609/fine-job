@@ -66,6 +66,15 @@ const postUnSave = {
   }),
 };
 
+const postSearchJobs = {
+  query: Joi.object().keys({
+    q: Joi.string(),
+    sortBy: Joi.string(),
+    limit: Joi.number().integer(),
+    page: Joi.number().integer(),
+  }),
+};
+
 module.exports = {
   createJob,
   getJobs,
@@ -74,4 +83,5 @@ module.exports = {
   deleteJob,
   postSave,
   postUnSave,
+  postSearchJobs,
 };

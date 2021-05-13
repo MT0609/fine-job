@@ -60,6 +60,12 @@ const postUnSave = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send({});
 });
 
+const postSearchJobs = (req, res) => {
+  const filter = pick(req.query, ['q']);
+  const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  jobService.searchJobs(filter, options, res);
+};
+
 module.exports = {
   createJob,
   getJobs,
@@ -68,4 +74,5 @@ module.exports = {
   deleteJob,
   postSave,
   postUnSave,
+  postSearchJobs,
 };

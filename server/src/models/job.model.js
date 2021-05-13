@@ -3,6 +3,7 @@ const validate = require('validator');
 const { toJSON, paginate } = require('./plugins');
 const { tokenTypes } = require('../config/tokens');
 const { number, string } = require('joi');
+const mongoosastic = require('mongoosastic');
 
 const enumIndustry = {
   values: ['Information Technology & Services', 'Services', 'Information Technology'],
@@ -19,7 +20,7 @@ const enumJobStatus = {
   message: `JobStatus must be 'open' or 'close'!`,
 };
 
-const jobSchema = mongoose.Schema(
+const jobSchema = new mongoose.Schema(
   {
     creator: {
       type: mongoose.Schema.ObjectId,
@@ -29,6 +30,7 @@ const jobSchema = mongoose.Schema(
       type: String,
       required: true,
       index: true,
+      es_indexed: true,
     },
     company: {
       name: {
@@ -56,6 +58,7 @@ const jobSchema = mongoose.Schema(
     posted: {
       type: Date,
       default: new Date(),
+      es_indexed: true,
     },
     job: {
       applicantCount: {
@@ -66,6 +69,7 @@ const jobSchema = mongoose.Schema(
         {
           type: String,
           enum: enumJobType,
+          es_indexed: true,
         },
       ],
     },
@@ -80,6 +84,7 @@ const jobSchema = mongoose.Schema(
     description: {
       type: String,
       require: true,
+      es_indexed: true,
     },
     locations: {
       type: Array,
@@ -88,6 +93,7 @@ const jobSchema = mongoose.Schema(
     maxSalary: {
       type: Number,
       default: 0,
+      es_indexed: true,
     },
     status: {
       type: String,
@@ -103,6 +109,7 @@ const jobSchema = mongoose.Schema(
 // add plugin that converts mongoose to json
 jobSchema.plugin(toJSON);
 jobSchema.plugin(paginate);
+jobSchema.plugin(mongoosastic, { hosts: ['localhost:9200'], hydrate: true });
 
 /**
  * @typedef Job

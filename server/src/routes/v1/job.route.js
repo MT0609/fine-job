@@ -30,6 +30,8 @@ router
 router.route('/:jobID/save').post(auth(), validate(jobValidation.postSave), jobController.postSave);
 router.route('/:jobID/unSave').post(auth(), validate(jobValidation.postUnSave), jobController.postUnSave);
 
+router.route('/search').post(validate(jobValidation.postSearchJobs), jobController.postSearchJobs);
+
 module.exports = router;
 
 /**
@@ -348,5 +350,67 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
+ *
+ */
+
+/**
+ * @swagger
+ * /jobs/search:
+ *   post:
+ *     summary: Search jobs
+ *     description: Anyone can search on jobs.
+ *     tags: [Jobs]
+ *     security:
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         schema:
+ *           type: string
+ *         description: Query string
+ *       - in: query
+ *         name: sortBy
+ *         schema:
+ *           type: string
+ *         description: Sort by query in the form of field:desc/asc (ex. name:asc)
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         default: 10
+ *         description: Maximum number of jobs
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Page number
+ *     requestBody:
+ *     example:
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 results:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Job'
+ *                 page:
+ *                   type: integer
+ *                   example: 1
+ *                 limit:
+ *                   type: integer
+ *                   example: 10
+ *                 totalPages:
+ *                   type: integer
+ *                   example: 1
+ *                 totalResults:
+ *                   type: integer
+ *                   example: 1
  *
  */
