@@ -206,13 +206,23 @@ const sendConnReq = async (userBody, sender, receiverID) => {
     if (isFriend.length >= 1) return {};
 
     // Sent the connection request
-    const isSent = sender.activities.filter(
-      (el) =>
+    let canBeSent = true;
+    for (let i = 0; i < sender.activities.length; i++) {
+      const el = sender.activities[i];
+      if (
         el.info.sender.id.toString() === sender._id.toString() &&
         el.info.receiver.id.toString() === receiver._id.toString() &&
         el.type === 'sendConnReq'
-    );
-    if (isSent.length >= 1) return {};
+      ) {
+        const notify = await getNotificationById(el.notificationID);
+        if (notify.status === 'new' && notify.type === 'sendConnReq') {
+          canBeSent = false;
+          return;
+        }
+      }
+    }
+
+    if (!canBeSent) return {};
 
     const activity = { ...userBody };
     activity.status = 'new';
@@ -222,17 +232,18 @@ const sendConnReq = async (userBody, sender, receiverID) => {
       sender: {
         id: sender._id,
         avatar: sender.avatar,
-        name: `${sender.firstName} ${sender.lastName}`,
+        name: `${sender.baseInfo.firstName} ${sender.baseInfo.lastName}`,
       },
       receiver: {
         id: receiver._id,
         avatar: receiver.avatar,
-        name: `${receiver.firstName} ${receiver.lastName}`,
+        name: `${receiver.baseInfo.firstName} ${receiver.baseInfo.lastName}`,
       },
     };
 
     const notification = await createNotification(activity);
 
+    activity.notificationID = notification._id;
     sender.activities.unshift(activity);
     receiver.notifications.unshift(notification);
 
@@ -278,12 +289,12 @@ const acceptConnReq = async (userBody, sender, receiverID, notificationID) => {
       sender: {
         id: sender._id,
         avatar: sender.avatar,
-        name: `${sender.firstName} ${sender.lastName}`,
+        name: `${sender.baseInfo.firstName} ${sender.baseInfo.lastName}`,
       },
       receiver: {
         id: receiver._id,
         avatar: receiver.avatar,
-        name: `${receiver.firstName} ${receiver.lastName}`,
+        name: `${receiver.baseInfo.firstName} ${receiver.baseInfo.lastName}`,
       },
     };
 
@@ -302,13 +313,13 @@ const acceptConnReq = async (userBody, sender, receiverID, notificationID) => {
     // Make a new connection
     const senderInfo = {
       id: sender._id,
-      name: sender.name,
+      name: `${sender.baseInfo.firstName} ${sender.baseInfo.lastName}`,
       avatar: sender.avatar,
     };
 
     const receiverInfo = {
       id: receiver._id,
-      name: receiver.name,
+      name: `${receiver.baseInfo.firstName} ${receiver.baseInfo.lastName}`,
       avatar: receiver.avatar,
     };
 
@@ -354,12 +365,12 @@ const deleteConnReq = async (userBody, sender, receiverID, notificationID) => {
       sender: {
         id: sender._id,
         avatar: sender.avatar,
-        name: `${sender.firstName} ${sender.lastName}`,
+        name: `${sender.baseInfo.firstName} ${sender.baseInfo.lastName}`,
       },
       receiver: {
         id: receiver._id,
         avatar: receiver.avatar,
-        name: `${receiver.firstName} ${receiver.lastName}`,
+        name: `${receiver.baseInfo.firstName} ${receiver.baseInfo.lastName}`,
       },
     };
 
@@ -411,12 +422,12 @@ const deleteFriend = async (userBody, sender, receiverID) => {
       sender: {
         id: sender._id,
         avatar: sender.avatar,
-        name: `${sender.firstName} ${sender.lastName}`,
+        name: `${sender.baseInfo.firstName} ${sender.baseInfo.lastName}`,
       },
       receiver: {
         id: receiver._id,
         avatar: receiver.avatar,
-        name: `${receiver.firstName} ${receiver.lastName}`,
+        name: `${receiver.baseInfo.firstName} ${receiver.baseInfo.lastName}`,
       },
     };
 

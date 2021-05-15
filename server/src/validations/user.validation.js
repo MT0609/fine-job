@@ -60,8 +60,8 @@ const sendConnReq = {
     receiverID: Joi.string().custom(objectId),
   }),
   body: Joi.object().keys({
-    url: Joi.string().required(),
-    icon: Joi.string().required(),
+    senderUrl: Joi.string().required(),
+    receiverUrl: Joi.string().required(),
   }),
 };
 

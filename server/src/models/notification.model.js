@@ -17,14 +17,8 @@ const notifySchema = mongoose.Schema(
       type: String,
       enum: enumNotificationType,
     },
-    url: {
-      type: String,
-    },
     params: {
       type: Object,
-    },
-    icon: {
-      type: String,
     },
     status: {
       type: String,
@@ -34,6 +28,14 @@ const notifySchema = mongoose.Schema(
     info: {
       type: Object,
       default: {},
+    },
+    senderUrl: {
+      type: String,
+      default: '',
+    },
+    receiverUrl: {
+      type: String,
+      default: '',
     },
   },
   {

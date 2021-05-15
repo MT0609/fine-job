@@ -307,19 +307,18 @@ module.exports = router;
  *           schema:
  *             type: object
  *             required:
- *               - url
- *               - icon
+ *               - senderUrl
+ *               - receiverUrl
  *             properties:
- *               url:
+ *               senderUrl:
  *                  type: string
- *                  description: Redirect url when click activity/notification
- *               icon:
+ *                  description: Redirect senderUrl when receiver click notification
+ *               receiverUrl:
  *                  type: string
- *                  description: Options
+ *                  description: Redirect receiverUrl when sender click activity
  *             example:
- *               url:  https://fine-job/users/nguyen-quoc-thai
- *               icon: https://static.thenounproject.com/png/2235846-200.png
-
+ *               senderUrl:  https://fine-job/users/nguyen-quoc-thai
+ *               receiverUrl:  https://fine-job/users/hong-minh-thang
  *     responses:
  *       "201":
  *         description: Created
