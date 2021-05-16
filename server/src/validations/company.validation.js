@@ -74,6 +74,15 @@ const postUnFollow = {
   }),
 };
 
+const postSearchCompanies = {
+  query: Joi.object().keys({
+    q: Joi.string(),
+    sortBy: Joi.string(),
+    limit: Joi.number().integer(),
+    page: Joi.number().integer(),
+  }),
+};
+
 module.exports = {
   createCompany,
   getCompanies,
@@ -82,4 +91,5 @@ module.exports = {
   deleteCompany,
   postFollow,
   postUnFollow,
+  postSearchCompanies,
 };

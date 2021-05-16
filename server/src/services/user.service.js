@@ -446,6 +446,43 @@ const deleteFriend = async (userBody, sender, receiverID) => {
   }
 };
 
+/**
+ * Query for users
+ * @param {Object} filter - Mongo filter
+ * @param {Object} options - Query options
+ * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
+ * @param {number} [options.limit] - Maximum number of results per page (default = 10)
+ * @param {number} [options.page] - Current page (default = 1)
+ * @param {Object} res - Respond variable
+ * @returns {Promise<QueryResult>}
+ */
+const searchUsers = (filter, options, res) => {
+  try {
+    User.search(
+      {
+        query_string: {
+          query: filter.q,
+        },
+      },
+      {
+        // sort: options.sortBy || 'createdAt:desc',
+        size: options.limit || 10,
+        from: (options.page - 1) * options.limit || 0,
+        hydrate: true,
+      },
+      function (err, results) {
+        if (err) {
+          console.log('Search failed: ', err);
+          throw new Error(err.message);
+        }
+        res.status(200).send(results.hits.hits);
+      }
+    );
+  } catch (error) {
+    throw new ApiError(httpStatus.NOT_FOUND, error.message);
+  }
+};
+
 module.exports = {
   createUser,
   queryUsers,
@@ -460,4 +497,5 @@ module.exports = {
   acceptConnReq,
   deleteConnReq,
   deleteFriend,
+  searchUsers,
 };

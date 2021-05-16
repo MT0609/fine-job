@@ -36,6 +36,7 @@ const jobSchema = new mongoose.Schema(
       name: {
         type: String,
         required: true,
+        es_indexed: true,
       },
       id: {
         type: mongoose.Schema.ObjectId,
@@ -58,7 +59,6 @@ const jobSchema = new mongoose.Schema(
     posted: {
       type: Date,
       default: new Date(),
-      es_indexed: true,
     },
     job: {
       applicantCount: {
@@ -69,14 +69,14 @@ const jobSchema = new mongoose.Schema(
         {
           type: String,
           enum: enumJobType,
-          es_indexed: true,
         },
       ],
     },
-    skills: {
-      type: Array,
-      default: [],
-    },
+    skills: [
+      {
+        type: String,
+      },
+    ],
     viewCount: {
       type: Number,
       default: 0,
@@ -86,14 +86,15 @@ const jobSchema = new mongoose.Schema(
       require: true,
       es_indexed: true,
     },
-    locations: {
-      type: Array,
-      default: [],
-    },
+    locations: [
+      {
+        type: String,
+        default: [],
+      },
+    ],
     maxSalary: {
       type: Number,
       default: 0,
-      es_indexed: true,
     },
     status: {
       type: String,
@@ -109,11 +110,20 @@ const jobSchema = new mongoose.Schema(
 // add plugin that converts mongoose to json
 jobSchema.plugin(toJSON);
 jobSchema.plugin(paginate);
-jobSchema.plugin(mongoosastic, { hosts: ['localhost:9200'], hydrate: true });
+jobSchema.plugin(mongoosastic, {
+  hosts: ['localhost:9200'],
+  hydrate: true,
+});
 
 /**
  * @typedef Job
  */
 const Job = mongoose.model('Job', jobSchema);
+
+// Start elastic mapping
+Job.createMapping(function (err, mapping) {
+  if (err) console.log('Job mapping error: ', err);
+  else console.log('Job mapping success: ', mapping);
+});
 
 module.exports = Job;

@@ -5,7 +5,7 @@ const createJob = {
   body: Joi.object().keys({
     id: Joi.string().custom(objectId),
     title: Joi.string().required(),
-    jobType: Joi.string().required(),
+    jobType: Joi.array().items(Joi.string()),
     skills: Joi.array().items(Joi.string()),
     description: Joi.string(),
     locations: Joi.array().items(Joi.string()),

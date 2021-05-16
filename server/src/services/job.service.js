@@ -5,27 +5,6 @@ const ApiError = require('../utils/ApiError');
 const { getCompanyById } = require('../services/company.service');
 const { getUserById } = require('../services/user.service');
 
-// Start elastic mapping
-Job.createMapping(function (err, mapping) {
-  if (err) console.log('Mapping error: ', err);
-  else console.log('Mapping success: ', mapping);
-});
-
-const stream = Job.synchronize();
-let count = 0;
-
-stream.on('data', function () {
-  count++;
-});
-
-stream.on('close', function () {
-  console.log(`Jobs indexed ${count} documents`);
-});
-
-stream.on('error', function (err) {
-  console.log('Stream error: ', err);
-});
-
 /**
  * Create a job
  * @param {Object} userBody

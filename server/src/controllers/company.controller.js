@@ -88,6 +88,12 @@ const postUnFollow = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send({});
 });
 
+const postSearchCompanies = (req, res) => {
+  const filter = pick(req.query, ['q']);
+  const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  companyService.searchCompanies(filter, options, res);
+};
+
 module.exports = {
   createCompany,
   getCompanies,
@@ -96,4 +102,5 @@ module.exports = {
   deleteCompany,
   postFollow,
   postUnFollow,
+  postSearchCompanies,
 };

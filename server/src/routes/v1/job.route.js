@@ -68,9 +68,11 @@ module.exports = router;
  *                 type: string
  *                 description: Job name
  *               jobType:
- *                 type: string
- *                 enum: ['full-time', 'part-time', 'internship', 'contract', 'remote', 'temporary', 'volunteer']
- *                 description: Job type
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   enum: ['full-time', 'part-time', 'internship', 'contract', 'remote', 'temporary', 'volunteer']
+ *                   description: Job type
  *               skill:
  *                 type: array
  *                 items:
@@ -92,18 +94,20 @@ module.exports = router;
  *                 type: number
  *                 description: Maximum salary for this position
  *             example:
- *               id: 6079d3b5bee9390730603276
- *               title: Full-stack develop javascript
- *               jobType: part-time
+ *               id: 609c0d1be962b125704a528d
+ *               title: Full stack develop javascript
+ *               jobType:
+ *                 - part-time
+ *                 - contract
  *               skills:
- *                 - mongoDb
- *                 - expressJs
- *                 - reactJs
- *                 - nodeJs
+ *                 - MongoDb
+ *                 - ExpressJs
+ *                 - ReactJs
+ *                 - NodeJs
  *               description: Master in MERN, MEAN stack
  *               locations:
- *                 - 127 Hai Thuong Lan Ong - Q5 - HCM
- *                 - 112 Dao Duy Tu - Q10 - HCM
+ *                 - 127 Hai Thuong Lan Ong, Q5, HCM
+ *                 - 112 Dao Duy Tu, Q10, HCM
  *               maxSalary: 3000
  *     responses:
  *       "201":
@@ -122,7 +126,6 @@ module.exports = router;
  *     description: Only admins can retrieve all jobs.
  *     tags: [Jobs]
  *     security:
- *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: title

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosastic = require('mongoosastic');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const { toJSON, paginate } = require('./plugins');
@@ -29,11 +30,13 @@ const userSchema = mongoose.Schema(
         type: String,
         required: [true, 'Họ là bắt buộc!'],
         trim: true,
+        es_indexed: true,
       },
       lastName: {
         type: String,
         required: [true, 'Tên là bắt buộc!'],
         trim: true,
+        es_indexed: true,
       },
       sex: {
         type: String,
@@ -43,6 +46,7 @@ const userSchema = mongoose.Schema(
       headLine: {
         type: String,
         default: '',
+        es_indexed: true,
       },
       educations: {
         type: Array,
@@ -60,6 +64,7 @@ const userSchema = mongoose.Schema(
       industry: {
         type: String,
         default: '',
+        es_indexed: true,
       },
       dob: {
         type: Date,
@@ -97,15 +102,18 @@ const userSchema = mongoose.Schema(
             throw new Error('Invalid email');
           }
         },
+        es_indexed: true,
       },
       phone: {
         type: String,
         default: '',
+        es_indexed: true,
       },
     },
     about: {
       type: String,
       default: '',
+      es_indexed: true,
     },
     connections: {
       type: Array,
@@ -215,6 +223,10 @@ const userSchema = mongoose.Schema(
 // add plugin that converts mongoose to json
 userSchema.plugin(toJSON);
 userSchema.plugin(paginate);
+userSchema.plugin(mongoosastic, {
+  hosts: ['localhost:9200'],
+  hydrate: true,
+});
 
 /**
  * Check if email is taken
@@ -249,5 +261,10 @@ userSchema.pre('save', async function (next) {
  * @typedef User
  */
 const User = mongoose.model('User', userSchema);
+// Start elastic mapping
+User.createMapping(function (err, mapping) {
+  if (err) console.log('User mapping error: ', err);
+  else console.log('User mapping success: ', mapping);
+});
 
 module.exports = User;
