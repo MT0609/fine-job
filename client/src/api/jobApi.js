@@ -21,6 +21,14 @@ const jobApi = {
     const url = `/v1/jobs/${id}`;
     return axiosClient.delete(url);
   },
+  save: (id) => {
+    const url = `/v1/jobs/${id}/save`;
+    return axiosClient.post(url);
+  },
+  unSave: (id) => {
+    const url = `/v1/jobs/${id}/unSave`;
+    return axiosClient.post(url);
+  },
 };
 
 export default jobApi;

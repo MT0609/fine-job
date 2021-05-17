@@ -55,8 +55,14 @@ function Header() {
                 <span>Jobs</span>
               </Link>
             </li>
-            <li>
-              <Link href="">
+            <li
+              className={
+                `${firstPathName}` === ROUTES.messages.replace("/", "")
+                  ? styles["header__links--active"]
+                  : ""
+              }
+            >
+              <Link href={ROUTES.messages}>
                 <Chat />
                 <span>Messages</span>
               </Link>

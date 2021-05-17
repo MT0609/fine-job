@@ -1,5 +1,5 @@
 .messages {
-  max-height: 20rem;
+  height: 20rem;
   overflow: auto;
   border-bottom: 1px solid #cecece;
   &__time {
@@ -9,6 +9,14 @@
 
 .message {
   position: relative;
+  &__text {
+    margin: 0.5rem;
+    padding-right: 2rem;
+    text-align: right;
+    &--left {
+      text-align: left;
+    }
+  }
   &__delete {
     position: absolute;
     top: 0;

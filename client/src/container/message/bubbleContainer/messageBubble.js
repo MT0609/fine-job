@@ -1,32 +1,34 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import Input from "../../../components/message/input";
 import InfoBar from "../../../components/message/infoBar";
 import InboxMessages from "../../../components/message/inboxMessages";
 import {
-  getMessage,
   sendMessage,
   deleteMessage,
+  deleteConversation,
 } from "../../../actions/messageActions";
 import styles from "./index.module.scss";
 
-function MessageBubble() {
-  const messageState = useSelector((state) => state.message);
-  const message = messageState?.message;
-  const dispatch = useDispatch();
-
+function MessageBubble({ message, onClose }) {
   const [largeBubble, setLargeBubble] = useState(true);
 
-  useEffect(() => {
-    dispatch(getMessage("607d5b37d9300e01e8a39c44"));
-  }, [dispatch]);
+  const dispatch = useDispatch();
 
   const handleSendMessage = (msg) => {
-    dispatch(sendMessage(msg, "607d5b37d9300e01e8a39c44"));
+    dispatch(sendMessage(message.userID_2, msg));
   };
 
   const handleDeleteMessage = (msgID) => {
-    dispatch(deleteMessage(msgID, "607d5b37d9300e01e8a39c44"));
+    dispatch(deleteMessage(message.userID_2, msgID));
+  };
+
+  const handleCloseMessage = () => {
+    if (onClose) onClose(message?.id);
+  };
+
+  const handleDeleteConversation = () => {
+    dispatch(deleteConversation(message.userID_2));
   };
 
   return (
@@ -38,6 +40,8 @@ function MessageBubble() {
       <InfoBar
         receipt={{ name: "receiver" }}
         enlargeBubble={() => setLargeBubble((prevState) => !prevState)}
+        onCloseMessage={handleCloseMessage}
+        onDeleteConversation={handleDeleteConversation}
       />
       <div
         className={

@@ -9,13 +9,16 @@ import TalentMainPage from "../pages/talent";
 import Profile from "../pages/profile";
 import Loading from "../components/loading/circular";
 
-const ForgotPassword = lazy(() => import("../pages/forgot"));
+const JobView = lazy(() => import("../pages/jobs/job"));
+const MyJob = lazy(() => import("../pages/jobs/myJob"));
 const Companies = lazy(() => import("../pages/company/companies"));
 const Company = lazy(() => import("../pages/company/company"));
 const PostJob = lazy(() => import("../pages/talent/post"));
 const UpdateJob = lazy(() => import("../pages/talent/update"));
 const ResumeHomePage = lazy(() => import("../pages/resume"));
 const ResumeUpdate = lazy(() => import("../pages/resume/update"));
+const MessagePage = lazy(() => import("../pages/message"));
+const ForgotPassword = lazy(() => import("../pages/forgot"));
 const NotFound = lazy(() => import("../pages/notfound"));
 
 const routes = [
@@ -42,13 +45,24 @@ const routes = [
     main: () => <Jobs />,
   },
   {
+    path: ROUTES.myJobs,
+    exact: false,
+    authen: true,
+    main: () => <MyJob />,
+  },
+  {
+    path: ROUTES.job,
+    exact: true,
+    main: () => <JobView />,
+  },
+  {
     path: ROUTES.companies,
     exact: true,
     main: () => <Companies />,
   },
   {
     path: ROUTES.company,
-    exact: true,
+    exact: false,
     main: () => <Company />,
   },
   {
@@ -80,6 +94,12 @@ const routes = [
     exact: true,
     authen: true,
     main: () => <ResumeUpdate />,
+  },
+  {
+    path: ROUTES.messages,
+    exact: true,
+    authen: true,
+    main: () => <MessagePage />,
   },
   {
     path: ROUTES.forgot,

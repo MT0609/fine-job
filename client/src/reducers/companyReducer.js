@@ -3,7 +3,11 @@ import * as COMPANYCONSTANTS from "../constants/companyConstants";
 const initialState = {
   companies: [],
   company: {},
+  currentPage: 0,
+  totalPages: 0,
   isLoading: false,
+  followStatus: "",
+  unFollowStatus: "",
 };
 
 const companyReducer = (state = initialState, action) => {
@@ -17,7 +21,9 @@ const companyReducer = (state = initialState, action) => {
     case COMPANYCONSTANTS.C0MPANY_GET_ALL_SUCCESS:
       return {
         ...state,
-        companies: action.payload,
+        companies: action.payload?.results,
+        currentPage: action.payload?.page,
+        totalPages: action.payload?.totalPages,
         isLoading: false,
       };
     case COMPANYCONSTANTS.COMPANY_GET_ALL_FAIL:
@@ -44,6 +50,32 @@ const companyReducer = (state = initialState, action) => {
         ...state,
         company: {},
         isLoading: false,
+      };
+
+    case COMPANYCONSTANTS.C0MPANY_FOLLOW_ONE_SUCCESS:
+      return {
+        ...state,
+        unFollowStatus: "",
+        followStatus: COMPANYCONSTANTS.C0MPANY_FOLLOW_ONE_SUCCESS,
+      };
+    case COMPANYCONSTANTS.C0MPANY_FOLLOW_ONE_FAIL:
+      return {
+        ...state,
+        unFollowStatus: "",
+        followStatus: COMPANYCONSTANTS.C0MPANY_FOLLOW_ONE_FAIL,
+      };
+
+    case COMPANYCONSTANTS.C0MPANY_UNFOLLOW_ONE_SUCCESS:
+      return {
+        ...state,
+        followStatus: "",
+        unFollowStatus: COMPANYCONSTANTS.C0MPANY_UNFOLLOW_ONE_SUCCESS,
+      };
+    case COMPANYCONSTANTS.C0MPANY_UNFOLLOW_ONE_FAIL:
+      return {
+        ...state,
+        followStatus: "",
+        unFollowStatus: COMPANYCONSTANTS.C0MPANY_UNFOLLOW_ONE_FAIL,
       };
     default:
       return {

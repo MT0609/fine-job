@@ -1,31 +1,34 @@
 import jobApi from "../api/jobApi";
 import * as JOBCONSTANTS from "../constants/jobConstants";
+import { getUserData } from "./authActions";
 import jwt_decode from "jwt-decode";
 
-export const getJobs = (title, page = 1, limit = 5) => async (dispatch) => {
-  try {
-    dispatch({
-      type: JOBCONSTANTS.JOB_GET_ALL_REQUEST,
-    });
+export const getJobs =
+  (title, page = 1, limit = 5) =>
+  async (dispatch) => {
+    try {
+      dispatch({
+        type: JOBCONSTANTS.JOB_GET_ALL_REQUEST,
+      });
 
-    const params = {};
-    if (title) params.title = title;
-    if (limit) params.limit = limit;
-    if (page) params.page = page;
+      const params = {};
+      if (title) params.title = title;
+      if (limit) params.limit = limit;
+      if (page) params.page = page;
 
-    let result = await jobApi.getAll(params);
+      let result = await jobApi.getAll(params);
 
-    dispatch({
-      type: JOBCONSTANTS.JOB_GET_ALL_SUCCESS,
-      payload: result,
-    });
-  } catch (error) {
-    console.log(error);
-    dispatch({
-      type: JOBCONSTANTS.JOB_GET_ALL_FAIL,
-    });
-  }
-};
+      dispatch({
+        type: JOBCONSTANTS.JOB_GET_ALL_SUCCESS,
+        payload: result,
+      });
+    } catch (error) {
+      console.log(error);
+      dispatch({
+        type: JOBCONSTANTS.JOB_GET_ALL_FAIL,
+      });
+    }
+  };
 
 export const getMyPostingJobs = (title) => async (dispatch) => {
   // params: {title, limit, ...}
@@ -196,5 +199,63 @@ export const deleteJob = (id) => async (dispatch) => {
     return {
       status: JOBCONSTANTS.JOB_DELETE_FAIL,
     };
+  }
+};
+
+export const saveJob = (id) => async (dispatch) => {
+  try {
+    let result = await jobApi.save(id);
+
+    if (!result) {
+      dispatch({
+        type: JOBCONSTANTS.JOB_SAVE_FAIL,
+      });
+
+      return JOBCONSTANTS.JOB_SAVE_FAIL;
+    } else {
+      dispatch({
+        type: JOBCONSTANTS.JOB_SAVE_SUCCESS,
+      });
+
+      dispatch(getUserData());
+
+      return JOBCONSTANTS.JOB_SAVE_SUCCESS;
+    }
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: JOBCONSTANTS.JOB_SAVE_FAIL,
+    });
+
+    return JOBCONSTANTS.JOB_SAVE_FAIL;
+  }
+};
+
+export const unSaveJob = (id) => async (dispatch) => {
+  try {
+    let result = await jobApi.unSave(id);
+
+    if (!result) {
+      dispatch({
+        type: JOBCONSTANTS.JOB_UNSAVE_FAIL,
+      });
+
+      return JOBCONSTANTS.JOB_UNSAVE_FAIL;
+    } else {
+      dispatch({
+        type: JOBCONSTANTS.JOB_UNSAVE_SUCCESS,
+      });
+
+      dispatch(getUserData());
+
+      return JOBCONSTANTS.JOB_UNSAVE_SUCCESS;
+    }
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: JOBCONSTANTS.JOB_UNSAVE_FAIL,
+    });
+
+    return JOBCONSTANTS.JOB_UNSAVE_FAIL;
   }
 };

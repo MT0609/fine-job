@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { AppBar, Tabs, Tab, Paper, Container } from "@material-ui/core";
-import TabPanel from "../../components/tabs/tabPanel";
 import SignIn from "../../container/signin";
 import SignUp from "../../container/signup";
 
@@ -21,34 +20,15 @@ function Authen() {
           <Tabs
             value={value}
             onChange={handleChange}
-            aria-label="simple tabs example"
             TabIndicatorProps={{ style: { background: "#ffc400" } }}
-            tabItemContainerStyle={{
-              backgroundColor: "#FFFFFF",
-              width: "30%",
-            }}
-            inkBarStyle={{ backgroundColor: "red" }}
           >
-            <Tab
-              label="Login"
-              id="simple-tab-0"
-              aria-controls="simple-tabpanel-0"
-              disabled={auth.isLoading}
-            />
-            <Tab
-              label="Register"
-              id="simple-tab-1"
-              aria-controls="simple-tabpanel-1"
-              disabled={auth.isLoading}
-            />
+            <Tab label="Login" disabled={auth.isLoading} />
+            <Tab label="Register" disabled={auth.isLoading} />
           </Tabs>
         </AppBar>
-        <TabPanel value={value} index={0}>
-          <SignIn />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <SignUp />
-        </TabPanel>
+        <div style={{ padding: "1rem" }} value={value}>
+          {value === 0 ? <SignIn /> : <SignUp />}
+        </div>
       </Paper>
     </Container>
   );

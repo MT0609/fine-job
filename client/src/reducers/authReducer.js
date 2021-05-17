@@ -70,6 +70,11 @@ const authReducer = (state = initialState, action) => {
         isAuth: false,
       };
 
+    case AUTHCONSTANTS.USER_INFO_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+      };
     case AUTHCONSTANTS.USER_INFO_SUCCESS:
       return {
         ...state,
@@ -77,7 +82,6 @@ const authReducer = (state = initialState, action) => {
         isLoading: false,
         isAuth: true,
       };
-
     case AUTHCONSTANTS.USER_INFO_FAIL:
       return {
         ...state,

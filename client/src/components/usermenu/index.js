@@ -8,7 +8,7 @@ import {
   ListItemText,
   Typography,
 } from "@material-ui/core";
-import { ExitToApp, AccountBox } from "@material-ui/icons";
+import { ExitToApp, AccountBox, PostAdd, Work } from "@material-ui/icons";
 import { signOut } from "./../../actions/authActions";
 import { ROUTES } from "../../constants/routes";
 
@@ -57,6 +57,10 @@ function UserSubMenu(props) {
     window.open(`/profile/${user.id}`, "_self");
   };
 
+  const onMyJobsClick = () => {
+    window.open("/jobs/my-jobs", "_self");
+  };
+
   const onSignOutClick = () => {
     dispatch(signOut());
   };
@@ -88,9 +92,17 @@ function UserSubMenu(props) {
           <ListItemIcon
             style={{ minWidth: "fit-content", marginRight: "1rem" }}
           >
-            <ExitToApp fontSize="small" />
+            <PostAdd fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Manage Posting Job" />
+        </MenuItem>
+        <MenuItem onClick={onMyJobsClick}>
+          <ListItemIcon
+            style={{ minWidth: "fit-content", marginRight: "1rem" }}
+          >
+            <Work fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="My Jobs" />
         </MenuItem>
         <MenuItem onClick={onSignOutClick}>
           <ListItemIcon>

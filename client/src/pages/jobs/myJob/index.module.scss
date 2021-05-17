@@ -1,0 +1,28 @@
+.myjob {
+  &__tabBtns {
+    margin: 1rem;
+    display: flex;
+    align-items: flex-start;
+    :first-child {
+      margin-right: 1rem;
+    }
+  }
+  &__tabBtn {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: 1px solid #cacaca;
+    font-weight: bold;
+    transition: all 0.2s ease-in-out;
+    &:hover {
+      background-color: #ebebeb;
+      box-shadow: inset 0px 0px 0px 1px #a4a4a4;
+    }
+    &--active {
+      color: white;
+      background-color: #057642;
+      &:hover {
+        background-color: #057642;
+      }
+    }
+  }
+}
