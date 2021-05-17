@@ -15,39 +15,40 @@ router.route('/:subscriptionID');
 
 module.exports = router;
 
-// /**
-//  * @swagger
-//  * tags:
-//  *   name: Subscriptions
-//  *   description: Subscription management and retrieval
-//  */
+/**
+ * @swagger
+ * tags:
+ *   name: Subscriptions
+ *   description: Subscription management and retrieval
+ */
 
-// /**
-//  * @swagger
-//  * /subscriptions:
-//  *   post:
-//  *     summary: Create a subscription
-//  *     description: Users can create other subscriptions.
-//  *     tags: [Subscriptions]
-//  *     security:
-//  *       - bearerAuth: []
-//  *     requestBody:
-//  *       required: true
-//  *       content:
-//  *         application/json:
-//  *           schema:
-//  *             type: object
-//  *             properties:
-//  *
-//  *     responses:
-//  *       "201":
-//  *         description: Created
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *                $ref: '#/components/schemas/Subscription'
-//  *       "401":
-//  *         $ref: '#/components/responses/Unauthorized'
-//  *       "403":
-//  *         $ref: '#/components/responses/Forbidden'
-//  */
+/**
+ * @swagger
+ * /subscriptions:
+ *   post:
+ *     summary: Create a subscription
+ *     description: Users can create other subscriptions.
+ *     tags: [Subscriptions]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *
+ *     deprecated: true
+ *     responses:
+ *       "201":
+ *         description: Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Subscription'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ */

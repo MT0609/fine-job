@@ -101,6 +101,10 @@ const jobSchema = new mongoose.Schema(
       enum: enumJobStatus,
       default: 'open',
     },
+    directApplyUrl: {
+      type: String,
+      default: '',
+    },
   },
   {
     timestamps: true,

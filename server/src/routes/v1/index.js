@@ -41,10 +41,10 @@ const defaultRoutes = [
     path: '/notifications',
     route: notificationRoute,
   },
-  //{
-  //  path: '/subscriptions',
-  //  route: subscriptionRoute,
-  //},
+  {
+    path: '/subscriptions',
+    route: subscriptionRoute,
+  },
   // {
   //   path: '/jobs',
   //   route: jobRoute,

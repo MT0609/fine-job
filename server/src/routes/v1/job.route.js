@@ -254,6 +254,8 @@ module.exports = router;
  *                 type: array
  *                 items:
  *                   type: string
+ *               directApplyUrl:
+ *                 type: string
  *
  *             example:
  *               jobType:
@@ -269,6 +271,7 @@ module.exports = router;
  *               locations:
  *                  - Vietnam
  *                  - Singapore
+ *               directApplyUrl: https://apply.your-company.com/jobs?
  *     responses:
  *       "200":
  *         description: OK
