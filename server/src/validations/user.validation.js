@@ -60,8 +60,8 @@ const sendConnReq = {
     receiverID: Joi.string().custom(objectId),
   }),
   body: Joi.object().keys({
-    url: Joi.string().required(),
-    icon: Joi.string().required(),
+    senderUrl: Joi.string().required(),
+    receiverUrl: Joi.string().required(),
   }),
 };
 
@@ -86,6 +86,15 @@ const deleteFriend = {
   }),
 };
 
+const postSearchUsers = {
+  query: Joi.object().keys({
+    q: Joi.string(),
+    sortBy: Joi.string(),
+    limit: Joi.number().integer(),
+    page: Joi.number().integer(),
+  }),
+};
+
 module.exports = {
   createUser,
   getUsers,
@@ -96,4 +105,5 @@ module.exports = {
   acceptConnReq,
   deleteConnReq,
   deleteFriend,
+  postSearchUsers,
 };

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosastic = require('mongoosastic');
 const { toJSON, paginate } = require('./plugins');
 const { tokenTypes } = require('../config/tokens');
 
@@ -17,6 +18,7 @@ const companySchema = mongoose.Schema(
     name: {
       type: String,
       required: true,
+      es_indexed: true,
     },
     owner: {
       type: mongoose.SchemaTypes.ObjectId,
@@ -34,6 +36,7 @@ const companySchema = mongoose.Schema(
     headLine: {
       type: String,
       default: '',
+      es_indexed: true,
     },
     followers: [
       {
@@ -52,6 +55,7 @@ const companySchema = mongoose.Schema(
     about: {
       type: String,
       default: '',
+      es_indexed: true,
     },
     employees: [
       {
@@ -75,6 +79,7 @@ const companySchema = mongoose.Schema(
       industry: {
         type: String,
         enum: enumIndustry,
+        es_indexed: true,
       },
       companySize: {
         type: Number,
@@ -137,6 +142,7 @@ const companySchema = mongoose.Schema(
 // add plugin that converts mongoose to json
 companySchema.plugin(toJSON);
 companySchema.plugin(paginate);
+companySchema.plugin(mongoosastic, { hosts: ['localhost:9200'], hydrate: true });
 
 /**
  * Check if company name is taken
@@ -153,5 +159,11 @@ companySchema.statics.isNameTaken = async function (name, excludeCompanyId) {
  * @typedef Company
  */
 const Company = mongoose.model('Company', companySchema);
+
+// Start elastic mapping
+Company.createMapping(function (err, mapping) {
+  if (err) console.log('Company mapping error: ', err);
+  else console.log('Company mapping success: ', mapping);
+});
 
 module.exports = Company;

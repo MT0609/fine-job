@@ -31,6 +31,8 @@ router.route('/:companyID/follow').post(auth(), validate(companyValidation.postF
 
 router.route('/:companyID/unFollow').post(auth(), validate(companyValidation.postUnFollow), companyController.postUnFollow);
 
+router.route('/search').post(validate(companyValidation.postSearchCompanies), companyController.postSearchCompanies);
+
 module.exports = router;
 
 /**
@@ -355,5 +357,67 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
+ *
+ */
+
+/**
+ * @swagger
+ * /companies/search:
+ *   post:
+ *     summary: Search companies
+ *     description: Anyone can search on companies.
+ *     tags: [Companies]
+ *     security:
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         schema:
+ *           type: string
+ *         description: Query string
+ *       - in: query
+ *         name: sortBy
+ *         schema:
+ *           type: string
+ *         description: Sort by query in the form of field:desc/asc (ex. name:asc)
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         default: 10
+ *         description: Maximum number of jobs
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Page number
+ *     requestBody:
+ *     example:
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 results:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Company'
+ *                 page:
+ *                   type: integer
+ *                   example: 1
+ *                 limit:
+ *                   type: integer
+ *                   example: 10
+ *                 totalPages:
+ *                   type: integer
+ *                   example: 1
+ *                 totalResults:
+ *                   type: integer
+ *                   example: 1
  *
  */

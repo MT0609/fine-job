@@ -30,6 +30,8 @@ router
 router.route('/:jobID/save').post(auth(), validate(jobValidation.postSave), jobController.postSave);
 router.route('/:jobID/unSave').post(auth(), validate(jobValidation.postUnSave), jobController.postUnSave);
 
+router.route('/search').post(validate(jobValidation.postSearchJobs), jobController.postSearchJobs);
+
 module.exports = router;
 
 /**
@@ -66,9 +68,11 @@ module.exports = router;
  *                 type: string
  *                 description: Job name
  *               jobType:
- *                 type: string
- *                 enum: ['full-time', 'part-time', 'internship', 'contract', 'remote', 'temporary', 'volunteer']
- *                 description: Job type
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   enum: ['full-time', 'part-time', 'internship', 'contract', 'remote', 'temporary', 'volunteer']
+ *                   description: Job type
  *               skill:
  *                 type: array
  *                 items:
@@ -90,18 +94,20 @@ module.exports = router;
  *                 type: number
  *                 description: Maximum salary for this position
  *             example:
- *               id: 6079d3b5bee9390730603276
- *               title: Full-stack develop javascript
- *               jobType: part-time
+ *               id: 609c0d1be962b125704a528d
+ *               title: Full stack develop javascript
+ *               jobType:
+ *                 - part-time
+ *                 - contract
  *               skills:
- *                 - mongoDb
- *                 - expressJs
- *                 - reactJs
- *                 - nodeJs
+ *                 - MongoDb
+ *                 - ExpressJs
+ *                 - ReactJs
+ *                 - NodeJs
  *               description: Master in MERN, MEAN stack
  *               locations:
- *                 - 127 Hai Thuong Lan Ong - Q5 - HCM
- *                 - 112 Dao Duy Tu - Q10 - HCM
+ *                 - 127 Hai Thuong Lan Ong, Q5, HCM
+ *                 - 112 Dao Duy Tu, Q10, HCM
  *               maxSalary: 3000
  *     responses:
  *       "201":
@@ -120,7 +126,6 @@ module.exports = router;
  *     description: Only admins can retrieve all jobs.
  *     tags: [Jobs]
  *     security:
- *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: title
@@ -249,6 +254,8 @@ module.exports = router;
  *                 type: array
  *                 items:
  *                   type: string
+ *               directApplyUrl:
+ *                 type: string
  *
  *             example:
  *               jobType:
@@ -264,6 +271,7 @@ module.exports = router;
  *               locations:
  *                  - Vietnam
  *                  - Singapore
+ *               directApplyUrl: https://apply.your-company.com/jobs?
  *     responses:
  *       "200":
  *         description: OK
@@ -348,5 +356,67 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
+ *
+ */
+
+/**
+ * @swagger
+ * /jobs/search:
+ *   post:
+ *     summary: Search jobs
+ *     description: Anyone can search on jobs.
+ *     tags: [Jobs]
+ *     security:
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         schema:
+ *           type: string
+ *         description: Query string
+ *       - in: query
+ *         name: sortBy
+ *         schema:
+ *           type: string
+ *         description: Sort by query in the form of field:desc/asc (ex. name:asc)
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         default: 10
+ *         description: Maximum number of jobs
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Page number
+ *     requestBody:
+ *     example:
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 results:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Job'
+ *                 page:
+ *                   type: integer
+ *                   example: 1
+ *                 limit:
+ *                   type: integer
+ *                   example: 10
+ *                 totalPages:
+ *                   type: integer
+ *                   example: 1
+ *                 totalResults:
+ *                   type: integer
+ *                   example: 1
  *
  */

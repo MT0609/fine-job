@@ -5,7 +5,7 @@ const createJob = {
   body: Joi.object().keys({
     id: Joi.string().custom(objectId),
     title: Joi.string().required(),
-    jobType: Joi.string().required(),
+    jobType: Joi.array().items(Joi.string()),
     skills: Joi.array().items(Joi.string()),
     description: Joi.string(),
     locations: Joi.array().items(Joi.string()),
@@ -66,6 +66,15 @@ const postUnSave = {
   }),
 };
 
+const postSearchJobs = {
+  query: Joi.object().keys({
+    q: Joi.string(),
+    sortBy: Joi.string(),
+    limit: Joi.number().integer(),
+    page: Joi.number().integer(),
+  }),
+};
+
 module.exports = {
   createJob,
   getJobs,
@@ -74,4 +83,5 @@ module.exports = {
   deleteJob,
   postSave,
   postUnSave,
+  postSearchJobs,
 };

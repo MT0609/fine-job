@@ -29,6 +29,8 @@ router
 
 router.route('/:receiverID/deleteFriend').post(auth(), validate(userValidation.deleteFriend), userController.deleteFriend);
 
+router.route('/search').post(validate(userValidation.postSearchUsers), userController.postSearchUsers);
+
 module.exports = router;
 
 /**
@@ -307,19 +309,18 @@ module.exports = router;
  *           schema:
  *             type: object
  *             required:
- *               - url
- *               - icon
+ *               - senderUrl
+ *               - receiverUrl
  *             properties:
- *               url:
+ *               senderUrl:
  *                  type: string
- *                  description: Redirect url when click activity/notification
- *               icon:
+ *                  description: Redirect senderUrl when receiver click notification
+ *               receiverUrl:
  *                  type: string
- *                  description: Options
+ *                  description: Redirect receiverUrl when sender click activity
  *             example:
- *               url:  https://fine-job/users/nguyen-quoc-thai
- *               icon: https://static.thenounproject.com/png/2235846-200.png
-
+ *               senderUrl:  https://fine-job/users/nguyen-quoc-thai
+ *               receiverUrl:  https://fine-job/users/hong-minh-thang
  *     responses:
  *       "201":
  *         description: Created
@@ -418,4 +419,66 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /users/search:
+ *   post:
+ *     summary: Search users
+ *     description: Anyone can search on users.
+ *     tags: [Users]
+ *     security:
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         schema:
+ *           type: string
+ *         description: Query string
+ *       - in: query
+ *         name: sortBy
+ *         schema:
+ *           type: string
+ *         description: Sort by query in the form of field:desc/asc (ex. name:asc)
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         default: 10
+ *         description: Maximum number of jobs
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Page number
+ *     requestBody:
+ *     example:
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 results:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/User'
+ *                 page:
+ *                   type: integer
+ *                   example: 1
+ *                 limit:
+ *                   type: integer
+ *                   example: 10
+ *                 totalPages:
+ *                   type: integer
+ *                   example: 1
+ *                 totalResults:
+ *                   type: integer
+ *                   example: 1
+ *
  */
