@@ -9,25 +9,29 @@
 }
 
 .message {
-  position: relative;
-  &__text {
-    margin: 0.5rem;
-    padding-right: 2rem;
+  padding: 0 1rem;
+  &__item {
+    position: relative;
+    margin: 0.5rem 0;
+    margin-left: auto;
+    width: fit-content;
+    max-width: 70%;
     text-align: right;
     &--left {
+      margin-left: 0;
       text-align: left;
+    }
+    &:hover > .message__delete {
+      visibility: visible;
     }
   }
   &__delete {
     position: absolute;
     top: 0;
-    right: 0;
+    right: 100%;
     visibility: hidden;
     &:hover {
       visibility: visible;
     }
-  }
-  &__text:hover + .message__delete {
-    visibility: visible;
   }
 }

@@ -6,9 +6,9 @@ import { getAllMessages, getMessage } from "../../actions/messageActions";
 import MessageList from "../../container/message/pageContainer/messageList";
 import MessageDetail from "../../container/message/pageContainer/messageDetail";
 import MessageDialog from "../../container/message/dialog";
-import CircularLoading from "../../components/loading/circular";
 
 function MessagePage() {
+  const myInfo = useSelector((state) => state.auth.user);
   const messageState = useSelector((state) => state.message);
   const messages = messageState.messages;
   const message = messageState.message;
@@ -55,16 +55,13 @@ function MessagePage() {
 
         {messageGridAllow && (
           <Grid item md style={{ height: "100%" }}>
-            {!messageState.isLoading ? (
-              <MessageDetail message={message} />
-            ) : (
-              <CircularLoading />
-            )}
+            <MessageDetail myInfo={myInfo} message={message} />
           </Grid>
         )}
 
         {messageDialogAllow && (
           <MessageDialog
+            myInfo={myInfo}
             show={messageDialogShow && messageDialogAllow}
             message={message}
             close={() => setMessageDialogShow(false)}

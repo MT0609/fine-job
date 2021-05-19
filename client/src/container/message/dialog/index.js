@@ -15,7 +15,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function MessageDialog(props) {
-  const { message = null, show = false, close } = props;
+  const { myInfo = {}, message = {}, show = false, close } = props;
 
   const dispatch = useDispatch();
 
@@ -24,15 +24,15 @@ export default function MessageDialog(props) {
   };
 
   const handleSendMessage = (msg) => {
-    dispatch(sendMessage(message.userID_2, msg, 1));
+    dispatch(sendMessage(message.partnerID, msg));
   };
 
   const handleDeleteMessage = (msgID) => {
-    dispatch(deleteMessage(message.userID_2, msgID, 1));
+    dispatch(deleteMessage(message.partnerID, msgID, 1));
   };
 
   const handleDeleteConversation = () => {
-    dispatch(deleteConversation(message.userID_2));
+    dispatch(deleteConversation(message.partnerID));
     handleClose();
   };
 
@@ -46,14 +46,26 @@ export default function MessageDialog(props) {
       fullWidth
     >
       <DialogContent style={{ padding: 5 }}>
-        {message && message.id && (
+        {message && (
           <>
             <InfoBar
-              receive={{ name: "receiver" }}
+              receiver={{
+                avatar: `${message.avatar}`,
+                name: `${message.partnerInfo?.lastName}`,
+                id: `${message.partnerID}`,
+              }}
               onDeleteConversation={handleDeleteConversation}
               onCloseMessage={handleClose}
             />
             <InboxMessages
+              myInfo={{
+                avatar: myInfo?.avatar,
+                name: myInfo.baseInfo?.lastName,
+              }}
+              receiver={{
+                avatar: `${message.avatar}`,
+                name: `${message.partnerInfo?.lastName}`,
+              }}
               messages={message?.messages}
               ondelete={handleDeleteMessage}
             />

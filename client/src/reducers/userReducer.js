@@ -3,6 +3,7 @@ import * as USERCONSTANTS from "../constants/userConstants";
 const initialState = {
   user: null, // object -> info
   isLoading: false,
+  connectStatus: "",
 };
 
 const userReducer = (state = initialState, action) => {
@@ -10,7 +11,7 @@ const userReducer = (state = initialState, action) => {
     case USERCONSTANTS.USER_INFO_REQUEST:
       return {
         ...state,
-        user: null,
+        // user: null,
         isLoading: true,
       };
     case USERCONSTANTS.USER_INFO_SUCCESS:
@@ -23,6 +24,34 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         initialState,
+      };
+
+    case USERCONSTANTS.USER_SEND_REQ_SUCCESS:
+      return {
+        ...state,
+        connectStatus: USERCONSTANTS.USER_SEND_REQ_SUCCESS,
+      };
+    case USERCONSTANTS.USER_SEND_REQ_FAIL:
+      return {
+        ...state,
+        connectStatus: USERCONSTANTS.USER_SEND_REQ_FAIL,
+      };
+
+    case USERCONSTANTS.USER_DELETE_REQ_SUCCESS:
+      return {
+        ...state,
+        connectStatus: USERCONSTANTS.USER_DELETE_REQ_SUCCESS,
+      };
+
+    case USERCONSTANTS.USER_DELETE_FRIEND_FAIL:
+      return {
+        ...state,
+        connectStatus: USERCONSTANTS.USER_DELETE_FRIEND_FAIL,
+      };
+    case USERCONSTANTS.USER_DELETE_FRIEND_SUCCESS:
+      return {
+        ...state,
+        connectStatus: USERCONSTANTS.USER_DELETE_FRIEND_SUCCESS,
       };
 
     default:
