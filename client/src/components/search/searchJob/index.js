@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Container, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { Search } from "@material-ui/icons";
 import styles from "./search.module.scss";
 
@@ -21,7 +21,7 @@ function SearchJobBar({ defaultValue = "", onsearch }) {
   };
 
   return (
-    <Container>
+    <div className={styles.container}>
       <Grid container spacing={3}>
         <Grid item md={5}>
           <div className={styles.searchbar}>
@@ -51,7 +51,7 @@ function SearchJobBar({ defaultValue = "", onsearch }) {
           </button>
         </Grid>
       </Grid>
-    </Container>
+    </div>
   );
 }
 

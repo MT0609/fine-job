@@ -1,6 +1,7 @@
 export const ROUTES = {
   home: "/",
   profile: "/profile/:id",
+  search: "/search",
   jobs: "/jobs",
   myJobs: "/jobs/my-jobs",
   job: "/jobs/:id",

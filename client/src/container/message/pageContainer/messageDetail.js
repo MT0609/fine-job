@@ -10,33 +10,44 @@ import {
 } from "../../../actions/messageActions";
 import styles from "./index.module.scss";
 
-function MessageDetail({ message }) {
+function MessageDetail({ myInfo = {}, message }) {
   const dispatch = useDispatch();
 
   const handleSendMessage = (msg) => {
-    dispatch(sendMessage(message.userID_2, msg, 1));
+    dispatch(sendMessage(message.partnerID, msg));
   };
 
   const handleDeleteMessage = (msgID) => {
-    dispatch(deleteMessage(message.userID_2, msgID, 1));
+    dispatch(deleteMessage(message.partnerID, msgID, 1));
   };
 
   const handleDeleteConversation = () => {
-    dispatch(deleteConversation(message.userID_2));
+    dispatch(deleteConversation(message.partnerID));
   };
 
   return (
     <div className={styles.message}>
-      {message && message.id && (
+      {message && message.partnerID && (
         <>
           <InfoBar
-            receive={{ name: "receiver" }}
+            receiver={{
+              name: `${message.partnerInfo?.firstName} ${message.partnerInfo?.lastName}`,
+              id: `${message.partnerID}`,
+            }}
             onDeleteConversation={handleDeleteConversation}
           />
 
           <div className={styles.message__main}>
             <InboxMessages
-              messages={message?.messages}
+              myInfo={{
+                avatar: myInfo?.avatar,
+                name: myInfo.baseInfo?.lastName,
+              }}
+              receiver={{
+                avatar: `${message.avatar}`,
+                name: `${message.partnerInfo?.lastName}`,
+              }}
+              messages={message.messages}
               ondelete={handleDeleteMessage}
             />
           </div>

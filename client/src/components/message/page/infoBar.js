@@ -1,9 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { IconButton, Menu, MenuItem } from "@material-ui/core";
 import { MoreVert, Delete } from "@material-ui/icons";
 
 function InfoBar(props) {
-  const { receive, onDeleteConversation } = props;
+  const { receiver, onDeleteConversation } = props;
 
   const onDeleteConversationClick = () => {
     if (onDeleteConversation) onDeleteConversation();
@@ -26,7 +27,14 @@ function InfoBar(props) {
       }}
     >
       <section>
-        <span>{receive.name}</span>
+        <Link
+          to={`/profile/${receiver.id}`}
+          style={{
+            fontWeight: "bold",
+          }}
+        >
+          {receiver.name}
+        </Link>
       </section>
 
       <section>

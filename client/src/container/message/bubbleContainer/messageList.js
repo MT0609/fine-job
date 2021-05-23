@@ -7,10 +7,14 @@ import styles from "./index.module.scss";
 function MessageList({ isLoading = false, messages = [], onMessageClick }) {
   const auth = useSelector((state) => state.auth);
 
-  const [messageListEnlarge, SetMessageListEnlarge] = useState(true);
+  const [messageListEnlarge, SetMessageListEnlarge] = useState(false);
 
   const handleMessageClick = (partnerID) => {
     if (onMessageClick) onMessageClick(partnerID);
+  };
+
+  const setMessageListView = () => {
+    SetMessageListEnlarge((prevState) => !prevState);
   };
 
   return (
@@ -28,7 +32,7 @@ function MessageList({ isLoading = false, messages = [], onMessageClick }) {
           textAlign: "left",
           cursor: "pointer",
         }}
-        onClick={() => SetMessageListEnlarge((prevState) => !prevState)}
+        onClick={setMessageListView}
       >
         <Avatar
           style={{
@@ -100,8 +104,8 @@ function MessageList({ isLoading = false, messages = [], onMessageClick }) {
                       width: "15rem",
                       color: "#5E5E5E",
                       overflow: "hidden",
-                      "text-overflow": "ellipsis",
-                      "white-space": "nowrap",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
                     }}
                   >
                     {message.latestMessage[0]?.msg}

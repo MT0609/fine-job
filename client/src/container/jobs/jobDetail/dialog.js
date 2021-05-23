@@ -89,7 +89,7 @@ export default function JobDetailDialog(props) {
 
               <div className={styles.detail__section}>
                 <p>Skills</p>
-                <ul className={styles.detail__skills}>
+                <ul className={styles.detail__list}>
                   {job.skills.length &&
                     job.skills.map((skill, index) => (
                       <li key={index}>{skill}</li>
@@ -99,7 +99,11 @@ export default function JobDetailDialog(props) {
 
               <div className={styles.detail__section}>
                 <p>Employment Type</p>
-                <span>{job.job.jobType[0]}</span>
+                <ul className={styles.detail__list}>
+                  {job.job.jobType.map((type, index) => (
+                    <li key={index}>{type}</li>
+                  ))}
+                </ul>
               </div>
 
               <div className={styles.detail__section}>

@@ -14,7 +14,7 @@ function Authen() {
   };
 
   return (
-    <Container maxWidth="sm" style={{ paddingTop: "3rem" }}>
+    <Container maxWidth="sm" style={{ paddingTop: "1rem" }}>
       <Paper>
         <AppBar position="static">
           <Tabs

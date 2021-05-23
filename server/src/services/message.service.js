@@ -27,17 +27,20 @@ const createMessage = async (userBody) => {
         { userID_1: userID_2, userID_2: userID_1 },
       ],
     });
+
+    const partnerInfo = await getUserById(userID_2);
+
     if (message) {
       message.messages.push(msg);
       await message.save();
-      return message;
+      return { ...message._doc, partnerInfo: partnerInfo.baseInfo, avatar: partnerInfo.avatar, partnerID: userID_2 };
     } else {
       userBody.messages = [];
       userBody.messages.push(msg);
       userBody.userID_1 = userID_1;
       userBody.userID_2 = userID_2;
       const newConversation = await Message.create(userBody);
-      return newConversation;
+      return { ...newConversation._doc, partnerInfo: partnerInfo.baseInfo, avatar: partnerInfo.avatar, partnerID: userID_2 };
     }
   } catch (error) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Message not found');
@@ -76,10 +79,12 @@ const deleteMessage = async (filter) => {
       throw new Error('This message was not sent by you');
     }
 
+    const partnerInfo = await getUserById(userID_2);
+
     // Update message status
     message.messages[validIndex].status = 'deleted';
     await message.save();
-    return message;
+    return { ...message._doc, partnerInfo: partnerInfo.baseInfo, avatar: partnerInfo.avatar, partnerID: userID_2 };
   } catch (error) {
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
   }
@@ -106,7 +111,6 @@ const deleteConversation = async (filter) => {
     }
 
     await message.remove();
-    return message;
   } catch (error) {
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
   }
@@ -134,6 +138,14 @@ const queryMessages = async (filter, options) => {
     });
 
     const partnerInfo = await getUserById(userID_2);
+
+    if (!message) {
+      return {
+        partnerInfo: partnerInfo.baseInfo,
+        avatar: partnerInfo.avatar,
+        partnerID: userID_2,
+      };
+    }
 
     const ret = message._doc;
     ret.partnerInfo = partnerInfo.baseInfo;

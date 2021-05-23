@@ -1,13 +1,13 @@
-import React, { Suspense, lazy } from "react";
-import { Route, Redirect, Switch, BrowserRouter } from "react-router-dom";
+import React, { lazy } from "react";
+import { Route, Redirect, Switch } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { ROUTES } from "../constants/routes";
 import AuthenPage from "../pages/authen";
 import Home from "../pages/home";
 import Jobs from "../pages/jobs";
+import SearchPage from "../pages/search";
 import TalentMainPage from "../pages/talent";
 import Profile from "../pages/profile";
-import Loading from "../components/loading/circular";
 
 const JobView = lazy(() => import("../pages/jobs/job"));
 const MyJob = lazy(() => import("../pages/jobs/myJob"));
@@ -34,6 +34,11 @@ const routes = [
     main: () => <Profile />,
   },
   {
+    path: ROUTES.search,
+    exact: true,
+    main: () => <SearchPage />,
+  },
+  {
     path: ROUTES.authen,
     exact: true,
     authen: false,
@@ -56,14 +61,14 @@ const routes = [
     main: () => <JobView />,
   },
   {
-    path: ROUTES.companies,
-    exact: true,
-    main: () => <Companies />,
-  },
-  {
     path: ROUTES.company,
     exact: false,
     main: () => <Company />,
+  },
+  {
+    path: ROUTES.companies,
+    exact: false,
+    main: () => <Companies />,
   },
   {
     path: ROUTES.talent,
@@ -111,49 +116,43 @@ const routes = [
 
 const renderRoutes = (routes) => {
   return (
-    <BrowserRouter>
-      <Suspense fallback={<Loading />}>
-        <Switch>
-          {routes.map((route, index) => {
-            const { path, exact, main: Component, authen = "none" } = route;
-            return (
-              <Route
-                key={index}
-                path={path}
-                exact={exact}
-                render={(props) => {
-                  try {
-                    const token = localStorage.getItem(
-                      process.env.REACT_APP_ACCESS_TOKEN
-                    );
+    <Switch>
+      {routes.map((route, index) => {
+        const { path, exact, main: Component, authen = "none" } = route;
+        return (
+          <Route
+            key={index}
+            path={path}
+            exact={exact}
+            render={(props) => {
+              try {
+                const token = localStorage.getItem(
+                  process.env.REACT_APP_ACCESS_TOKEN
+                );
 
-                    if (!token && authen !== true)
-                      return <Component {...props} />;
+                if (!token && authen !== true) return <Component {...props} />;
 
-                    const user = jwt_decode(token);
+                const user = jwt_decode(token);
 
-                    if (authen === false && user.sub) {
-                      return <Redirect to="/jobs" />;
-                    }
+                if (authen === false && user.sub)
+                  return <Redirect to="/jobs" />;
 
-                    if (authen === true && (!user || !user.sub))
-                      return <Redirect to="/authen" />;
+                if (authen === true && (!user || !user.sub))
+                  return <Redirect to="/authen" />;
 
-                    return <Component {...props} />;
-                  } catch (error) {
-                    localStorage.clear();
-                    return <Redirect to="/authen" />;
-                  }
-                }}
-              />
-            );
-          })}
-          <Route>
-            <NotFound />
-          </Route>
-        </Switch>
-      </Suspense>
-    </BrowserRouter>
+                return <Component {...props} />;
+              } catch (error) {
+                localStorage.clear();
+                return <Redirect to="/authen" />;
+              }
+            }}
+          />
+        );
+      })}
+      <Route>
+        <NotFound />
+      </Route>
+    </Switch>
   );
 };
 

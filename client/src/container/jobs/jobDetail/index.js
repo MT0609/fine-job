@@ -1,5 +1,6 @@
 import React from "react";
-import { Avatar, Grid, Typography, Link, Box } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import { Avatar, Grid, Typography, Box } from "@material-ui/core";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import styles from "./index.module.scss";
 
@@ -25,7 +26,7 @@ function JobDetail(props) {
               <Typography variant="h5" style={{ lineHeight: 1 }}>
                 {job.title}
               </Typography>
-              <Link href={`/company/${job.company?.id}`}>
+              <Link to={`/company/${job.company?.id}`}>
                 {job.company?.name}
               </Link>
               <p className={styles.detail__subheader}>
@@ -72,7 +73,7 @@ function JobDetail(props) {
 
             <div className={styles.detail__section}>
               <p>Skills</p>
-              <ul className={styles.detail__skills}>
+              <ul className={styles.detail__list}>
                 {job.skills.length &&
                   job.skills.map((skill, index) => (
                     <li key={index}>{skill}</li>
@@ -82,7 +83,11 @@ function JobDetail(props) {
 
             <div className={styles.detail__section}>
               <p>Employment Type</p>
-              <span>{job.job.jobType[0]}</span>
+              <ul className={styles.detail__list}>
+                {job.job.jobType.map((type, index) => (
+                  <li key={index}>{type}</li>
+                ))}
+              </ul>
             </div>
 
             <div className={styles.detail__section}>

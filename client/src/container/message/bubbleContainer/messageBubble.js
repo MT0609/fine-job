@@ -10,53 +10,71 @@ import {
 } from "../../../actions/messageActions";
 import styles from "./index.module.scss";
 
-function MessageBubble({ message, onClose }) {
+function MessageBubble({ myInfo = {}, message, onClose }) {
   const [largeBubble, setLargeBubble] = useState(true);
 
   const dispatch = useDispatch();
 
   const handleSendMessage = (msg) => {
-    dispatch(sendMessage(message.userID_2, msg));
+    dispatch(sendMessage(message.partnerID, msg));
   };
 
   const handleDeleteMessage = (msgID) => {
-    dispatch(deleteMessage(message.userID_2, msgID));
+    dispatch(deleteMessage(message.partnerID, msgID));
   };
 
   const handleCloseMessage = () => {
-    if (onClose) onClose(message?.id);
+    if (onClose) onClose(message.partnerID);
   };
 
   const handleDeleteConversation = () => {
-    dispatch(deleteConversation(message.userID_2));
+    dispatch(deleteConversation(message.partnerID));
   };
 
   return (
-    <div
-      className={`${
-        largeBubble ? `${styles["bubble"]}` : `${styles["bubble--minimize"]}`
-      } `}
-    >
-      <InfoBar
-        receipt={{ name: "receiver" }}
-        enlargeBubble={() => setLargeBubble((prevState) => !prevState)}
-        onCloseMessage={handleCloseMessage}
-        onDeleteConversation={handleDeleteConversation}
-      />
-      <div
-        className={
-          largeBubble
-            ? `${styles["bubble__message--maximize"]}`
-            : `${styles["bubble__message--minimize"]}`
-        }
-      >
-        <InboxMessages
-          messages={message?.messages}
-          ondelete={handleDeleteMessage}
-        />
-        <Input sendMessage={handleSendMessage} />
-      </div>
-    </div>
+    <>
+      {message && message.partnerID && (
+        <div
+          className={`${
+            largeBubble
+              ? `${styles["bubble"]}`
+              : `${styles["bubble--minimize"]}`
+          } `}
+        >
+          <InfoBar
+            receiver={{
+              avatar: `${message.avatar}`,
+              name: `${message.partnerInfo?.lastName}`,
+              id: `${message.partnerID}`,
+            }}
+            enlargeBubble={() => setLargeBubble((prevState) => !prevState)}
+            onCloseMessage={handleCloseMessage}
+            onDeleteConversation={handleDeleteConversation}
+          />
+          <div
+            className={
+              largeBubble
+                ? `${styles["bubble__message--maximize"]}`
+                : `${styles["bubble__message--minimize"]}`
+            }
+          >
+            <InboxMessages
+              myInfo={{
+                avatar: myInfo?.avatar,
+                name: myInfo.baseInfo?.lastName,
+              }}
+              receiver={{
+                avatar: `${message.avatar}`,
+                name: `${message.partnerInfo?.lastName}`,
+              }}
+              messages={message?.messages}
+              ondelete={handleDeleteMessage}
+            />
+            <Input sendMessage={handleSendMessage} />
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

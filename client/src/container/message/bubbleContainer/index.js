@@ -13,6 +13,8 @@ function MessageBubbleContainer() {
   const messageState = useSelector((state) => state.message);
   const activeBubbleMessages = messageState?.activeBubbleMessages;
 
+  const myInfo = useSelector((state) => state.auth.user);
+
   const dispatch = useDispatch();
 
   const handleGetMessage = (partnerID) => {
@@ -23,14 +25,12 @@ function MessageBubbleContainer() {
     dispatch(getAllMessages());
   }, [dispatch, activeBubbleMessages]);
 
-  const onCloseActiveBubbleMessage = (msgID) => {
-    dispatch(closeActiveBubbleMessage(msgID));
+  const onCloseActiveBubbleMessage = (partnerID) => {
+    dispatch(closeActiveBubbleMessage(partnerID));
   };
 
   return (
     <div className={styles.messageListContainer}>
-      {/* <MessageBubble message={message} />
-      <MessageBubble message={message} /> */}
       {activeBubbleMessages?.length
         ? activeBubbleMessages.map((activeMessage) => (
             <MessageBubble
@@ -43,6 +43,7 @@ function MessageBubbleContainer() {
       <MessageList
         isLoading={messageState.isMessagesLoading}
         messages={messageState.messages}
+        myInfo={myInfo}
         onMessageClick={handleGetMessage}
       />
     </div>
