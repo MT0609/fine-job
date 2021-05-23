@@ -1,9 +1,12 @@
 import * as USERCONSTANTS from "../constants/userConstants";
 
 const initialState = {
+  users: [],
   user: null, // object -> info
   isLoading: false,
   connectStatus: "",
+  currentPage: 0,
+  totalPages: 0,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -24,6 +27,28 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         initialState,
+      };
+
+    case USERCONSTANTS.USER_SEARCH_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case USERCONSTANTS.USER_SEARCH_SUCCESS:
+      return {
+        ...state,
+        users: action.payload?.results,
+        currentPage: action.payload?.page,
+        totalPages: action.payload?.totalPages,
+        isLoading: false,
+      };
+    case USERCONSTANTS.USER_SEARCH_FAIL:
+      return {
+        ...state,
+        users: null,
+        currentPage: 0,
+        totalPages: 0,
+        isLoading: false,
       };
 
     case USERCONSTANTS.USER_SEND_REQ_SUCCESS:

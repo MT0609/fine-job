@@ -8,13 +8,18 @@ import CircularLoading from "../../components/loading/circular";
 import JobDetailDialog from "../../container/jobs/jobDetail/dialog";
 import JobList from "../../container/jobs/jobList";
 import JobDetail from "../../container/jobs/jobDetail";
+import FilterBar from "../../container/filter";
 import { getJobs, getJobDetail } from "../../actions/jobActions";
+import { searchUsers } from "../../actions/userActions";
+import { getCompanies } from "../../actions/companyActions";
 
 function Jobs() {
   const { search } = useLocation();
-  const keyword = new URLSearchParams(search).get("keyword") || "";
+  const keyword = new URLSearchParams(search).get("keyword");
   const page = new URLSearchParams(search).get("page") || 1;
+  const cate = new URLSearchParams(search).get("cate") || "job";
   const history = useHistory();
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -59,7 +64,10 @@ function Jobs() {
 
   const handleJobClick = (id) => {
     dispatch(getJobDetail(id));
-    if (jobDetailDialogAllow) setJobDetailDialog(true);
+    if (jobDetailDialogAllow) {
+      setJobDetailDialog(true);
+      console.log(jobDetailDialogAllow);
+    }
   };
 
   const handlePageChange = async (page) => {
@@ -69,12 +77,39 @@ function Jobs() {
     dispatch(getJobs(keyword, page));
   };
 
+  const handleSearchByCate = (cate) => {
+    let queryParams = new URLSearchParams(window.location.search);
+    if (cate === "job") {
+      let queryString = `/jobs`;
+      if (queryParams.get("keyword")) queryString += `?keyword=${keyword}`;
+      history.push(queryString);
+      return;
+    }
+
+    if (cate === queryParams.get("cate")) return;
+    queryParams.set("cate", cate);
+    queryParams.set("page", 1);
+    history.push(`/search?${queryParams}`);
+
+    if (cate === "people")
+      dispatch(searchUsers(keyword, +queryParams.get("page")));
+    else if (cate === "company")
+      dispatch(getCompanies(keyword, +queryParams.get("page")));
+    else {
+      dispatch(searchUsers(keyword, page));
+      dispatch(getCompanies(keyword, page));
+    }
+  };
+
   return (
     <div>
+      <FilterBar onclick={handleSearchByCate} option={cate} />
+
       <SearchJobBar onsearch={handleInputSearch} defaultValue={keyword} />
       <Container
+        maxWidth="lg"
         style={{
-          marginTop: "2rem",
+          marginTop: "1rem",
           padding: 0,
           backgroundColor: "white",
           boxShadow: "0 3px 8px rgba(0, 0, 0, 0.15)",
@@ -84,10 +119,10 @@ function Jobs() {
           <Grid
             item
             xs={12}
-            md={6}
+            sm={6}
             style={{ borderRight: "2px solid #F4F4F4" }}
           >
-            {jobs.jobs.length ? (
+            {jobs?.jobs?.length ? (
               <JobList
                 jobs={jobs.jobs}
                 totalPage={jobs.totalPages}
@@ -101,16 +136,13 @@ function Jobs() {
             )}
           </Grid>
           {jobDetailGridAllow && (
-            <Grid item xs={0} md={6}>
+            <Grid item sm={6}>
               {jobs.isLoading && <CircularLoading />}
 
-              {!jobs.isLoading &&
-                job &&
-                job !== "null" &&
-                job !== "undefined" && <JobDetail job={job} />}
+              {!jobs.isLoading && job && <JobDetail job={job} />}
 
               {!jobs.isLoading &&
-              jobs.jobs.length &&
+              jobs?.jobs?.length &&
               (!job || job === "null" || job === "undefined") ? (
                 <Typography variant="h5" style={{ paddingTop: "1rem" }}>
                   No matching job found

@@ -1,3 +1,6 @@
+.container {
+  margin: 0 4rem;
+}
 .searchbar {
   padding-right: 1rem;
   display: flex;
@@ -29,5 +32,11 @@
     &:hover {
       background-color: #1788df;
     }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    margin: 0 1rem;
   }
 }

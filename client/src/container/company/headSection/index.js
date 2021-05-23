@@ -136,13 +136,13 @@ function CompanyHeadContainer(props) {
             TabIndicatorProps={{ style: { background: "blue" } }}
           >
             <Tab
-              style={{ fontWeight: "bold" }}
+              style={{ fontWeight: "bold", textDecoration: "none" }}
               label="Home"
               component={Link}
               to={`/company/${company.id}`}
             />
             <Tab
-              style={{ fontWeight: "bold" }}
+              style={{ fontWeight: "bold", textDecoration: "none" }}
               label="Jobs"
               component={Link}
               to={`/company/${company.id}/jobs`}

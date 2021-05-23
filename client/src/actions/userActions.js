@@ -20,6 +20,29 @@ export const getProfileData = (userID) => async (dispatch) => {
   }
 };
 
+export const searchUsers =
+  (q, page = 1, limit = 10) =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: USERCONSTANTS.USER_SEARCH_REQUEST });
+
+      if (!q) q = "*";
+      let result = await userApi.search(q, limit, page);
+
+      if (!result) {
+        dispatch({ type: USERCONSTANTS.USER_SEARCH_FAIL });
+        return;
+      }
+
+      dispatch({
+        type: USERCONSTANTS.USER_SEARCH_SUCCESS,
+        payload: result,
+      });
+    } catch (error) {
+      dispatch({ type: USERCONSTANTS.USER_SEARCH_FAIL });
+    }
+  };
+
 export const updateUser = (data) => async (dispatch) => {
   try {
     const token = localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN);

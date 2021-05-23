@@ -30,9 +30,7 @@ function InfoBar(props) {
         <Link
           to={`/profile/${receiver.id}`}
           style={{
-            color: "#000000",
             fontWeight: "bold",
-            textDecoration: "none",
           }}
         >
           {receiver.name}

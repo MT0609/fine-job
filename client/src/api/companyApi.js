@@ -2,8 +2,8 @@ import axiosClient from "./axiosClient";
 
 const companyApi = {
   getAll: (params) => {
-    const url = `/v1/companies`;
-    return axiosClient.get(url, { params });
+    const url = `/v1/companies/search?q=${params.q}&limit=${params.limit}&page=${params.page}`;
+    return axiosClient.post(url, { params });
   },
   getOne: (id) => {
     const url = `/v1/companies/${id}`;

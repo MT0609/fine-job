@@ -1,5 +1,6 @@
 import React from "react";
-import { Avatar, Link, IconButton, Menu, MenuItem } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import { Avatar, IconButton, Menu, MenuItem } from "@material-ui/core";
 import { MoreVert, Close, Delete } from "@material-ui/icons";
 import styles from "./index.module.scss";
 
@@ -38,7 +39,7 @@ function InfoBar(props) {
           }
           style={{ marginRight: "0.5rem" }}
         />
-        <Link href={`/profile/${receiver.id}`}>{receiver.name}</Link>
+        <Link to={`/profile/${receiver.id}`}>{receiver.name}</Link>
       </section>
 
       <section className={styles.infobar__right}>

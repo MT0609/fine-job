@@ -1,12 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
-import {
-  Avatar,
-  Grid,
-  Typography,
-  Link,
-  Box,
-  Divider,
-} from "@material-ui/core";
+import { Link } from "react-router-dom";
+import { Avatar, Grid, Typography, Divider } from "@material-ui/core";
 import { useMediaQuery } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
 import Pagination from "@material-ui/lab/Pagination";
@@ -20,15 +14,6 @@ function JobList(props) {
 
   const theme = useTheme();
   const jobSelectHightlight = useMediaQuery(theme.breakpoints.up("sm"));
-  // useEffect(() => {
-  //   if (onclick) {
-  //     onclick(jobSelection);
-  //   }
-  // }, [jobSelection]);
-
-  // useEffect(() => {
-  //   setJobSelection(jobs[0]?.id);
-  // }, [currentPage]);
 
   const onJobClick = (id) => {
     setJobSelection(id);
@@ -56,6 +41,7 @@ function JobList(props) {
         {jobs.length > 0 &&
           jobs.map((job, index) => (
             <div
+              key={job.id}
               className={`${styles.jobList__main}${
                 jobSelection === job.id && jobSelectHightlight
                   ? ` ${styles["jobList__main--active"]}`
@@ -65,11 +51,12 @@ function JobList(props) {
             >
               <div className={`${styles.jobList__item} `} key={index}>
                 <Grid
-                  style={{ textAlign: "left", marginBottom: "1rem" }}
+                  style={{ textAlign: "left", marginBottom: "0.2rem" }}
                   container
                   justify="flex-start"
+                  spacing={2}
                 >
-                  <Grid item sm={1.5} style={{ marginRight: "1rem" }}>
+                  <Grid item>
                     <Avatar
                       variant="square"
                       alt="Company"
@@ -79,42 +66,16 @@ function JobList(props) {
                       }
                     />
                   </Grid>
-                  <Grid item sm={7}>
+                  <Grid item sm>
                     <Typography
                       variant="h6"
                       style={{ color: "#0A66C2", lineHeight: 1 }}
                     >
                       {job.title}
                     </Typography>
-                    <Link href={`/company/${job.company.id}`}>
+                    <Link to={`/company/${job.company.id}`}>
                       {job.company.name}
                     </Link>
-                  </Grid>
-                  <Grid
-                    item
-                    xs
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      alignItems: "center",
-                    }}
-                  >
-                    {job.job.jobType.length > 0 &&
-                      job.job.jobType.map((type, index) => (
-                        <Box
-                          style={{
-                            padding: "0.4rem 0.8rem",
-                            fontSize: "0.8rem",
-                            borderRadius: "20px",
-                            border: "2px solid #569BDB",
-                            color: "#1E66C2",
-                            width: "fit-content",
-                          }}
-                          key={index}
-                        >
-                          {type}
-                        </Box>
-                      ))}
                   </Grid>
                 </Grid>
                 <p className={styles.jobList__caption}>

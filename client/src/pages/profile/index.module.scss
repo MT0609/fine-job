@@ -88,6 +88,12 @@
         cursor: not-allowed;
       }
     }
+    &--largescreen {
+      display: inline-block;
+    }
+    &--smallscreen {
+      display: none;
+    }
   }
 
   &__intro {
@@ -99,23 +105,6 @@
     span::before {
       content: "  \00b7  ";
       font-weight: bold;
-    }
-  }
-}
-
-@media screen and (max-width: 2000px) {
-  .profile {
-    &__container {
-      width: 90%;
-      margin: auto;
-    }
-    &__connect {
-      &--largescreen {
-        display: inline-block;
-      }
-      &--smallscreen {
-        display: none;
-      }
     }
   }
 }
