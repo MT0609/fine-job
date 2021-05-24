@@ -55,6 +55,12 @@ const deleteUser = {
   }),
 };
 
+const getConnStatus = {
+  params: Joi.object().keys({
+    receiverID: Joi.string().custom(objectId),
+  }),
+};
+
 const sendConnReq = {
   params: Joi.object().keys({
     receiverID: Joi.string().custom(objectId),
@@ -106,4 +112,5 @@ module.exports = {
   deleteConnReq,
   deleteFriend,
   postSearchUsers,
+  getConnStatus,
 };

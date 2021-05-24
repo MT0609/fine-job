@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script>
+      // Javascript program to rotate a
+      // matrix by 90 degrees
+
+      // An Inplace function to
+      // rotate a N x N matrix
+      // by 90 degrees in
+      // anti-clockwise direction
+      function rotateMatrix(N, mat) {
+        // Consider all squares one by one
+        for (let x = 0; x < N / 2; x++) {
+          // Consider elements in group
+          // of 4 in current square
+          for (let y = x; y < N - x - 1; y++) {
+            // Store current cell in
+            // temp variable
+            let temp = mat[x][y];
+
+            // Move values from right to top
+            mat[x][y] = mat[y][N - 1 - x];
+
+            // Move values from bottom to right
+            mat[y][N - 1 - x] = mat[N - 1 - x][N - 1 - y];
+
+            // Move values from left to bottom
+            mat[N - 1 - x][N - 1 - y] = mat[N - 1 - y][x];
+
+            // Assign temp to left
+            mat[N - 1 - y][x] = temp;
+          }
+        }
+      }
+
+      // Function to print the matrix
+      function displayMatrix(N, mat) {
+        for (let i = 0; i < N; i++) {
+          for (let j = 0; j < N; j++) document.write(' ' + mat[i][j]);
+
+          document.write('<br>');
+        }
+        document.write('<br>');
+      }
+
+      /* Driver program to test above functions */
+      let N = 4;
+      let mat = [
+        [1, 2, 3, 4],
+        [5, 6, 7, 8],
+        [9, 10, 11, 12],
+        [13, 14, 15, 16],
+      ];
+
+      // displayMatrix(mat);
+      rotateMatrix(N, mat);
+
+      // Print rotated matrix
+      displayMatrix(N, mat);
+
+      // This code is contributed by rag2127.
+
+      function rleEncode(str) {
+        const temp = str.split('');
+        const length = temp.length;
+        let count = 1;
+        let ret = [];
+        let i = 0;
+        for (i; i < length - 1; i++) {
+          if (temp[i] === temp[i + 1]) {
+            count++;
+          } else {
+            ret.push(temp[i]);
+            ret.push(count);
+            count = 1;
+          }
+        }
+
+        ret.push(temp[i]);
+        ret.push(count);
+
+        return ret;
+      }
+
+      console.log(rleEncode('AAAABCCCCCAAAAAAAAAAC'));
+
+      function rleDecode(arr) {
+        const length = arr.length;
+
+        if (length === 0) return '';
+
+        let ret = '';
+        let i = 0;
+        for (i; i < length; i += 2) {
+          ret += arr[i].repeat(arr[i + 1]);
+        }
+
+        return ret;
+      }
+
+      console.log(rleDecode(['A', 4, 'B', 1, 'C', 5, 'A', 10]));
+
+      const delay1sec = (str) => {
+        return new Promise((resolve, reject) => {
+          setTimeout(resolve(str), 1000);
+        });
+      };
+
+      delay1sec('5').then((v) => console.log(v));
+
+      const print1To100 = (fr, t) => {
+        let start = fr || 0;
+        let end = t || 100;
+
+        const interval = setInterval(() => {
+          delay1sec(start).then((v) => console.log(v));
+          if (start === end) clearInterval(interval);
+          start++;
+        }, 1000);
+      };
+      print1To100(1, 5);
+    </script>
+  </head>
+  <body></body>
+</html>

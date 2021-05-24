@@ -6,6 +6,7 @@ const { sendEmail } = require('./email.service');
 const {
   createNotification,
   getNotificationById,
+  getNotificationByQuery,
   postHideNotification,
   postShowNotification,
 } = require('./notification.service');
@@ -191,7 +192,7 @@ const mergeDeep = (target, ...sources) => {
  * @param {Object} userBody
  * @param {Object} sender
  * @param {ObjectId} receiverID
- * @returns {Promise<Job>}
+ * @returns {Promise<User>}
  */
 const sendConnReq = async (userBody, sender, receiverID) => {
   try {
@@ -227,7 +228,7 @@ const sendConnReq = async (userBody, sender, receiverID) => {
     const activity = { ...userBody };
     activity.status = 'new';
     activity.type = 'sendConnReq';
-    activity.params = [sender._id, receiver._id];
+    activity.params = [sender._id.toString(), receiver._id.toString()];
     activity.info = {
       sender: {
         id: sender._id,
@@ -262,7 +263,7 @@ const sendConnReq = async (userBody, sender, receiverID) => {
  * @param {Object} sender
  * @param {ObjectId} receiverID
  * @param {ObjectId} notificationID
- * @returns {Promise<Job>}
+ * @returns {Promise<User>}
  */
 const acceptConnReq = async (userBody, sender, receiverID, notificationID) => {
   try {
@@ -342,7 +343,7 @@ const acceptConnReq = async (userBody, sender, receiverID, notificationID) => {
  * @param {Object} sender
  * @param {ObjectId} receiverID
  * @param {ObjectId} notificationID
- * @returns {Promise<Job>}
+ * @returns {Promise<User>}
  */
 const deleteConnReq = async (userBody, sender, receiverID, notificationID) => {
   try {
@@ -399,7 +400,7 @@ const deleteConnReq = async (userBody, sender, receiverID, notificationID) => {
  * @param {Object} userBody
  * @param {Object} sender
  * @param {ObjectId} receiverID
- * @returns {Promise<Job>}
+ * @returns {Promise<User>}
  */
 const deleteFriend = async (userBody, sender, receiverID) => {
   try {
@@ -407,6 +408,23 @@ const deleteFriend = async (userBody, sender, receiverID) => {
 
     if (!receiver) {
       throw new Error('User not found');
+    }
+
+    // Get notificationID
+    const index = sender.notifications.findIndex((el) => {
+      const params = el.params.map((el) => el.toString());
+      return params.includes(sender._id.toString()) && params.includes(receiver._id.toString());
+    });
+    if (index < 0) {
+      throw new Error('???');
+    }
+
+    const notificationID = sender.notifications[index]._id;
+
+    const notification = await getNotificationById(notificationID);
+
+    if (!notification) {
+      throw new Error('Notification not found');
     }
 
     // Already haven't the connection
@@ -436,11 +454,68 @@ const deleteFriend = async (userBody, sender, receiverID) => {
     receiver.connections = receiver.connections.filter((el) => el.id.toString() !== sender._id.toString());
 
     sender.activities.unshift(activity);
+    notification.status = 'hide';
+    notification.type = 'deleteFriend';
 
     await sender.save();
     await receiver.save();
+    await notification.save();
 
     return {};
+  } catch (error) {
+    throw new ApiError(httpStatus.NOT_FOUND, error.message);
+  }
+};
+
+/**
+ * Get connection status
+ * @param {Object} sender
+ * @param {ObjectId} receiverID
+ * @returns {Promise<User>}
+ */
+const getConnStatus = async (sender, receiverID) => {
+  try {
+    const receiver = await getUserById(receiverID);
+
+    if (!receiver) {
+      throw new Error('User not found');
+    }
+
+    const query = { params: [sender._id.toString(), receiver._id.toString()] };
+    const notification = await getNotificationByQuery(query);
+
+    // Get type
+    let type = '';
+    switch (notification.type) {
+      case 'sendConnReq': {
+        if (notification.params[0].toString() === sender._id.toString()) {
+          type = 'connSent';
+        } else {
+          type = 'waitForRespond';
+        }
+        break;
+      }
+
+      case 'acceptConnReq': {
+        type = 'friend';
+        break;
+      }
+
+      case 'deleteConnReq':
+      case 'deleteFriend': {
+        type = 'noConn';
+        break;
+      }
+    }
+
+    const ret = {};
+    ret.status = 'success';
+    ret.result = {
+      type,
+      notification,
+    };
+
+    return ret;
   } catch (error) {
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
   }
@@ -499,4 +574,5 @@ module.exports = {
   deleteConnReq,
   deleteFriend,
   searchUsers,
+  getConnStatus,
 };
