@@ -4,19 +4,21 @@ import { getUserData } from "./authActions";
 import jwt_decode from "jwt-decode";
 
 export const getJobs =
-  (title, page = 1, limit = 5) =>
+  (title, page = 1, limit = 10) =>
   async (dispatch) => {
     try {
       dispatch({
         type: JOBCONSTANTS.JOB_GET_ALL_REQUEST,
       });
 
-      const params = {};
-      if (title) params.title = title;
-      if (limit) params.limit = limit;
-      if (page) params.page = page;
+      if (!title) title = "*";
 
-      let result = await jobApi.getAll(params);
+      // const params = {};
+      // if (title) params.q = title;
+      // if (limit) params.limit = limit;
+      // if (page) params.page = +page;
+
+      let result = await jobApi.get(title, page, limit);
 
       dispatch({
         type: JOBCONSTANTS.JOB_GET_ALL_SUCCESS,

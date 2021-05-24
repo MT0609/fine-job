@@ -536,13 +536,10 @@ const searchUsers = (filter, options, res) => {
     User.search(
       {
         query_string: {
-          query: filter.q,
+          query: filter.q || '*',
         },
       },
       {
-        // sort: options.sortBy || 'createdAt:desc',
-        size: options.limit || 10,
-        from: (options.page - 1) * options.limit || 0,
         hydrate: true,
       },
       function (err, results) {
@@ -550,7 +547,11 @@ const searchUsers = (filter, options, res) => {
           console.log('Search failed: ', err);
           throw new Error(err.message);
         }
-        res.status(200).send(results.hits.hits);
+        const allResults = results.hits.hits;
+        const { page, limit } = options;
+        const paginatedResults = allResults.slice((page - 1) * limit, page * limit);
+        const totalPages = Math.ceil(allResults.length / limit);
+        res.status(200).send({ results: paginatedResults, totalPages, page });
       }
     );
   } catch (error) {

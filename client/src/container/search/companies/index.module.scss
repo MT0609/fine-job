@@ -1,0 +1,43 @@
+.companies {
+  &__container {
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid #dddddd;
+    background-color: white;
+  }
+  &__header {
+    margin-bottom: 1rem;
+  }
+  &__item {
+    margin-bottom: 1rem;
+  }
+
+  &__button {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: 0.3s all ease;
+    &--blue {
+      font-weight: 500;
+      color: #0a66c2;
+      border: 1px solid #0a66c2;
+      &:hover {
+        background-color: #e2f0fe;
+        box-shadow: inset 0 0 0 1px #0a66c2;
+      }
+    }
+    &--gray {
+      color: #5e5e5e;
+      border: 1px solid #cdcdcd;
+      &:hover {
+        background-color: #ebebeb;
+        box-shadow: inset 0 0 0 1px #a4a4a4;
+      }
+    }
+  }
+
+  &__pagination {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+  }
+}

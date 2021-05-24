@@ -13,10 +13,31 @@
   &__container {
     @include flexbox(space-between, center);
   }
+
+  &__left {
+    @include flexbox(flex-start, center);
+    width: 50%;
+    text-align: left;
+  }
   &__thumbnail {
+    width: 2rem;
+    height: 2rem;
+    margin-right: 0.5rem;
     img {
-      width: 2rem;
-      height: 2rem;
+      width: 100%;
+    }
+  }
+  &__search {
+    padding: 0.2rem 0.5rem;
+    width: 50%;
+    border: none;
+    outline: none;
+    border-bottom: 2px solid #0369d6;
+    transition: 0.2s all ease;
+    font-size: 1.1rem;
+    &:focus {
+      border-bottom: 1px solid #0053ac;
+      box-shadow: 0 0 0 1.5px #5baaff;
     }
   }
   &__links {
@@ -29,6 +50,8 @@
 
         a,
         button {
+          color: black;
+          text-decoration: none;
           padding: 0.5rem;
           @include flexbox(space-between, center, column);
           &:hover {
@@ -46,19 +69,45 @@
       border-bottom: 2px solid #191919;
     }
   }
+
+  &__hamburger {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .header {
+    &__left {
+      width: 30%;
+    }
+    &__search {
+      width: 80%;
+    }
+  }
 }
 
 @media screen and (max-width: 600px) {
   .header {
-    padding: 0 1rem 0 2rem;
+    padding: 0 0.5rem 0 0.5rem;
+    &__left {
+      width: 50%;
+    }
     &__links {
       ul {
+        li:nth-child(1),
+        li:nth-child(2),
+        li:nth-child(3) {
+          display: none;
+        }
         li {
           span {
             display: none;
           }
         }
       }
+    }
+    &__hamburger {
+      display: inline-block;
     }
   }
 }

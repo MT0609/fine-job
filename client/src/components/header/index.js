@@ -1,16 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Paper, Link, Avatar } from "@material-ui/core";
-import { AccountCircle, PeopleAlt, Work, Chat } from "@material-ui/icons";
+import { useHistory, useLocation, Link } from "react-router-dom";
+import { Paper, Avatar, Button } from "@material-ui/core";
+import { AccountCircle, PeopleAlt, Work, Chat, Menu } from "@material-ui/icons";
 import UserSubMenu from "../usermenu";
+import SidebarMenu from "../../container/sidebar/menu";
 import { ROUTES } from "../../constants/routes";
 import styles from "./header.module.scss";
 
 function Header() {
-  const [firstPathName, setFirstPathName] = useState("");
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const keyword = queryParams.get("keyword") || "";
+  const cate = queryParams.get("cate") || "all";
+  const history = useHistory();
+  const [textSearch, SetTextSearch] = useState(keyword);
+
   useEffect(() => {
-    setFirstPathName(window.location.pathname.split("/")[1]);
-  }, []);
+    SetTextSearch(keyword);
+  }, [keyword]);
+
+  const [firstPathName, setFirstPathName] = useState(location.pathname);
+  useEffect(() => {
+    setFirstPathName(location.pathname.split("/")[1]);
+  }, [location.pathname]);
+
+  const handleSearch = (keyword) => {
+    history.push(`/search?keyword=${keyword}&cate=${cate}`);
+  };
 
   const auth = useSelector((state) => state.auth);
 
@@ -24,20 +41,35 @@ function Header() {
     setDropdownAnchor(null);
   };
 
+  const [sidebarShow, setSidebarShow] = useState(false);
+
   return (
     <header className={styles.header}>
       <section className={styles.header__container}>
-        <Link href={ROUTES.jobs} className={styles.header__thumbnail}>
-          <img
-            // src="https://edumax.edu.vn/wp-content/uploads/2013/12/03.12.2013-TOEIC-b4.jpg"
-            src="https://www.funnp.com/funny_pictures/464246679-funny_avatar_man_woman_toilet_sign.jpg"
-            alt="Fine_Job"
+        <div className={styles.header__left}>
+          <div className={styles.header__thumbnail}>
+            <Link to={ROUTES.jobs}>
+              <img
+                // src="https://edumax.edu.vn/wp-content/uploads/2013/12/03.12.2013-TOEIC-b4.jpg"
+                src="https://www.funnp.com/funny_pictures/464246679-funny_avatar_man_woman_toilet_sign.jpg"
+                alt="Fine_Job"
+              />
+            </Link>
+          </div>
+          <input
+            className={styles.header__search}
+            placeholder="Search..."
+            value={textSearch}
+            onChange={(e) => SetTextSearch(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSearch(e.target.value);
+            }}
           />
-        </Link>
+        </div>
         <div className={styles.header__links}>
           <ul>
             <li>
-              <Link href="">
+              <Link to="/">
                 <PeopleAlt />
                 <span>My Network</span>
               </Link>
@@ -50,7 +82,7 @@ function Header() {
                   : ""
               }
             >
-              <Link href={ROUTES.jobs}>
+              <Link to={ROUTES.jobs}>
                 <Work />
                 <span>Jobs</span>
               </Link>
@@ -62,11 +94,23 @@ function Header() {
                   : ""
               }
             >
-              <Link href={ROUTES.messages}>
+              <Link to={ROUTES.messages}>
                 <Chat />
                 <span>Messages</span>
               </Link>
             </li>
+
+            <div className={styles.header__hamburger}>
+              <Button onClick={() => setSidebarShow(true)}>
+                <Menu />
+              </Button>
+              <SidebarMenu
+                auth={auth}
+                show={sidebarShow}
+                onclose={() => setSidebarShow(false)}
+              />
+            </div>
+
             {auth.isAuth ? (
               <li className={styles.header__userIcon}>
                 <button onClick={handleClick}>
@@ -98,7 +142,7 @@ function Header() {
                     : ""
                 }
               >
-                <Link href={ROUTES.authen}>
+                <Link to={ROUTES.authen}>
                   <AccountCircle />
                   <span>Login/Register</span>
                 </Link>
