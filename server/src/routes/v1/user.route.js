@@ -29,6 +29,8 @@ router
 
 router.route('/:receiverID/deleteFriend').post(auth(), validate(userValidation.deleteFriend), userController.deleteFriend);
 
+router.route('/:receiverID/getConnStatus').get(auth(), validate(userValidation.getConnStatus), userController.getConnStatus);
+
 router.route('/search').post(validate(userValidation.postSearchUsers), userController.postSearchUsers);
 
 module.exports = router;
@@ -400,6 +402,33 @@ module.exports = router;
  *   post:
  *     summary: Delete friend
  *     description: Delete a friend
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Receiver id
+ *     responses:
+ *       "200":
+ *         description: No content
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /users/{id}/getConnStatus:
+ *   get:
+ *     summary: Get connection status
+ *     description: Get connection type of 2 people ['connSent', 'waitForRespond', 'friend', 'noConn']
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []

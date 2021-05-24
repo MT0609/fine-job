@@ -2,8 +2,17 @@ const mongoose = require('mongoose');
 const { toJSON, paginate } = require('./plugins');
 
 const enumNotificationType = {
-  values: ['sendConnReq', 'acceptConnReq', 'deleteConnReq', 'unFriend', 'postJob', 'closeJob', 'applyJob', 'followCompany'],
-  message: `Notification must be 'sendConnReq', 'acceptConnReq', 'deleteConnReq', 'unFriend', 'postJob', 'closeJob', 'applyJob' or 'followCompany'!`,
+  values: [
+    'sendConnReq',
+    'acceptConnReq',
+    'deleteConnReq',
+    'deleteFriend',
+    'postJob',
+    'closeJob',
+    'applyJob',
+    'followCompany',
+  ],
+  message: `Notification must be 'sendConnReq', 'acceptConnReq', 'deleteConnReq', 'deleteFriend', 'postJob', 'closeJob', 'applyJob' or 'followCompany'!`,
 };
 
 const enumNotificationStatus = {

@@ -89,9 +89,24 @@ const postShowNotification = async (notificationID, userID) => {
   }
 };
 
+/**
+ * Query notification
+ * @param {Object} query
+ * @returns {Promise<Notification>}
+ */
+const getNotificationByQuery = async (query) => {
+  try {
+    const notification = await Notification.findOne(query).sort({ createdAt: 'desc' });
+    return notification;
+  } catch (error) {
+    throw new ApiError(httpStatus.NOT_FOUND, error.message);
+  }
+};
+
 module.exports = {
   createNotification,
   getNotificationById,
   postHideNotification,
   postShowNotification,
+  getNotificationByQuery,
 };

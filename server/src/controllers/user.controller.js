@@ -54,6 +54,11 @@ const deleteFriend = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send({});
 });
 
+const getConnStatus = catchAsync(async (req, res) => {
+  const result = await userService.getConnStatus(req.user, req.params.receiverID);
+  res.status(httpStatus.CREATED).send(result);
+});
+
 const postSearchUsers = (req, res) => {
   const filter = pick(req.query, ['q']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
@@ -71,4 +76,5 @@ module.exports = {
   deleteConnReq,
   deleteFriend,
   postSearchUsers,
+  getConnStatus,
 };
