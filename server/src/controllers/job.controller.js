@@ -32,6 +32,17 @@ const getJob = catchAsync(async (req, res) => {
   res.send(job);
 });
 
+const applyJob = catchAsync(async (req, res) => {
+  const job = await jobService.getJobById(req.params.jobID);
+  if (!job) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Job not found');
+  }
+  let cvPath = '';
+  if (req.file) cvPath = req.hostname + '/' + req.file.path.replace(/\\/g, '/').replace('..', '');
+  jobService.applyJob(req.params.jobID, req.body, req.user.id, cvPath);
+  res.status(httpStatus.CREATED).send({});
+});
+
 const updateJob = catchAsync(async (req, res) => {
   // Users can update own companies.
   const validOwner = await isUserOwnerJob(req.params.jobID, req.user.id);
@@ -70,6 +81,7 @@ module.exports = {
   createJob,
   getJobs,
   getJob,
+  applyJob,
   updateJob,
   deleteJob,
   postSave,

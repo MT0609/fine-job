@@ -1,8 +1,17 @@
 const multer = require('multer');
 
-const storage = multer.diskStorage({
+const imageStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './uploads/');
+    cb(null, './uploads/image');
+  },
+  filename: function (req, file, cb) {
+    cb(null, new Date().toISOString().split(/:/).join('-') + file.originalname);
+  },
+});
+
+const cvStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads/cv');
   },
   filename: function (req, file, cb) {
     cb(null, new Date().toISOString().split(/:/).join('-') + file.originalname);
@@ -10,7 +19,8 @@ const storage = multer.diskStorage({
 });
 
 // Filter file support: jpg, jpeg, png
-const fileFilter = (req, file, cb) => {
+const imageFileFilter = (req, file, cb) => {
+  console.log(file.mimetype);
   if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg' || file.mimetype === 'image/png') {
     cb(null, true);
   } else {
@@ -18,12 +28,33 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-const upload = multer({
-  storage,
+// Filter file support: pdf, docx, doc
+const cvFileFilter = (req, file, cb) => {
+  console.log(file.mimetype);
+  if (
+    file.mimetype === 'application/pdf' ||
+    file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+    file.mimetype === 'application/msword'
+  ) {
+    cb(null, true);
+  } else {
+    cb(new Error('Only support: pdf, docx, doc file type!'), false);
+  }
+};
+
+const imageUpload = multer({
+  storage: imageStorage,
   limits: 1024 * 1024 * 5, // 5 MB for each file
-  fileFilter,
+  imageFileFilter,
+});
+
+const cvUpload = multer({
+  storage: cvStorage,
+  limits: 1024 * 1024 * 5, // 5 MB for each file
+  cvFileFilter,
 });
 
 module.exports = {
-  upload,
+  imageUpload,
+  cvUpload,
 };

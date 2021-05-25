@@ -1,12 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Box, Avatar, Typography } from "@material-ui/core";
-import { LocationOn, Cancel } from "@material-ui/icons";
+import { LocationOn, Cancel, OpenInNew } from "@material-ui/icons";
 import CircularLoading from "../../../components/loading/circular";
-import { getJobDetail, saveJob, unSaveJob } from "../../../actions/jobActions";
+import {
+  getJobDetail,
+  applyJob,
+  saveJob,
+  unSaveJob,
+} from "../../../actions/jobActions";
 import { timeDiff } from "../../../utils/time";
+import JobApplyDialog from "../../../container/jobs/apply";
 import styles from "./index.module.scss";
 
 function JobView() {
@@ -22,6 +28,12 @@ function JobView() {
   useEffect(() => {
     dispatch(getJobDetail(id));
   }, [id, dispatch, jobState.saveStatus, jobState.unSaveStatus]);
+
+  const [jobApplyDialogShow, setJobApplyDialogShow] = useState(false);
+
+  const handleApplyJob = (jobID, formData) => {
+    dispatch(applyJob(jobID, formData));
+  };
 
   const handleSaveJob = () => {
     dispatch(saveJob(id));
@@ -77,33 +89,79 @@ function JobView() {
               </p>
 
               {job.locations?.length && (
-                <p>
-                  <Box display="flex">
-                    <LocationOn />
+                <Box display="flex">
+                  <LocationOn />
+                  <div>
                     {job.locations.map((location, index) => (
-                      <span key={index}>{location}</span>
+                      <p key={index}>{location}</p>
                     ))}
-                  </Box>
-                </p>
+                  </div>
+                </Box>
               )}
 
-              <Box mt={1}>
-                {auth.isAuth &&
-                  (auth.user?.savePosts?.some((job) => job.jobID === id) ? (
-                    <button
-                      onClick={handleUnSaveJob}
-                      className={styles.section__save}
-                    >
-                      Unsave
+              <Box display="flex" flexWrap="wrap" alignItems="flex-end">
+                {job.directApplyUrl && (
+                  <a href={job.directApplyUrl} target="_blank" rel="noreferrer">
+                    <button className={styles.section__directApply}>
+                      <OpenInNew fontSize="small" />
+                      Direct Apply
                     </button>
-                  ) : (
-                    <button
-                      onClick={handleSaveJob}
-                      className={styles.section__save}
-                    >
-                      Save
-                    </button>
-                  ))}
+                  </a>
+                )}
+
+                <Box mt={1} mr={1}>
+                  {auth.isAuth &&
+                    (auth.user?.applies?.some((job) => job.id === id) ? (
+                      <button className={styles.section__applied}>
+                        Applied{" "}
+                        {timeDiff(
+                          new Date(
+                            auth.user.applies.find(
+                              (job) => job.id === id
+                            ).createdAt
+                          ),
+                          new Date()
+                        )}
+                      </button>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => setJobApplyDialogShow(true)}
+                          className={styles.section__apply}
+                        >
+                          Apply Now
+                        </button>
+                        <JobApplyDialog
+                          show={jobApplyDialogShow}
+                          user={auth.user}
+                          job={job}
+                          onsubmit={(jobID, formData) =>
+                            handleApplyJob(jobID, formData)
+                          }
+                          onclose={() => setJobApplyDialogShow(false)}
+                        />
+                      </>
+                    ))}
+                </Box>
+
+                <Box mt={1}>
+                  {auth.isAuth &&
+                    (auth.user?.savePosts?.some((job) => job.jobID === id) ? (
+                      <button
+                        onClick={handleUnSaveJob}
+                        className={styles.section__save}
+                      >
+                        Unsave
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleSaveJob}
+                        className={styles.section__save}
+                      >
+                        Save
+                      </button>
+                    ))}
+                </Box>
               </Box>
             </section>
 

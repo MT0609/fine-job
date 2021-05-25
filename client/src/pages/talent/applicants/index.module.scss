@@ -1,0 +1,96 @@
+.job {
+  padding: 1rem;
+  background-color: white;
+  box-shadow: 0 3px 5px #929191;
+  text-align: left;
+  margin: auto;
+  width: 70%;
+  &__job {
+    padding: 1rem;
+    text-align: left;
+    &--hide {
+      display: none;
+    }
+  }
+  &__name {
+    font-size: 1.1rem;
+    line-height: 1;
+    font-weight: bold;
+  }
+  &__caption {
+    font-size: 0.8rem;
+  }
+  &__status {
+    &--open {
+      color: green;
+    }
+    &--close {
+      color: red;
+    }
+  }
+  &__applicants {
+    &::before {
+      content: "  \00b7  ";
+    }
+  }
+  &__postday {
+    font-size: 0.9rem;
+  }
+}
+
+.applicants {
+  margin: auto;
+  margin-top: 1rem;
+  width: 70%;
+  &__count {
+    text-align: left;
+    font-weight: bold;
+  }
+}
+.applicant {
+  margin-top: 0.5rem;
+  padding: 1rem;
+  text-align: left;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid #c4c3c3;
+  &__contact {
+    margin-top: 0.2rem;
+    display: flex;
+    align-items: flex-end;
+    font-size: 0.9rem;
+    overflow-x: auto;
+  }
+  &__message {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: 1px solid #0a66c2;
+    background-color: white;
+    color: #0a66c2;
+    font-weight: bold;
+    transition: 0.2s all ease;
+    &:hover {
+      box-shadow: inset 0px 0px 1px #0a66c2;
+      background-color: #e2f0fe;
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .job,
+  .applicants {
+    width: 80%;
+  }
+  .applicant {
+    &__message {
+      display: none;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .job,
+  .applicants {
+    width: 100%;
+  }
+}

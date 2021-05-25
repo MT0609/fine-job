@@ -1,11 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { Avatar, Grid, Typography, Box } from "@material-ui/core";
-import LocationOnIcon from "@material-ui/icons/LocationOn";
+import { Avatar, Grid, Box } from "@material-ui/core";
+import { LocationOn, OpenInNew } from "@material-ui/icons";
+import JobApplyDialog from "../apply";
+import { timeDiff } from "../../../utils/time";
 import styles from "./index.module.scss";
 
 function JobDetail(props) {
-  const { job } = props;
+  const { job, onApply, onSave, onUnSave } = props;
+
+  const user = useSelector((state) => state.auth);
+  const [jobApplyDialogShow, setJobApplyDialogShow] = useState(false);
+
+  const handleApplyJob = (jobID, formData) => {
+    if (onApply) onApply(jobID, formData);
+  };
+
+  const onSaveJob = () => {
+    if (onSave) onSave(job.id);
+  };
+
+  const onUnSaveJob = () => {
+    if (onUnSave) onUnSave(job.id);
+  };
 
   return (
     <>
@@ -23,9 +41,17 @@ function JobDetail(props) {
               />
             </Grid>
             <Grid item sm={8} style={{ textAlign: "left" }}>
-              <Typography variant="h5" style={{ lineHeight: 1 }}>
+              <Link
+                to={`/jobs/${job.id}`}
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "1.2rem",
+                  lineHeight: 1,
+                }}
+              >
                 {job.title}
-              </Typography>
+              </Link>
+              <br />
               <Link to={`/company/${job.company?.id}`}>
                 {job.company?.name}
               </Link>
@@ -52,11 +78,74 @@ function JobDetail(props) {
             )}
           </Grid>
 
+          {user.isAuth && (
+            <Box display="flex" flexWrap="wrap" alignItems="center">
+              {job.directApplyUrl && (
+                <a href={job.directApplyUrl} target="_blank" rel="noreferrer">
+                  <button className={styles.detail__directApply}>
+                    <OpenInNew fontSize="small" />
+                    Direct Apply
+                  </button>
+                </a>
+              )}
+              <Box mt={1} mr={1} mb={1}>
+                {user.user?.applies?.some((el) => el.id === job.id) ? (
+                  <button className={styles.detail__applied}>
+                    Applied{" "}
+                    {timeDiff(
+                      new Date(
+                        user.user.applies.find(
+                          (el) => el.id === job.id
+                        ).createdAt
+                      ),
+                      new Date()
+                    )}
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => setJobApplyDialogShow(true)}
+                      className={styles.detail__apply}
+                    >
+                      Apply Now
+                    </button>
+                    <JobApplyDialog
+                      show={jobApplyDialogShow}
+                      user={user.user}
+                      job={job}
+                      onsubmit={(jobID, formData) =>
+                        handleApplyJob(jobID, formData)
+                      }
+                      onclose={() => setJobApplyDialogShow(false)}
+                    />
+                  </>
+                )}
+              </Box>
+              <Box mt={1} mb={1}>
+                {user.isAuth &&
+                  (user.user?.savePosts?.some(
+                    (savedJob) => savedJob.jobID === job.id
+                  ) ? (
+                    <button
+                      onClick={onUnSaveJob}
+                      className={styles.detail__save}
+                    >
+                      Unsave
+                    </button>
+                  ) : (
+                    <button onClick={onSaveJob} className={styles.detail__save}>
+                      Save
+                    </button>
+                  ))}
+              </Box>
+            </Box>
+          )}
+
           <section className={styles.detail__main}>
             {job.locations && job.locations.length && (
               <Grid container spacing={3}>
                 <Grid item>
-                  <LocationOnIcon />
+                  <LocationOn />
                 </Grid>
                 <Grid item>
                   {job.locations.map((location, index) => (

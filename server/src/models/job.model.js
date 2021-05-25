@@ -61,6 +61,12 @@ const jobSchema = new mongoose.Schema(
       default: new Date(),
     },
     job: {
+      applicants: [
+        {
+          type: Object,
+          default: {},
+        },
+      ],
       applicantCount: {
         type: Number,
         default: 0,

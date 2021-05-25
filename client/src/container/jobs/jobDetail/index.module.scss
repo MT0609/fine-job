@@ -26,4 +26,39 @@
   &__list {
     padding-left: 2rem;
   }
+
+  &__directApply {
+    margin-right: 0.5rem;
+    padding: 0.3rem 1rem;
+    display: flex;
+    align-items: flex-end;
+    color: #0a66c2;
+    border-radius: 20px;
+    border: 1px solid #0a66c2;
+    font-size: 0.8rem;
+    svg {
+      margin-right: 0.2rem;
+      font-size: 1rem;
+    }
+  }
+  &__applied {
+    padding: 0.3rem 1rem;
+    color: black;
+    border-radius: 30px;
+    border: 1px solid #afb2b6;
+    cursor: not-allowed;
+  }
+
+  &__save,
+  &__apply {
+    padding: 0.3rem 1rem;
+    color: #0a66c2;
+    border-radius: 30px;
+    border: 1px solid #0a66c2;
+    transition: 0.2s all ease-in-out;
+    &:hover {
+      background-color: #e2f0fe;
+      box-shadow: inset 0px 0px 0px 1px #0a66c2;
+    }
+  }
 }

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 import { Container, Divider, Typography } from "@material-ui/core";
 import SavedJobs from "../../../container/jobs/myJob/save";
+import AppliedJobs from "../../../container/jobs/myJob/applied";
 import CircularLoading from "../../../components/loading/circular";
 import { getUserData } from "../../../actions/authActions";
 import { unSaveJob } from "../../../actions/jobActions";
@@ -97,7 +98,7 @@ function MyJob() {
               onUnSave={handleUnSaveJob}
             />
           ) : (
-            <div>In Development</div>
+            <AppliedJobs appliedJobs={auth.user?.applies} />
           )
         ) : (
           <CircularLoading />

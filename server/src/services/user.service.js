@@ -547,7 +547,10 @@ const searchUsers = (filter, options, res) => {
           console.log('Search failed: ', err);
           throw new Error(err.message);
         }
-        const allResults = results.hits.hits;
+        let allResults = results.hits.hits;
+        allResults = allResults.filter(function (result) {
+          return result !== undefined;
+        });
         const { page, limit } = options;
         const paginatedResults = allResults.slice((page - 1) * limit, page * limit);
         const totalPages = Math.ceil(allResults.length / limit);

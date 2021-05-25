@@ -3,16 +3,18 @@ import { Link } from "react-router-dom";
 import {
   Divider,
   Grid,
+  Avatar,
+  Box,
   Typography,
   Menu,
   MenuItem,
   IconButton,
 } from "@material-ui/core";
-import { MoreVert, FileCopy, BookmarkBorder } from "@material-ui/icons";
+import { LocationOn, MoreVert, FileCopy } from "@material-ui/icons";
 import styles from "./index.module.scss";
 
 function SavedJobs(props) {
-  const { savedJobs = [], onUnSave } = props;
+  const { appliedJobs = [] } = props;
 
   const [moreOpen, setMoreOpen] = useState(null);
   const open = Boolean(moreOpen);
@@ -32,54 +34,64 @@ function SavedJobs(props) {
     );
   };
 
-  const handleUnSaveJob = () => {
-    handleClose();
-    if (onUnSave) onUnSave(moreOpen.getAttribute("aria-controls"));
-  };
-
   return (
     <div>
-      {savedJobs?.length ? (
-        savedJobs.map((job) => (
+      {appliedJobs?.length ? (
+        appliedJobs.map((job) => (
           <div key={job.jobID}>
             <div className={`${styles["myjob__item"]}`}>
-              <Grid container spacing={2} justify="space-between">
-                <Grid item xs={9} sm={11} style={{ textAlign: "left" }}>
+              <Grid container spacing={2}>
+                <Grid item>
                   <Link
-                    to={`/jobs/${job.jobID}`}
+                    to={`/company/${job.company.id}`}
                     className={styles.myjob__name}
+                  >
+                    <Avatar
+                      alt={job.company.name}
+                      src={
+                        job.company?.avatar ||
+                        "https://media-exp1.licdn.com/dms/image/C560BAQFVx7L2Y-Fz2w/company-logo_100_100/0/1541176107679?e=1629936000&v=beta&t=IUlcJ4VAEdQ6ZXuR6vi_JXbM1nPQZdf0AlFdCJT2r_o"
+                      }
+                    />
+                  </Link>
+                </Grid>
+                <Grid item md={9}>
+                  <Link
+                    to={`/jobs/${job.id}`}
+                    style={{ fontWeight: "bold", fontSize: "1.1rem" }}
                   >
                     {job.name}
                   </Link>
-                  <p>
-                    <span>{job.job?.applicantCount} applicants</span> &#8227;{" "}
-                    {job.status === "open" && (
-                      <span
-                        className={`${styles.myjob__status} ${styles["myjob__status--close"]}`}
-                      >
-                        {job.status}
-                      </span>
-                    )}
-                  </p>
+                  <br />
+                  <Link to={`/company/${job.company.id}`}>
+                    {job.company.name}
+                  </Link>
+                  <Box display="flex">
+                    <LocationOn />
+                    <div>
+                      {job.locations.map((location, index) => (
+                        <p key={index}>{location}</p>
+                      ))}
+                    </div>
+                  </Box>
                   <p className={styles.myjob__postday}>
-                    Posted on {new Date(job.posted).toDateString()}
+                    Applied on {new Date(job.createdAt).toDateString()}
                   </p>
                 </Grid>
-                <Grid item>
+                <Grid item md style={{ textAlign: "right" }}>
                   <IconButton
-                    aria-controls={job.jobID}
-                    style={{ padding: 0 }}
+                    aria-controls={job.id}
+                    style={{ padding: "0.5rem" }}
                     onClick={handleClick}
                   >
                     <MoreVert />
                   </IconButton>
                   <Menu
-                    id={job.jobID}
+                    id={job.id}
                     anchorEl={moreOpen}
                     keepMounted
                     open={open}
                     onClose={handleClose}
-                    // getContentAnchorEl={null}
                     PaperProps={{
                       style: {
                         width: "20ch",
@@ -88,9 +100,6 @@ function SavedJobs(props) {
                   >
                     <MenuItem onClick={handleCopyJobLink}>
                       <FileCopy style={{ marginRight: "1rem" }} /> Copy Link
-                    </MenuItem>
-                    <MenuItem onClick={handleUnSaveJob}>
-                      <BookmarkBorder style={{ marginRight: "1rem" }} /> Unsave
                     </MenuItem>
                   </Menu>
                 </Grid>
@@ -101,7 +110,7 @@ function SavedJobs(props) {
         ))
       ) : (
         <div className={`${styles["myjob__item"]}`}>
-          <Typography>You have no saved jobs</Typography>
+          <Typography>You have no applied jobs</Typography>
         </div>
       )}
     </div>

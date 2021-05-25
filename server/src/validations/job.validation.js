@@ -7,6 +7,7 @@ const createJob = {
     title: Joi.string().required(),
     jobType: Joi.array().items(Joi.string()),
     skills: Joi.array().items(Joi.string()),
+    directApplyUrl: Joi.string().allow('', null),
     description: Joi.string(),
     locations: Joi.array().items(Joi.string()),
     maxSalary: Joi.number(),
@@ -40,6 +41,7 @@ const updateJob = {
       ),
       skills: Joi.array().items(Joi.string()),
       description: Joi.string(),
+      directApplyUrl: Joi.string().allow('', null),
       title: Joi.string(),
       status: Joi.string().valid('open', 'close'),
       maxSalary: Joi.number(),
@@ -49,6 +51,12 @@ const updateJob = {
 };
 
 const deleteJob = {
+  params: Joi.object().keys({
+    jobID: Joi.string().custom(objectId),
+  }),
+};
+
+const applyJob = {
   params: Joi.object().keys({
     jobID: Joi.string().custom(objectId),
   }),
@@ -81,6 +89,7 @@ module.exports = {
   getJob,
   updateJob,
   deleteJob,
+  applyJob,
   postSave,
   postUnSave,
   postSearchJobs,

@@ -9,7 +9,13 @@ import JobDetailDialog from "../../container/jobs/jobDetail/dialog";
 import JobList from "../../container/jobs/jobList";
 import JobDetail from "../../container/jobs/jobDetail";
 import FilterBar from "../../container/filter";
-import { getJobs, getJobDetail } from "../../actions/jobActions";
+import {
+  getJobs,
+  getJobDetail,
+  applyJob,
+  saveJob,
+  unSaveJob,
+} from "../../actions/jobActions";
 import { searchUsers } from "../../actions/userActions";
 import { getCompanies } from "../../actions/companyActions";
 
@@ -101,6 +107,18 @@ function Jobs() {
     }
   };
 
+  const handleApplyJob = (jobID, formData) => {
+    dispatch(applyJob(jobID, formData));
+  };
+
+  const handleSaveJob = (jobID) => {
+    dispatch(saveJob(jobID));
+  };
+
+  const handleUnSaveJob = (jobID) => {
+    dispatch(unSaveJob(jobID));
+  };
+
   return (
     <div>
       <FilterBar onclick={handleSearchByCate} option={cate} />
@@ -139,7 +157,14 @@ function Jobs() {
             <Grid item sm={6}>
               {jobs.isLoading && <CircularLoading />}
 
-              {!jobs.isLoading && job && <JobDetail job={job} />}
+              {!jobs.isLoading && job && (
+                <JobDetail
+                  job={job}
+                  onApply={handleApplyJob}
+                  onSave={handleSaveJob}
+                  onUnSave={handleUnSaveJob}
+                />
+              )}
 
               {!jobs.isLoading &&
               jobs?.jobs?.length &&
@@ -158,10 +183,13 @@ function Jobs() {
           job={job}
           show={jobDetailDialog && jobDetailDialogAllow}
           close={() => setJobDetailDialog(false)}
+          onApply={handleApplyJob}
+          onSave={handleSaveJob}
+          onUnSave={handleUnSaveJob}
         />
       </Container>
 
-      {!jobs.isLoading && jobs.jobs.length === 0 && (
+      {!jobs.isLoading && jobs?.jobs?.length === 0 && (
         <Container maxWidth="xs">
           <img
             alt="not-found"

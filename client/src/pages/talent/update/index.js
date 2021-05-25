@@ -7,7 +7,6 @@ import jwt_decode from "jwt-decode";
 import {
   Container,
   TextField,
-  Select,
   Box,
   Switch,
   FormGroup,
@@ -18,7 +17,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import LoadingButton from "@material-ui/lab/LoadingButton";
 import { getJobDetail, updateJob } from "../../../actions/jobActions";
 import { PostJobSchema } from "../../../utils/validation";
-import { JOBTYPES, JOBSKILLS } from "../../../constants/jobConstants";
+import JobTypeAutoComplete from "../../../components/talent/autocomplete/jobType";
 import SkillAutoComplete from "../../../components/talent/autocomplete/skills";
 import LocationsAdd from "../../../components/talent/location";
 import * as JOBCONSTANTS from "../../../constants/jobConstants";
@@ -56,13 +55,17 @@ export default function UpdateJob() {
 
   useEffect(() => {
     if (job?.status) setStatus(job.status === "open");
+    if (job?.job?.jobType) setJobTypes(job.job.jobType);
     if (job?.skills) setSkills(job.skills);
     if (job?.locations) setLocations(job.locations);
-  }, [job?.status, job?.skills, job?.locations]);
+  }, [job?.job?.jobType, job?.status, job?.skills, job?.locations]);
 
   const [updateStatus, setUpdateStatus] = useState("");
 
   const [status, setStatus] = useState(job?.status === "open");
+
+  const [jobTypes, setJobTypes] = useState(job?.job?.jobType);
+  const [jobTypeError, setJobTypeError] = useState("");
 
   const [skills, setSkills] = useState(job?.skills);
   const [skillError, setSkillError] = useState("");
@@ -71,6 +74,11 @@ export default function UpdateJob() {
   const [locationsError, setLocationsError] = useState("");
 
   const onSubmit = async (data) => {
+    if (jobTypes.length === 0) {
+      setJobTypeError("Choose at least one job type");
+      return;
+    }
+
     if (skills.length === 0) {
       setSkillError("Choose at least one skill");
       return;
@@ -82,14 +90,14 @@ export default function UpdateJob() {
       return;
     }
 
-    data.jobType = data.jobType.split(" ");
     data.status = status ? "open" : "close";
+    data.jobType = jobTypes;
     data.skills = skills;
     data.locations = submitedLocations;
-    console.log(data);
 
-    const result = await dispatch(updateJob(id, data));
-    setUpdateStatus(result?.status);
+    dispatch(updateJob(id, data)).then((result) => {
+      setUpdateStatus(result?.status);
+    });
   };
 
   return (
@@ -182,7 +190,7 @@ export default function UpdateJob() {
               onChange={() => setUpdateStatus("")}
             >
               <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={8}>
                   <TextField
                     fullWidth
                     defaultValue={job.title}
@@ -194,26 +202,7 @@ export default function UpdateJob() {
                     {errors.title && <span>* {errors.title.message}</span>}
                   </Box>
                 </Grid>
-                <Grid item xs={12} md={3}>
-                  <Select
-                    fullWidth
-                    native
-                    name="jobType"
-                    defaultValue={job.job.jobType}
-                    style={{ marginTop: "1rem" }}
-                    inputRef={register}
-                  >
-                    {JOBTYPES.map((type, index) => (
-                      <option fullWidth value={type} key={index}>
-                        {type.charAt(0).toUpperCase() + type.slice(1)}
-                      </option>
-                    ))}
-                  </Select>
-                  <Box className={classes.error}>
-                    {errors.jobType && <span>* {errors.jobType.message}</span>}
-                  </Box>
-                </Grid>
-                <Grid item xs={12} md={3}>
+                <Grid item xs={12} md={4}>
                   <TextField
                     fullWidth
                     name="maxSalary"
@@ -230,6 +219,16 @@ export default function UpdateJob() {
                   </Box>
                 </Grid>
               </Grid>
+
+              <FormGroup style={{ marginTop: "1rem" }}>
+                <JobTypeAutoComplete
+                  types={JOBCONSTANTS.JOBTYPES}
+                  selectedTypes={job.job.jobType}
+                  error={jobTypeError}
+                  onchange={(values) => setJobTypes(values)}
+                  setError={(err) => setJobTypeError(err)}
+                />
+              </FormGroup>
 
               <FormGroup style={{ marginTop: "1rem" }}>
                 <Typography variant="h6" style={{ textAlign: "left" }}>
@@ -252,7 +251,7 @@ export default function UpdateJob() {
 
               <FormGroup style={{ marginTop: "1rem" }}>
                 <SkillAutoComplete
-                  skills={JOBSKILLS}
+                  skills={JOBCONSTANTS.JOBSKILLS}
                   selectedSkills={job.skills}
                   error={skillError}
                   onchange={(values) => setSkills(values)}
@@ -266,6 +265,16 @@ export default function UpdateJob() {
                   onEdit={(location) => setLocations(location)}
                   error={locationsError}
                   setError={(error) => setLocationsError(error)}
+                />
+              </FormGroup>
+
+              <FormGroup style={{ marginTop: "0.3rem" }}>
+                <TextField
+                  fullWidth
+                  defaultValue={job.directApplyUrl}
+                  label="Direct Apply Url"
+                  name="directApplyUrl"
+                  inputRef={register}
                 />
               </FormGroup>
 
