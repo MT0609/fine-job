@@ -135,6 +135,10 @@ const userSchema = mongoose.Schema(
       default: [],
       //luu kinh nghiem cua nguoi do, nhung job da lam
     },
+    applies: {
+      type: Array,
+      default: [],
+    },
     followings: {
       type: Array,
       default: [],

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
   Avatar,
   Button,
@@ -8,7 +10,6 @@ import {
   Grid,
   Paper,
   Typography,
-  Link,
 } from "@material-ui/core";
 import { Add, Edit, RemoveCircle } from "@material-ui/icons";
 import { getMyPostingJobs, deleteJob } from "../../actions/jobActions";
@@ -28,14 +29,18 @@ function TalentHomePage() {
   const [deletedJobs, setDeletedJobs] = useState([]);
 
   const handleDeleteJob = async (id) => {
-    const result = await dispatch(deleteJob(id));
-    if (result?.status === JOBCONSTANTS.JOB_DELETE_SUCCESS) {
-      let newDeletedJobs = [...deletedJobs];
-      if (!newDeletedJobs.includes(id)) newDeletedJobs.push(id);
-      setDeletedJobs(newDeletedJobs);
-      return;
-    }
-    alert("Cannot delete job! Try again!");
+    const confirmation = window.confirm("Do you want to delete this job?");
+    if (!confirmation) return;
+    dispatch(deleteJob(id)).then((result) => {
+      if (result?.status === JOBCONSTANTS.JOB_DELETE_SUCCESS) {
+        let newDeletedJobs = [...deletedJobs];
+        if (!newDeletedJobs.includes(id)) newDeletedJobs.push(id);
+        setDeletedJobs(newDeletedJobs);
+        toast("🦄 Job Deleted");
+        return;
+      }
+      toast.error("Error deleting job. Please Try again");
+    });
   };
 
   return (
@@ -59,7 +64,7 @@ function TalentHomePage() {
               </Typography>
             </Grid>
             <Grid item>
-              <Link href="/talent/post">
+              <Link to="/talent/post">
                 <Button>
                   <Add />
                   Create Job
@@ -80,18 +85,26 @@ function TalentHomePage() {
               <div className={`${styles["talenthome__job"]}`}>
                 <Grid container spacing={2}>
                   <Grid item>
-                    <Avatar
-                      variant="square"
-                      src={
-                        job.company.avatar ||
-                        "https://mcnewsmd1.keeng.net/netnews/archive/images/2020/07/20/tinngan_011115_916156142_0.jpg"
-                      }
-                      alt="company"
-                    />
+                    <Link to={`/company/${job.company.id}`}>
+                      <Avatar
+                        variant="square"
+                        src={
+                          job.company.avatar ||
+                          "https://mcnewsmd1.keeng.net/netnews/archive/images/2020/07/20/tinngan_011115_916156142_0.jpg"
+                        }
+                        alt="company"
+                      />
+                    </Link>
                   </Grid>
                   <Grid item xs={7} style={{ textAlign: "left" }}>
-                    <p className={styles.talenthome__name}>{job.title}</p>
-                    <p>{job.company.name}</p>
+                    <Link
+                      to={`/talent/post/${job.id}/applicants`}
+                      className={styles.talenthome__name}
+                    >
+                      {job.title}
+                    </Link>
+                    <br />
+                    <Link to={`/jobs/${job.id}`}>{job.company.name}</Link>
                     <p className={styles.talenthome__caption}>
                       <span
                         className={`${styles["talenthome__jobstatus"]} ${
@@ -108,7 +121,7 @@ function TalentHomePage() {
                     </p>
                   </Grid>
                   <Grid item md style={{ textAlign: "right" }}>
-                    <Link href={`/talent/post/${job.id}/update`}>
+                    <Link to={`/talent/post/${job.id}/update`}>
                       <Button style={{ color: "#0A66C2" }}>
                         <Edit />
                       </Button>
@@ -144,7 +157,7 @@ function TalentHomePage() {
           <Typography variant="h5" style={{ marginBottom: "1rem" }}>
             You do not have any posted job
           </Typography>
-          <Link href="/talent/post">
+          <Link to="/talent/post">
             <Button>
               <Add />
               Create job

@@ -1,5 +1,6 @@
 import React from "react";
-import { Avatar, Box, Link, Grid, IconButton, Paper } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import { Avatar, Box, Grid, IconButton, Paper } from "@material-ui/core";
 import { BookmarkBorder, Bookmark } from "@material-ui/icons";
 
 function CompanyJobs({ company, onSave, onUnSave, user }) {
@@ -27,10 +28,7 @@ function CompanyJobs({ company, onSave, onUnSave, user }) {
                 sm={4}
                 style={{ position: "relative" }}
               >
-                <Link
-                  href={`/jobs/${job.id}`}
-                  style={{ textDecoration: "none" }}
-                >
+                <Link to={`/jobs/${job.id}`}>
                   <Paper
                     key={index}
                     style={{

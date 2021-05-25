@@ -1,4 +1,5 @@
 const httpStatus = require('http-status');
+const moment = require('moment');
 const { Job } = require('../models');
 const ApiError = require('../utils/ApiError');
 
@@ -76,6 +77,67 @@ const getJobById = async (id) => {
  */
 const getJobByEmail = async (email) => {
   return Job.findOne({ email });
+};
+
+/**
+ * @param {ObjectId} jobID
+ * @param {ObjectId} userID
+ * @param {String} cvPath
+ * @returns {Promise<Job>}
+ */
+const applyJob = async (jobID, body, userID, cvPath) => {
+  try {
+    const job = await getJobById(jobID);
+    const user = await getUserById(userID);
+
+    // Check valid user & job
+    if (!job) {
+      throw new Error('Job not found');
+    }
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // is already applied
+    const isApplied = job.job.applicants.filter((applicant) => applicant.userID == userID);
+    if (isApplied.length >= 1) return {};
+
+    const applyTime = moment().toISOString();
+
+    // User & job update
+    const appliedSnap = {
+      user: {
+        id: userID,
+        ...user._doc.baseInfo,
+        avatar: user.avatar,
+        email: body.email,
+        phone: body.phone,
+      },
+      cvPath,
+      createdAt: applyTime,
+    };
+
+    const jobSnap = {
+      id: job._id,
+      name: job.title,
+      company: {
+        id: job.company.id,
+        name: job.company.name,
+        avatar: job.company.avatar,
+      },
+      locations: job.locations,
+      createdAt: applyTime,
+    };
+
+    job.job.applicantCount++;
+    job.job.applicants.push(appliedSnap);
+    user.applies.push(jobSnap);
+
+    await Promise.all([job.save(), user.save()]);
+    return {};
+  } catch (error) {
+    throw new ApiError(httpStatus.NOT_FOUND, error.message);
+  }
 };
 
 /**
@@ -209,7 +271,10 @@ const searchJobs = (filter, options, res) => {
           console.log('Search failed: ', err);
           throw new Error(err.message);
         }
-        const allResults = results.hits.hits;
+        let allResults = results.hits.hits;
+        allResults = allResults.filter(function (result) {
+          return result !== undefined;
+        });
         const { page, limit } = options;
         const paginatedResults = allResults.slice((page - 1) * limit, page * limit);
         const totalPages = Math.ceil(allResults.length / limit);
@@ -226,6 +291,7 @@ module.exports = {
   queryJobs,
   getJobById,
   getJobByEmail,
+  applyJob,
   updateJobById,
   deleteJobById,
   postSaveJob,

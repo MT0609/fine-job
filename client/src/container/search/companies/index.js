@@ -44,7 +44,6 @@ function CompaniesSearchResult(props) {
   const handleUnFollowCompany = (id) => {
     dispatch(UnFollowCompany(id)).then((res) => {
       if (res === COMPANYCONSTANTS.C0MPANY_UNFOLLOW_ONE_SUCCESS) {
-        console.log(id);
         let newFollowedIDs = [...followedIDs];
         newFollowedIDs = newFollowedIDs.filter((item) => item !== id);
         setFollowedIDs(newFollowedIDs);

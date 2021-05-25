@@ -7,17 +7,16 @@ import { makeStyles } from "@material-ui/core/styles";
 import {
   Container,
   TextField,
-  Select,
   Box,
   FormGroup,
   Typography,
   Grid,
 } from "@material-ui/core";
 import LoadingButton from "@material-ui/lab/LoadingButton";
-import { JOBTYPES, JOBSKILLS } from "../../../constants/jobConstants";
 import { PostJobSchema } from "../../../utils/validation";
 import { getCompanies } from "./../../../actions/companyActions";
 import { postJob } from "./../../../actions/jobActions";
+import JobTypeAutoComplete from "../../../components/talent/autocomplete/jobType";
 import CompanyAutoComplete from "../../../components/talent/autocomplete/company";
 import SkillAutoComplete from "../../../components/talent/autocomplete/skills";
 import LocationsAdd from "../../../components/talent/location";
@@ -51,6 +50,9 @@ function PostJob() {
 
   const [status, setStatus] = useState("");
 
+  const [jobTypes, setJobTypes] = useState([]);
+  const [jobTypeError, setJobTypeError] = useState("");
+
   const [companyID, setCompanyID] = useState("");
   const [companyIDError, setCompanyIDError] = useState("");
 
@@ -61,6 +63,11 @@ function PostJob() {
   const [locationsError, setLocationsError] = useState("");
 
   const onSubmit = async (data) => {
+    if (jobTypes.length === 0) {
+      setJobTypeError("Choose at least one job type");
+      return;
+    }
+
     if (!companyID) {
       setCompanyIDError("Choose company");
       return;
@@ -78,12 +85,13 @@ function PostJob() {
     }
 
     data.id = companyID;
+    data.jobType = jobTypes;
     data.skills = skills;
     data.locations = submitedLocations;
-    console.log(data);
 
-    const result = await dispatch(postJob(data));
-    setStatus(result?.status);
+    dispatch(postJob(data)).then((result) => {
+      setStatus(result.status);
+    });
   };
 
   return (
@@ -137,7 +145,7 @@ function PostJob() {
 
       <form onSubmit={handleSubmit(onSubmit)} onChange={() => setStatus("")}>
         <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={8}>
             <TextField
               fullWidth
               label="Title"
@@ -148,26 +156,7 @@ function PostJob() {
               {errors.title && <span>* {errors.title.message}</span>}
             </Box>
           </Grid>
-          <Grid item xs={12} md={3}>
-            <Select
-              fullWidth
-              native
-              name="jobType"
-              defaultValue="male"
-              style={{ marginTop: "1rem" }}
-              inputRef={register}
-            >
-              {JOBTYPES.map((type, index) => (
-                <option fullWidth value={type} key={index}>
-                  {type.charAt(0).toUpperCase() + type.slice(1)}
-                </option>
-              ))}
-            </Select>
-            <Box className={classes.error}>
-              {errors.jobType && <span>* {errors.jobType.message}</span>}
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} md={4}>
             <TextField
               fullWidth
               name="maxSalary"
@@ -181,6 +170,15 @@ function PostJob() {
             </Box>
           </Grid>
         </Grid>
+
+        <FormGroup style={{ marginTop: "1rem" }}>
+          <JobTypeAutoComplete
+            types={JOBCONSTANTS.JOBTYPES}
+            error={jobTypeError}
+            onchange={(values) => setJobTypes(values)}
+            setError={(err) => setJobTypeError(err)}
+          />
+        </FormGroup>
 
         <FormGroup style={{ marginTop: "1rem" }}>
           <CompanyAutoComplete
@@ -209,7 +207,7 @@ function PostJob() {
 
         <FormGroup style={{ marginTop: "1rem" }}>
           <SkillAutoComplete
-            skills={JOBSKILLS}
+            skills={JOBCONSTANTS.JOBSKILLS}
             error={skillError}
             onchange={(values) => setSkills(values)}
             setError={(err) => setSkillError(err)}
@@ -221,6 +219,15 @@ function PostJob() {
             onEdit={(location) => setLocations(location)}
             error={locationsError}
             setError={(error) => setLocationsError(error)}
+          />
+        </FormGroup>
+
+        <FormGroup style={{ marginTop: "0.3rem" }}>
+          <TextField
+            fullWidth
+            label="Direct Apply Url"
+            name="directApplyUrl"
+            inputRef={register}
           />
         </FormGroup>
 

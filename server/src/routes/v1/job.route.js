@@ -7,14 +7,15 @@ const jobController = require('../../controllers/job.controller');
 const router = express.Router();
 
 // Multer upload
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
-// const upload = require('../../config/multer');
-const cpUpload = upload.fields([
-  { name: 'avatar', maxCount: 1 },
-  { name: 'backgroundAvt', maxCount: 1 },
-  { name: 'photos', maxCount: 8 },
-]);
+// const multer = require('multer');
+// const upload = multer({ dest: 'uploads/' });
+// // const upload = require('../../config/multer');
+// const cpUpload = upload.fields([
+//   { name: 'avatar', maxCount: 1 },
+//   { name: 'backgroundAvt', maxCount: 1 },
+//   { name: 'photos', maxCount: 8 },
+// ]);
+const { cvUpload } = require('../../config/multer');
 
 router
   .route('/')
@@ -27,6 +28,7 @@ router
   .patch(auth(), validate(jobValidation.updateJob), jobController.updateJob)
   .delete(auth(), validate(jobValidation.deleteJob), jobController.deleteJob);
 
+router.route('/:jobID/apply').post(auth(), validate(jobValidation.applyJob), cvUpload.single('cv'), jobController.applyJob);
 router.route('/:jobID/save').post(auth(), validate(jobValidation.postSave), jobController.postSave);
 router.route('/:jobID/unSave').post(auth(), validate(jobValidation.postUnSave), jobController.postUnSave);
 
@@ -299,6 +301,49 @@ module.exports = router;
  *         schema:
  *           type: string
  *         description: Job id
+ *     responses:
+ *       "200":
+ *         description: No content
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ *
+ * /jobs/{id}/apply:
+ *   post:
+ *     summary: Apply Job
+ *     description: Apply for a job
+ *     tags: [Jobs]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Job id
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - phone
+ *             properties:
+ *               email:
+ *                  type: string
+ *                  description: Email for employer to contact applicant
+ *               phone:
+ *                  type: string
+ *                  description: Phone for employer to contact applicant
+ *               cv:
+ *                  type: string
+ *                  format: binary
  *     responses:
  *       "200":
  *         description: No content

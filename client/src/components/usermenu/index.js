@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import {
   Menu,
@@ -10,7 +11,6 @@ import {
 } from "@material-ui/core";
 import { ExitToApp, AccountBox, PostAdd, Work } from "@material-ui/icons";
 import { signOut } from "./../../actions/authActions";
-import { ROUTES } from "../../constants/routes";
 
 const StyledMenu = withStyles({
   paper: {
@@ -49,18 +49,6 @@ function UserSubMenu(props) {
     if (onclose) onclose();
   };
 
-  const onTalentClick = () => {
-    window.open(ROUTES.talent, "_self");
-  };
-
-  const onProfileClick = () => {
-    window.open(`/profile/${user.id}`, "_self");
-  };
-
-  const onMyJobsClick = () => {
-    window.open("/jobs/my-jobs", "_self");
-  };
-
   const onSignOutClick = () => {
     handleClose();
     dispatch(signOut());
@@ -83,28 +71,34 @@ function UserSubMenu(props) {
         >
           {user?.baseInfo?.firstName} {user?.baseInfo?.lastName}
         </Typography>
-        <MenuItem onClick={onProfileClick}>
-          <ListItemIcon>
-            <AccountBox fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="My Profile" />
-        </MenuItem>
-        <MenuItem onClick={onTalentClick}>
-          <ListItemIcon
-            style={{ minWidth: "fit-content", marginRight: "1rem" }}
-          >
-            <PostAdd fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Manage Posting Job" />
-        </MenuItem>
-        <MenuItem onClick={onMyJobsClick}>
-          <ListItemIcon
-            style={{ minWidth: "fit-content", marginRight: "1rem" }}
-          >
-            <Work fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="My Jobs" />
-        </MenuItem>
+        <Link to={`/profile/${user.id}`}>
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon>
+              <AccountBox fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="My Profile" />
+          </MenuItem>
+        </Link>
+        <Link to={`/talent`}>
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon
+              style={{ minWidth: "fit-content", marginRight: "1rem" }}
+            >
+              <PostAdd fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Manage Posting Job" />
+          </MenuItem>
+        </Link>
+        <Link to={`/jobs/my-jobs`}>
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon
+              style={{ minWidth: "fit-content", marginRight: "1rem" }}
+            >
+              <Work fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="My Jobs" />
+          </MenuItem>
+        </Link>
         <MenuItem onClick={onSignOutClick}>
           <ListItemIcon>
             <ExitToApp fontSize="small" />

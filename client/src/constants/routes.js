@@ -11,6 +11,7 @@ export const ROUTES = {
   talentfind: "/talent/post",
   resume: "/resume",
   resumeUpdate: "/resume/:id",
+  jobApplicants: "/talent/post/:id/applicants",
   jobUpdate: "/talent/post/:id/update",
   messages: "/messages",
   authen: "/authen",

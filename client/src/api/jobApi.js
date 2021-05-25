@@ -21,6 +21,10 @@ const jobApi = {
     const url = `/v1/jobs/${id}`;
     return axiosClient.delete(url);
   },
+  apply: (jobID, formData) => {
+    const url = `/v1/jobs/${jobID}/apply`;
+    return axiosClient.post(url, formData);
+  },
   save: (id) => {
     const url = `/v1/jobs/${id}/save`;
     return axiosClient.post(url);

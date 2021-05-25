@@ -32,36 +32,35 @@ export const getJobs =
     }
   };
 
-export const getMyPostingJobs = (title) => async (dispatch) => {
-  // params: {title, limit, ...}
-  try {
-    dispatch({
-      type: JOBCONSTANTS.JOB_GET_ALL_REQUEST,
-    });
+export const getMyPostingJobs =
+  (title = "*") =>
+  async (dispatch) => {
+    // params: {title, limit, ...}
+    try {
+      dispatch({
+        type: JOBCONSTANTS.JOB_GET_ALL_REQUEST,
+      });
 
-    const params = {};
-    if (title) params.title = title;
+      let result = await jobApi.get(title, 1, 1000);
 
-    let result = await jobApi.getAll(params);
+      const token = localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN);
 
-    const token = localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN);
+      let myJobs = result.results.filter(
+        (job) => job.creator === jwt_decode(token)?.sub
+      );
+      result.results = myJobs;
 
-    let myJobs = result.results.filter(
-      (job) => job.creator === jwt_decode(token)?.sub
-    );
-    result.results = myJobs;
-
-    dispatch({
-      type: JOBCONSTANTS.JOB_GET_ALL_SUCCESS,
-      payload: result,
-    });
-  } catch (error) {
-    console.log(error);
-    dispatch({
-      type: JOBCONSTANTS.JOB_GET_ALL_FAIL,
-    });
-  }
-};
+      dispatch({
+        type: JOBCONSTANTS.JOB_GET_ALL_SUCCESS,
+        payload: result,
+      });
+    } catch (error) {
+      console.log(error);
+      dispatch({
+        type: JOBCONSTANTS.JOB_GET_ALL_FAIL,
+      });
+    }
+  };
 
 export const getJobDetail = (id) => async (dispatch) => {
   // params: {title, limit, ...}
@@ -92,8 +91,6 @@ export const postJob = (data) => async (dispatch) => {
     });
 
     let result = await jobApi.post(data);
-
-    console.log(result);
 
     if (!result) {
       dispatch({
@@ -201,6 +198,35 @@ export const deleteJob = (id) => async (dispatch) => {
     return {
       status: JOBCONSTANTS.JOB_DELETE_FAIL,
     };
+  }
+};
+
+export const applyJob = (jobID, formData) => async (dispatch) => {
+  try {
+    let result = await jobApi.apply(jobID, formData);
+
+    if (!result) {
+      dispatch({
+        type: JOBCONSTANTS.JOB_APPLY_FAIL,
+      });
+
+      return JOBCONSTANTS.JOB_APPLY_FAIL;
+    } else {
+      dispatch({
+        type: JOBCONSTANTS.JOB_APPLY_SUCCESS,
+      });
+
+      dispatch(getUserData());
+
+      return JOBCONSTANTS.JOB_APPLY_SUCCESS;
+    }
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: JOBCONSTANTS.JOB_APPLY_FAIL,
+    });
+
+    return JOBCONSTANTS.JOB_APPLY_FAIL;
   }
 };
 
