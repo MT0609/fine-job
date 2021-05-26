@@ -440,7 +440,6 @@ Contributions are more than welcome! Please check out the [contributing guide](C
 
 [MIT](LICENSE)
 
-
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
