@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { useHistory, useLocation } from "react-router-dom";
 import { Container, Divider, Typography } from "@material-ui/core";
 import SavedJobs from "../../../container/jobs/myJob/save";
@@ -14,6 +15,7 @@ function MyJob() {
   const { search } = useLocation();
   const saveType = new URLSearchParams(search).get("type") || "saved";
 
+  const { t } = useTranslation();
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
@@ -67,7 +69,7 @@ function MyJob() {
             fontWeight: "bold",
           }}
         >
-          My Jobs
+          {t("job.myJobs")}
         </Typography>
 
         <div className={styles.myjob__tabBtns}>
@@ -77,7 +79,7 @@ function MyJob() {
             }`}
             onClick={() => handleChangeActiveTab(0)}
           >
-            Saved
+            {t("job.save")}
           </button>
           <button
             className={`${styles["myjob__tabBtn"]} ${
@@ -85,7 +87,7 @@ function MyJob() {
             }`}
             onClick={() => handleChangeActiveTab(1)}
           >
-            Applied
+            {t("job.apply")}
           </button>
         </div>
 

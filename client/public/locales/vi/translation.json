@@ -1,0 +1,111 @@
+{
+	"header": {
+		"searchBar": "Tìm kiếm...",
+		"network": "Kết nối",
+		"job": "Công việc",
+		"message": "Tin nhắn",
+		"auth": "Đăng nhập/Đăng ký",
+		"me": "Tôi",
+		"language": "Vie",
+		"userMenu": {
+			"profile": "Hồ sơ cá nhân",
+			"talent": "Quản lý tuyển dụng",
+			"job": "Hồ sơ nghề nghiệp",
+			"signOut": "Đăng xuất"
+		}
+	},
+	"filterBar": {
+		"all": "Tất cả",
+		"people": "Mọi người",
+		"job": "Công việc",
+		"company": "Công ty"
+	},
+	"people": {
+		"people": "Mọi người",
+		"connect": "Gửi lời mời",
+		"pending": "Đã gửi lời mời",
+		"accept": "Chấp nhận",
+		"ignore": "Bỏ qua",
+		"connected": "Bạn bè",
+		"remove": "Hùy kết bạn",
+		"message": "Nhắn tin",
+		"friendNumber": "{{number}} bạn bè",
+		"noUser": "Không tìm thấy người dùng nào",
+		"contactInfo": "Thông tin liên lạc",
+		"editBasicInfo": "Cập nhật thông tin cơ bản",
+		"firstName": "Tên",
+		"lastName": "Họ",
+		"email": "Email",
+		"phone": "Số điện thoại",
+		"gender": "Giới tính",
+		"male": "Nam",
+		"female": "Nữ",
+		"birthday": "Ngày sinh",
+		"about": "Giới thiệu bản thân",
+		"education": "Học vấn",
+		"skills": "Kĩ năng",
+		"cancelButton": "Hủy",
+		"saveButton": "Lưu"
+	},
+	"company": {
+		"companies": "Công ty",
+		"follow": "Theo dõi",
+		"following": "Đang theo dõi",
+		"followNumber": "{{number}} người theo dõi",
+		"noCompany": "Không tìm thấy công ty nào"
+	},
+	"job": {
+		"searchPlaceholder": "Tìm kiếm công việc...",
+		"searchButton": "Tìm kiếm",
+		"myJobs": "Công việc của tôi",
+		"apply": "Ứng tuyển",
+		"save": "Lưu",
+		"unSave": "Gỡ lưu",
+		"titlePlaceholder": "Tên công việc",
+		"description": "Mô tả",
+		"skills": "Kĩ năng",
+		"employmentType": "Loại hình công việc",
+		"maxSalary": "Mức lương tối đa",
+		"viewCount": "{{number}} lượt xem",
+		"applicantNumber": "{{number}} người đã nộp đơn",
+		"post": "Đăng công việc",
+		"postSuccess": "Đăng công việc thành công",
+		"postFail": "Đăng công việc thất bại",
+		"updateSuccess": "Cập nhật thành công",
+		"updateFail": "Cập nhật thất bại",
+		"backToTalentPage": "Về trang danh sách đăng tuyển",
+		"noPostedJob": "Bạn chưa đăng tuyển công việc nào",
+		"createButton": "Tạo",
+		"updateButton": "Cập nhật",
+		"directApplyUrl": "Link ứng tuyển trực tiếp",
+		"jobNotFound": "Không tìm thấy công việc"
+	},
+	"message": {
+		"messages": "Tin nhắn",
+		"noMessages": "Không có tin nhắn nào",
+		"type": "Nhập tin nhắn",
+		"deleteConversation": "Xóa tin nhắn"
+	},
+	"resume": {
+		"enterTitle": "Điền tên CV",
+		"titlePlaceholder": "Tiêu đề",
+		"myResumes": "Danh sách CV của tôi",
+		"empty": "Bạn chưa tạo CV nào",
+		"uploadCondition": "CV - DOC, DOCX, PDF (tối đa 5 MB)",
+		"uploadButton": "Tải lên",
+		"create": "Tạo CV",
+		"cancelButton": "Hủy bỏ",
+		"submit": "Tạo"
+	},
+	"authPage": {
+		"login": "Đăng nhập",
+		"register": "Đăng ký",
+		"username": "Tên đăng nhập",
+		"password": "Mật khẩu",
+		"passwordRetype": "Xác nhận mật khẩu",
+		"forgot": "Quên mật khẩu",
+		"loginFail": "Tên đăng nhập hoặc mật khẩu không đúng",
+		"signUpSuccess": "Đăng ký tài khoản thành công",
+		"emailUsed": "Email đã được sử dụng!"
+	}
+}

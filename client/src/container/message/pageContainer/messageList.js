@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Avatar, Box, Divider, Typography } from "@material-ui/core";
 import CircularLoading from "../../../components/loading/circular";
 import styles from "./index.module.scss";
@@ -10,6 +11,8 @@ function MessageList(props) {
     onMessageClick,
     jobSelectHightLight = true,
   } = props;
+
+  const { t } = useTranslation();
 
   const [messageClick, setMessageClick] = useState("");
 
@@ -27,7 +30,7 @@ function MessageList(props) {
         justifyContent="space-between"
         style={{ padding: "0.8rem 1rem", fontWeight: "bold" }}
       >
-        <span>Messages</span>
+        <span>{t("message.messages")}</span>
       </Box>
 
       <Divider />
@@ -92,7 +95,7 @@ function MessageList(props) {
           </div>
         ) : (
           <div className={styles.messageList__items}>
-            <Typography variant="h6">No Messages</Typography>
+            <Typography variant="h6">{t("message.noMessages")}</Typography>
           </div>
         )
       ) : (

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -34,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 function PostJob() {
   const classes = useStyles();
 
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const companyState = useSelector((state) => state.company);
@@ -107,7 +109,7 @@ function PostJob() {
         variant="h5"
         style={{ textAlign: "left", color: "blue", fontWeight: "bold" }}
       >
-        Post A Job
+        {t("job.post")}
       </Typography>
 
       {status === JOBCONSTANTS.JOB_POST_SUCCESS && (
@@ -121,8 +123,8 @@ function PostJob() {
           }}
         >
           <p>
-            &#10004; Post Job Successfully.{" "}
-            <Link to="/talent">Go back to Talent Page</Link>
+            &#10004; {t("job.postSuccess")}{" "}
+            <Link to="/talent">{t("job.backToTalentPage")}</Link>
           </p>
         </Box>
       )}
@@ -138,7 +140,8 @@ function PostJob() {
           }}
         >
           <p>
-            * Fail Posting Job <Link to="/talent">Go back to Talent Page</Link>
+            * {t("job.postFail")}{" "}
+            <Link to="/talent">{t("job.backToTalentPage")}</Link>
           </p>
         </Box>
       )}
@@ -148,7 +151,7 @@ function PostJob() {
           <Grid item xs={12} md={8}>
             <TextField
               fullWidth
-              label="Title"
+              label={t("job.titlePlaceholder")}
               name="title"
               inputRef={register}
             />
@@ -160,7 +163,7 @@ function PostJob() {
             <TextField
               fullWidth
               name="maxSalary"
-              label="Max Salary"
+              label={t("job.maxSalary")}
               type="number"
               InputProps={{ inputProps: { min: 0 } }}
               inputRef={register}
@@ -191,12 +194,12 @@ function PostJob() {
 
         <FormGroup style={{ marginTop: "1rem" }}>
           <Typography variant="h6" style={{ textAlign: "left" }}>
-            Job's Descriptions
+            {t("job.description")}
           </Typography>
           <textarea
             style={{ width: "100%", padding: "1rem" }}
             rows={10}
-            placeholder="Some job's decriptions"
+            placeholder={t("job.description")}
             name="description"
             ref={register}
           />
@@ -225,7 +228,7 @@ function PostJob() {
         <FormGroup style={{ marginTop: "0.3rem" }}>
           <TextField
             fullWidth
-            label="Direct Apply Url"
+            label={t("job.directApplyUrl")}
             name="directApplyUrl"
             inputRef={register}
           />
@@ -238,7 +241,7 @@ function PostJob() {
           onClick={handleSubmit}
           pending={jobState.isLoading}
         >
-          Create
+          {t("job.createButton")}
         </LoadingButton>
       </form>
     </Container>

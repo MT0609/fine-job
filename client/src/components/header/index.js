@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useHistory, useLocation, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Paper, Avatar, Button } from "@material-ui/core";
-import { AccountCircle, PeopleAlt, Work, Chat, Menu } from "@material-ui/icons";
+import {
+  Language,
+  AccountCircle,
+  PeopleAlt,
+  Work,
+  Chat,
+  Menu,
+} from "@material-ui/icons";
 import UserSubMenu from "../usermenu";
+import LanguageSubMenu from "../language";
 import SidebarMenu from "../../container/sidebar/menu";
 import { ROUTES } from "../../constants/routes";
 import styles from "./header.module.scss";
@@ -15,6 +24,8 @@ function Header() {
   const cate = queryParams.get("cate") || "all";
   const history = useHistory();
   const [textSearch, SetTextSearch] = useState(keyword);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     SetTextSearch(keyword);
@@ -32,12 +43,19 @@ function Header() {
   const auth = useSelector((state) => state.auth);
 
   const [dropdownAnchor, setDropdownAnchor] = useState(null);
+  const [languageDropdown, setLanguageDropdown] = useState(null);
 
-  const handleClick = (event) => {
-    setDropdownAnchor(event.currentTarget);
+  const handleLangClick = (event) => {
+    setLanguageDropdown(event.currentTarget);
+  };
+  const handleLangClose = () => {
+    setLanguageDropdown(null);
   };
 
-  const handleClose = () => {
+  const handleMeClick = (event) => {
+    setDropdownAnchor(event.currentTarget);
+  };
+  const handleMeClose = () => {
     setDropdownAnchor(null);
   };
 
@@ -50,15 +68,14 @@ function Header() {
           <div className={styles.header__thumbnail}>
             <Link to={ROUTES.jobs}>
               <img
-                // src="https://edumax.edu.vn/wp-content/uploads/2013/12/03.12.2013-TOEIC-b4.jpg"
-                src="https://www.funnp.com/funny_pictures/464246679-funny_avatar_man_woman_toilet_sign.jpg"
+                src="https://res.cloudinary.com/dghvjalhh/image/upload/v1623952564/avatars/job_xjiuyn.svg"
                 alt="Fine_Job"
               />
             </Link>
           </div>
           <input
             className={styles.header__search}
-            placeholder="Search..."
+            placeholder={t("header.searchBar")}
             value={textSearch}
             onChange={(e) => SetTextSearch(e.target.value)}
             onKeyDown={(e) => {
@@ -71,7 +88,7 @@ function Header() {
             <li>
               <Link to="/">
                 <PeopleAlt />
-                <span>My Network</span>
+                <span>{t("header.network")}</span>
               </Link>
             </li>
             <li
@@ -84,7 +101,7 @@ function Header() {
             >
               <Link to={ROUTES.jobs}>
                 <Work />
-                <span>Jobs</span>
+                <span>{t("header.job")}</span>
               </Link>
             </li>
             <li
@@ -96,8 +113,19 @@ function Header() {
             >
               <Link to={ROUTES.messages}>
                 <Chat />
-                <span>Messages</span>
+                <span>{t("header.message")}</span>
               </Link>
+            </li>
+            <li>
+              <a onClick={handleLangClick}>
+                <Language />
+                <span>{t("header.language")}</span>
+              </a>
+              <LanguageSubMenu
+                anchorEl={languageDropdown}
+                open={Boolean(languageDropdown)}
+                onclose={handleLangClose}
+              />
             </li>
 
             <div className={styles.header__hamburger}>
@@ -113,7 +141,7 @@ function Header() {
 
             {auth.isAuth ? (
               <li className={styles.header__userIcon}>
-                <button onClick={handleClick}>
+                <button onClick={handleMeClick}>
                   <Avatar
                     style={{
                       height: "1.6rem",
@@ -123,14 +151,14 @@ function Header() {
                     alt="Avatar"
                     src="https://mcnewsmd1.keeng.net/netnews/archive/images/2020/07/20/tinngan_011115_916156142_0.jpg"
                   />
-                  <span>Me</span>
+                  <span>{t("header.me")}</span>
                 </button>
                 <Paper className={styles.header__userIcon__submenu}>
                   <UserSubMenu
                     user={auth.user}
                     anchorEl={dropdownAnchor}
                     open={Boolean(dropdownAnchor)}
-                    onclose={handleClose}
+                    onclose={handleMeClose}
                   />
                 </Paper>
               </li>
@@ -144,7 +172,7 @@ function Header() {
               >
                 <Link to={ROUTES.authen}>
                   <AccountCircle />
-                  <span>Login/Register</span>
+                  <span>{t("header.auth")}</span>
                 </Link>
               </li>
             )}

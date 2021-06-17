@@ -16,6 +16,7 @@ import CVAboutUpdate from "../../../container/resume/update/aboutUpdate";
 import CVExpUpdate from "../../../container/resume/update/expUpdate";
 import CVEduUpdate from "../../../container/resume/update/eduUpdate";
 import CVSkillUpdate from "../../../container/resume/update/skillUpdate";
+// import LicenseAndCertUpdate from "../../../container/resume/update/licenseAndCertUpdate";
 import { JOBSKILLS } from "../../../constants/jobConstants";
 import * as RESUMECONSTANTS from "../../../constants/resumeConstants";
 import { getResume, updateResume } from "../../../actions/resumeActions";
@@ -32,6 +33,7 @@ function ResumeUpdate() {
     experience: false,
     education: false,
     skills: false,
+    license: false,
   };
   const [updateDialog, setUpdateDialog] = useState(updateInitialState);
 
@@ -81,9 +83,7 @@ function ResumeUpdate() {
             <Grid container justify="space-between">
               <Grid item>
                 <Typography variant="h5">
-                  {cv.userSnapShort.baseInfo.firstName +
-                    " " +
-                    cv.userSnapShort.baseInfo.lastName}
+                  {cv.userSnapShort.baseInfo.lastName}
                   <p>{cv.userSnapShort.baseInfo.location}</p>
                 </Typography>
               </Grid>
@@ -229,12 +229,12 @@ function ResumeUpdate() {
                       education: false,
                     }))
                   }
-                  data={cv.userSnapShort.baseInfo.education}
+                  data={cv.userSnapShort.baseInfo.educations}
                   onsubmit={handleUpdate}
                 />
               </Grid>
             </Grid>
-            {cv.userSnapShort.baseInfo.education.map((edu, index1) => {
+            {cv.userSnapShort.baseInfo.educations.map((edu, index1) => {
               return (
                 <Box style={{ marginBottom: "1rem" }}>
                   {Object.keys(edu).map((key, index2) => (
@@ -296,22 +296,47 @@ function ResumeUpdate() {
           <Divider />
 
           {/* Licenses & certifications */}
-          <section className={styles.cvupdate__section}>
-            <Typography variant="h6" style={{ marginBottom: "1rem" }}>
-              Licenses & certifications
-            </Typography>
-            {cv.userSnapShort.licenseAndCert.map((cert, index1) => {
+          {/* <section className={styles.cvupdate__section}>
+            <Grid container justify="space-between">
+              <Grid item>
+                <Typography variant="h6" style={{ marginBottom: "1rem" }}>
+                  Licenses & certifications
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Button
+                  className={classes.btnEdit}
+                  onClick={() =>
+                    setUpdateDialog((prevState) => ({
+                      ...prevState,
+                      license: true,
+                    }))
+                  }
+                >
+                  <Edit />
+                </Button>
+                <LicenseAndCertUpdate
+                  licenseAndCerts={cv.userSnapShort.licenseAndCerts}
+                  open={updateDialog.license}
+                  onclose={() =>
+                    setUpdateDialog((prevState) => ({
+                      ...prevState,
+                      license: false,
+                    }))
+                  }
+                  onsubmit={handleUpdate}
+                />
+              </Grid>
+            </Grid>
+            {cv.userSnapShort.licenseAndCerts.map((cert, index) => {
               return (
-                <Box style={{ marginBottom: "1rem" }}>
-                  {Object.keys(cert).map((key, index2) => (
-                    <p key={index1 + index2}>
-                      {key}: {cert[key]}
-                    </p>
-                  ))}
+                <Box style={{ marginBottom: "1rem" }} key={index}>
+                  <p>{cert.name}</p>
+                  <p>{cert.issueDate}</p>
                 </Box>
               );
             })}
-          </section>
+          </section> */}
         </Container>
       )}
     </>

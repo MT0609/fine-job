@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useTranslation } from "react-i18next";
 import {
   Dialog,
   DialogTitle,
@@ -21,6 +22,8 @@ import styles from "./index.module.scss";
 
 function JobApplyDialog(props) {
   const { user = null, job = {}, show = false, onclose, onsubmit } = props;
+
+  const { t } = useTranslation();
 
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -55,11 +58,13 @@ function JobApplyDialog(props) {
     >
       {user && (
         <>
-          <DialogTitle>Apply Job: {job.title}</DialogTitle>
+          <DialogTitle>
+            {t("job.apply")}: {job.title}
+          </DialogTitle>
           <Divider />
           <form onSubmit={handleSubmit(onSubmit)}>
             <DialogContent>
-              <p className={styles.title}>Contact info</p>
+              <p className={styles.title}>{t("people.contactInfo")}</p>
               <Grid container spacing={1} style={{ marginBottom: "1rem" }}>
                 <Grid item>
                   <Avatar
@@ -86,7 +91,7 @@ function JobApplyDialog(props) {
                 <Grid item>
                   <TextField
                     inputRef={register}
-                    label="Email *"
+                    label={t("people.email") + " *"}
                     name="email"
                     variant="outlined"
                     defaultValue={user.contact.email}
@@ -98,7 +103,7 @@ function JobApplyDialog(props) {
                 <Grid item>
                   <TextField
                     inputRef={register}
-                    label="Phone *"
+                    label={t("people.phone") + " *"}
                     name="phone"
                     variant="outlined"
                     defaultValue={user.contact.phone}
@@ -110,11 +115,9 @@ function JobApplyDialog(props) {
               </Grid>
 
               <br />
-              <p className={styles.title}>
-                Resume - type: DOC, DOCX, PDF (maximum 5 MB)
-              </p>
+              <p className={styles.title}>{t("resume.uploadCondition")}</p>
               <Button variant="outlined" color="primary" component="label">
-                Upload File
+                {t("resume.uploadButton")}
                 <input
                   ref={register}
                   name="cv"
@@ -133,10 +136,10 @@ function JobApplyDialog(props) {
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose} color="primary">
-                Cancel
+                {t("resume.cancelButton")}
               </Button>
               <Button variant="contained" color="primary" type="submit">
-                Apply
+                {t("job.apply")}
               </Button>
             </DialogActions>
           </form>

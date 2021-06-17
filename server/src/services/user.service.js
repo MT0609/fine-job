@@ -485,26 +485,28 @@ const getConnStatus = async (sender, receiverID) => {
     const notification = await getNotificationByQuery(query);
 
     // Get type
-    let type = '';
-    switch (notification.type) {
-      case 'sendConnReq': {
-        if (notification.params[0].toString() === sender._id.toString()) {
-          type = 'connSent';
-        } else {
-          type = 'waitForRespond';
+    let type = 'noConn';
+    if (notification) {
+      switch (notification.type) {
+        case 'sendConnReq': {
+          if (notification.params[0].toString() === sender._id.toString()) {
+            type = 'connSent';
+          } else {
+            type = 'waitForRespond';
+          }
+          break;
         }
-        break;
-      }
 
-      case 'acceptConnReq': {
-        type = 'friend';
-        break;
-      }
+        case 'acceptConnReq': {
+          type = 'friend';
+          break;
+        }
 
-      case 'deleteConnReq':
-      case 'deleteFriend': {
-        type = 'noConn';
-        break;
+        case 'deleteConnReq':
+        case 'deleteFriend': {
+          type = 'noConn';
+          break;
+        }
       }
     }
 

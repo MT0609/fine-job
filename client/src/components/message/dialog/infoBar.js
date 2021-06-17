@@ -1,4 +1,5 @@
 import React from "react";
+import { Trans } from "react-i18next";
 import { Avatar, Link, IconButton, Menu, MenuItem } from "@material-ui/core";
 import { MoreVert, Close, Delete } from "@material-ui/icons";
 import styles from "./index.module.scss";
@@ -60,7 +61,7 @@ function InfoBar(props) {
             onClick={onDeleteConversationClick}
           >
             <Delete style={{ marginRight: "0.5rem", color: "red" }} />
-            Delete Conversation
+            <Trans i18nKey="message.deleteConversation"></Trans>
           </MenuItem>
         </Menu>
         <IconButton style={{ padding: "0.4rem" }} onClick={onCloseButtonClick}>

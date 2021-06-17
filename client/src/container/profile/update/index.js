@@ -1,5 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Dialog,
@@ -14,6 +15,8 @@ import { ProfileUpdateSchema } from "../../../utils/validation";
 
 export default function ProfileUpdate(props) {
   const { data, show, onclose, onsubmit } = props;
+
+  const { t } = useTranslation();
 
   const { register, handleSubmit, errors } = useForm({
     resolver: yupResolver(ProfileUpdateSchema),
@@ -30,13 +33,13 @@ export default function ProfileUpdate(props) {
 
   return (
     <Dialog fullWidth open={show} onClose={handleClose}>
-      <DialogTitle>Edit Introduction</DialogTitle>
+      <DialogTitle>{t("people.editBasicInfo")}</DialogTitle>
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent style={{ paddingTop: 0 }}>
           <Grid container spacing={2}>
             <Grid item>
               <TextField
-                label="First Name"
+                label={t("people.firstName")}
                 defaultValue={data.baseInfo?.firstName}
                 helperText={
                   errors.firstName?.message && `* ${errors.firstName?.message}`
@@ -50,7 +53,7 @@ export default function ProfileUpdate(props) {
             </Grid>
             <Grid item>
               <TextField
-                label="Last Name"
+                label={t("people.lastName")}
                 defaultValue={data.baseInfo?.lastName}
                 helperText={
                   errors.lastName?.message && `* ${errors.lastName?.message}`
@@ -61,7 +64,7 @@ export default function ProfileUpdate(props) {
             </Grid>
           </Grid>
           <TextField
-            label="Phone"
+            label={t("people.phone")}
             style={{ marginTop: 8 }}
             defaultValue={data.contact?.phone}
             InputLabelProps={{
@@ -73,10 +76,10 @@ export default function ProfileUpdate(props) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
-            Cancel
+            {t("people.cancelButton")}
           </Button>
           <Button type="submit" color="primary">
-            Save
+            {t("people.saveButton")}
           </Button>
         </DialogActions>
       </form>

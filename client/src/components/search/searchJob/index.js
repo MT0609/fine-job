@@ -1,9 +1,11 @@
 import React, { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { Grid } from "@material-ui/core";
 import { Search } from "@material-ui/icons";
 import styles from "./search.module.scss";
 
 function SearchJobBar({ defaultValue = "", onsearch }) {
+  const { t } = useTranslation();
   const searchInput = useRef(null);
 
   useEffect(() => {
@@ -32,7 +34,7 @@ function SearchJobBar({ defaultValue = "", onsearch }) {
               defaultValue={defaultValue}
               ref={searchInput}
               type="text"
-              placeholder="Search jobs by name"
+              placeholder={t("job.searchPlaceholder")}
               className={styles.searchbar__input}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
@@ -47,7 +49,7 @@ function SearchJobBar({ defaultValue = "", onsearch }) {
             className={styles.searchbar__searchBtn}
             onClick={handleSearch}
           >
-            Search
+            {t("job.searchButton")}
           </button>
         </Grid>
       </Grid>

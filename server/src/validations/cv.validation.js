@@ -12,8 +12,8 @@ const createCV = {
 const getAllUserCV = {
   query: Joi.object().keys({
     cvId: Joi.allow(null, ''),
-  })
-}
+  }),
+};
 
 //viet lai cai nay
 const updateACV = {
@@ -38,15 +38,13 @@ const updateACV = {
     education: Joi.string(),
     experience: Joi.string(),
     fetured: Joi.string(),
-    licenseAndCert: Joi.string(),
+    licenseAndCerts: Joi.array(),
     volunteer: Joi.string(),
-  })
-}
+  }),
+};
 
 module.exports = {
-    createCV,
-    getAllUserCV,
-    updateACV
-  };
-  
-
+  createCV,
+  getAllUserCV,
+  updateACV,
+};

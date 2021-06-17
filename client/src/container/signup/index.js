@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -25,6 +26,7 @@ function SignUp() {
     resolver: yupResolver(SignUpSchema),
   });
 
+  const { t } = useTranslation();
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
@@ -40,7 +42,7 @@ function SignUp() {
           <Typography
             style={{ textAlign: "left", color: "red", fontStyle: "italic" }}
           >
-            * Email has been used!
+            * {t("authPage.emailUsed")}
           </Typography>
         )}
 
@@ -48,7 +50,7 @@ function SignUp() {
           <Typography
             style={{ textAlign: "left", color: "green", fontStyle: "italic" }}
           >
-            &#10004; Sign Up Successfully
+            &#10004; {t("authPage.signUpSuccess")}
           </Typography>
         )}
 
@@ -58,7 +60,7 @@ function SignUp() {
               <TextField
                 variant="outlined"
                 margin="normal"
-                label="First Name"
+                label={t("people.firstName")}
                 name="firstName"
                 fullWidth
                 inputRef={register}
@@ -73,7 +75,7 @@ function SignUp() {
               <TextField
                 variant="outlined"
                 margin="normal"
-                label="Last Name"
+                label={t("people.lastName")}
                 name="lastName"
                 fullWidth
                 inputRef={register}
@@ -90,7 +92,7 @@ function SignUp() {
           variant="outlined"
           margin="normal"
           fullWidth
-          label="Email"
+          label={t("people.email")}
           name="email"
           autoComplete="email"
           inputRef={register}
@@ -103,7 +105,7 @@ function SignUp() {
           variant="outlined"
           margin="normal"
           fullWidth
-          label="Username"
+          label={t("authPage.username")}
           name="username"
           inputRef={register}
         />
@@ -115,7 +117,7 @@ function SignUp() {
           <Grid container alignItems="flex-end" spacing={2}>
             <Grid item xs={12} md={6}>
               <TextField
-                label="Birthday"
+                label={t("people.birthday")}
                 name="dob"
                 type="date"
                 defaultValue="2000-05-24"
@@ -128,7 +130,9 @@ function SignUp() {
             </Grid>
             <Grid item xs={12} md={6}>
               <FormControl fullWidth>
-                <InputLabel htmlFor="signup_gender">Gender</InputLabel>
+                <InputLabel htmlFor="signup_gender">
+                  {t("people.gender")}
+                </InputLabel>
                 <Select
                   id="signup_gender"
                   native
@@ -136,8 +140,8 @@ function SignUp() {
                   defaultValue="male"
                   inputRef={register}
                 >
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
+                  <option value="male">{t("people.male")}</option>
+                  <option value="female">{t("people.female")}</option>
                 </Select>
               </FormControl>
             </Grid>
@@ -149,7 +153,7 @@ function SignUp() {
           margin="normal"
           fullWidth
           name="password"
-          label="Password"
+          label={t("authPage.password")}
           type="password"
           inputRef={register}
         />
@@ -161,7 +165,7 @@ function SignUp() {
           margin="normal"
           fullWidth
           name="retypePassword"
-          label="Retype Password"
+          label={t("authPage.passwordRetype")}
           type="password"
           inputRef={register}
         />
@@ -177,7 +181,7 @@ function SignUp() {
             pending={auth.isLoading}
             variant="outlined"
           >
-            Sign Up
+            {t("authPage.register")}
           </LoadingButton>
         </div>
       </form>

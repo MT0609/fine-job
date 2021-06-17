@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -34,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 export default function UpdateJob() {
   const classes = useStyles();
 
+  const { t } = useTranslation();
   useEffect(() => {
     const token = localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN);
     if (!token || !jwt_decode(token)?.sub) window.open("/jobs", "_self");
@@ -162,8 +164,8 @@ export default function UpdateJob() {
                 }}
               >
                 <p>
-                  &#10004; Update Job Successfully.{" "}
-                  <Link to="/talent">Go back to Talent Page</Link>
+                  &#10004; {t("job.updateSuccess")}{" "}
+                  <Link to="/talent">{t("job.backToTalentPage")}</Link>
                 </p>
               </Box>
             )}
@@ -179,8 +181,8 @@ export default function UpdateJob() {
                 }}
               >
                 <p>
-                  * Fail Updating Job{" "}
-                  <Link to="/talent">Go back to Talent Page</Link>
+                  * {t("job.updateFail")}{" "}
+                  <Link to="/talent">{t("job.backToTalentPage")}</Link>
                 </p>
               </Box>
             )}
@@ -194,7 +196,7 @@ export default function UpdateJob() {
                   <TextField
                     fullWidth
                     defaultValue={job.title}
-                    label="Title"
+                    label={t("job.titlePlaceholder")}
                     name="title"
                     inputRef={register}
                   />
@@ -206,7 +208,7 @@ export default function UpdateJob() {
                   <TextField
                     fullWidth
                     name="maxSalary"
-                    label="Max Salary"
+                    label={t("job.maxSalary")}
                     type="number"
                     defaultValue={job.maxSalary}
                     InputProps={{ inputProps: { min: 0 } }}
@@ -232,13 +234,13 @@ export default function UpdateJob() {
 
               <FormGroup style={{ marginTop: "1rem" }}>
                 <Typography variant="h6" style={{ textAlign: "left" }}>
-                  Job's Descriptions
+                  {t("job.description")}
                 </Typography>
                 <textarea
                   style={{ width: "100%", padding: "1rem" }}
                   rows={10}
                   defaultValue={job.description}
-                  placeholder="Some job's decriptions"
+                  placeholder={t("job.description")}
                   name="description"
                   ref={register}
                 />
@@ -272,7 +274,7 @@ export default function UpdateJob() {
                 <TextField
                   fullWidth
                   defaultValue={job.directApplyUrl}
-                  label="Direct Apply Url"
+                  label={t("job.directApplyUrl")}
                   name="directApplyUrl"
                   inputRef={register}
                 />
@@ -285,13 +287,13 @@ export default function UpdateJob() {
                 onClick={handleSubmit}
                 pending={state.isLoading}
               >
-                Update
+                {t("job.updateButton")}
               </LoadingButton>
             </form>
           </Container>
         </div>
       ) : (
-        <Typography variant="h5">Cannot Find Job</Typography>
+        <Typography variant="h5">{t("job.jobNotFound")}</Typography>
       )}
     </>
   );

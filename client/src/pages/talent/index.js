@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
@@ -19,6 +20,7 @@ import styles from "./index.module.scss";
 function TalentHomePage() {
   const state = useSelector((state) => state.job);
   const jobs = state?.jobs;
+  const { t } = useTranslation();
 
   const dispatch = useDispatch();
 
@@ -60,14 +62,14 @@ function TalentHomePage() {
                 variant="h5"
                 style={{ textAlign: "left", color: "blue", fontWeight: "bold" }}
               >
-                Post A Job
+                {t("job.post")}
               </Typography>
             </Grid>
             <Grid item>
               <Link to="/talent/post">
                 <Button>
                   <Add />
-                  Create Job
+                  {t("job.createButton")}
                 </Button>
               </Link>
             </Grid>
@@ -155,12 +157,12 @@ function TalentHomePage() {
             alt="oops"
           />
           <Typography variant="h5" style={{ marginBottom: "1rem" }}>
-            You do not have any posted job
+            {t("job.noPostedJob")}
           </Typography>
           <Link to="/talent/post">
             <Button>
               <Add />
-              Create job
+              {t("job.createButton")}
             </Button>
           </Link>
         </Paper>

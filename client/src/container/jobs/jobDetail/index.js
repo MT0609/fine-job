@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Avatar, Grid, Box } from "@material-ui/core";
 import { LocationOn, OpenInNew } from "@material-ui/icons";
 import JobApplyDialog from "../apply";
@@ -10,6 +11,7 @@ import styles from "./index.module.scss";
 function JobDetail(props) {
   const { job, onApply, onSave, onUnSave } = props;
 
+  const { t } = useTranslation();
   const user = useSelector((state) => state.auth);
   const [jobApplyDialogShow, setJobApplyDialogShow] = useState(false);
 
@@ -58,7 +60,7 @@ function JobDetail(props) {
               <p className={styles.detail__subheader}>
                 <span>Posted on: {new Date(job.posted).toDateString()}</span>
                 <span className={styles.detail__viewcount}>
-                  {job.viewCount} views
+                  {t("job.viewCount", { number: job.viewCount })}
                 </span>
               </p>
             </Grid>
@@ -107,7 +109,7 @@ function JobDetail(props) {
                       onClick={() => setJobApplyDialogShow(true)}
                       className={styles.detail__apply}
                     >
-                      Apply Now
+                      {t("job.apply")}
                     </button>
                     <JobApplyDialog
                       show={jobApplyDialogShow}
@@ -130,11 +132,11 @@ function JobDetail(props) {
                       onClick={onUnSaveJob}
                       className={styles.detail__save}
                     >
-                      Unsave
+                      {t("job.unSave")}
                     </button>
                   ) : (
                     <button onClick={onSaveJob} className={styles.detail__save}>
-                      Save
+                      {t("job.save")}
                     </button>
                   ))}
               </Box>
@@ -156,12 +158,12 @@ function JobDetail(props) {
             )}
 
             <div className={styles.detail__section}>
-              <p>Description</p>
+              <p>{t("job.description")}</p>
               <span>{job.description}</span>
             </div>
 
             <div className={styles.detail__section}>
-              <p>Skills</p>
+              <p> {t("job.skills")}</p>
               <ul className={styles.detail__list}>
                 {job.skills.length &&
                   job.skills.map((skill, index) => (
@@ -171,7 +173,7 @@ function JobDetail(props) {
             </div>
 
             <div className={styles.detail__section}>
-              <p>Employment Type</p>
+              <p> {t("job.employmentType")}</p>
               <ul className={styles.detail__list}>
                 {job.job.jobType.map((type, index) => (
                   <li key={index}>{type}</li>
@@ -180,7 +182,7 @@ function JobDetail(props) {
             </div>
 
             <div className={styles.detail__section}>
-              <p>Max Salary</p>
+              <p> {t("job.maxSalary")}</p>
               <span>{job.maxSalary}</span>
             </div>
           </section>

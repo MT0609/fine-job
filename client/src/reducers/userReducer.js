@@ -51,32 +51,38 @@ const userReducer = (state = initialState, action) => {
         isLoading: false,
       };
 
+    case USERCONSTANTS.USER_GET_CONNSTATUS_SUCCESS:
+      return {
+        ...state,
+        connectStatus: action.payload?.result,
+      };
+    case USERCONSTANTS.USER_GET_CONNSTATUS_FAIL:
+      return {
+        ...state,
+        connectStatus: null,
+      };
+
     case USERCONSTANTS.USER_SEND_REQ_SUCCESS:
       return {
         ...state,
-        connectStatus: USERCONSTANTS.USER_SEND_REQ_SUCCESS,
       };
     case USERCONSTANTS.USER_SEND_REQ_FAIL:
       return {
         ...state,
-        connectStatus: USERCONSTANTS.USER_SEND_REQ_FAIL,
       };
 
     case USERCONSTANTS.USER_DELETE_REQ_SUCCESS:
       return {
         ...state,
-        connectStatus: USERCONSTANTS.USER_DELETE_REQ_SUCCESS,
       };
 
     case USERCONSTANTS.USER_DELETE_FRIEND_FAIL:
       return {
         ...state,
-        connectStatus: USERCONSTANTS.USER_DELETE_FRIEND_FAIL,
       };
     case USERCONSTANTS.USER_DELETE_FRIEND_SUCCESS:
       return {
         ...state,
-        connectStatus: USERCONSTANTS.USER_DELETE_FRIEND_SUCCESS,
       };
 
     default:
