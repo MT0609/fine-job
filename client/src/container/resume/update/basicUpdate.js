@@ -1,5 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
@@ -11,6 +12,7 @@ import { CVBasicUpdateSchema } from "../../../utils/validation";
 
 export default function CVAboutUpdate(props) {
   const { data, open, onclose, onsubmit } = props;
+  const { t } = useTranslation();
 
   const { register, handleSubmit, errors } = useForm({
     resolver: yupResolver(CVBasicUpdateSchema),
@@ -27,14 +29,14 @@ export default function CVAboutUpdate(props) {
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle style={{ paddingBottom: 0 }}>
-        Edit contact information
+        {t("people.editBasicInfo")}
       </DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container style={{ marginBottom: "1rem" }} spacing={2}>
             <Grid item>
               <TextField
-                label="* First Name"
+                label={"* " + t("people.firstName")}
                 helperText={errors.firstName?.message}
                 name="firstName"
                 defaultValue={data?.firstName}
@@ -44,7 +46,7 @@ export default function CVAboutUpdate(props) {
             </Grid>
             <Grid item>
               <TextField
-                label="* Last Name"
+                label={"* " + t("people.lastName")}
                 helperText={errors.lastName?.message}
                 defaultValue={data?.lastName}
                 name="lastName"
@@ -57,7 +59,7 @@ export default function CVAboutUpdate(props) {
           <Grid container spacing={2}>
             <Grid item>
               <TextField
-                label="* Email"
+                label={"* " + t("people.email")}
                 name="email"
                 defaultValue={data?.email}
                 helperText={errors.email?.message}
@@ -67,7 +69,7 @@ export default function CVAboutUpdate(props) {
             </Grid>
             <Grid item>
               <TextField
-                label="* Phone"
+                label={"* " + t("people.phone")}
                 defaultValue={data?.phone}
                 helperText={errors.phone?.message}
                 name="phone"
@@ -79,10 +81,10 @@ export default function CVAboutUpdate(props) {
 
           <DialogActions>
             <Button onClick={handleClose} color="primary">
-              Cancel
+              {t("people.cancelButton")}
             </Button>
             <Button type="submit" color="primary">
-              Save
+              {t("people.saveButton")}
             </Button>
           </DialogActions>
         </form>

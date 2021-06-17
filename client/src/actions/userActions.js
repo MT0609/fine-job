@@ -69,6 +69,26 @@ export const updateUser = (data) => async (dispatch) => {
   }
 };
 
+export const getConnectionStatus = (userID) => async (dispatch) => {
+  try {
+    let result = await userApi.getConnStatus(userID);
+
+    if (!result) {
+      dispatch({ type: USERCONSTANTS.USER_GET_CONNSTATUS_FAIL });
+      return;
+    }
+
+    dispatch({
+      type: USERCONSTANTS.USER_GET_CONNSTATUS_SUCCESS,
+      payload: result,
+    });
+
+    return result;
+  } catch (error) {
+    dispatch({ type: USERCONSTANTS.USER_GET_CONNSTATUS_FAIL });
+  }
+};
+
 export const sendConnReq = (receiverID) => async (dispatch, getState) => {
   try {
     const senderID = getState().auth?.user?.id;
@@ -90,7 +110,8 @@ export const sendConnReq = (receiverID) => async (dispatch, getState) => {
       payload: result,
     });
 
-    dispatch(getProfileData(receiverID));
+    const result2 = await dispatch(getConnectionStatus(receiverID));
+    return result2;
   } catch (error) {
     dispatch({ type: USERCONSTANTS.USER_SEND_REQ_FAIL });
   }
@@ -112,7 +133,8 @@ export const acceptConnReq = (receiverID) => async (dispatch, getState) => {
       payload: result,
     });
 
-    dispatch(getProfileData(receiverID));
+    const result2 = await dispatch(getConnectionStatus(receiverID));
+    return result2;
   } catch (error) {
     dispatch({ type: USERCONSTANTS.USER_ACCEPT_FAIL });
   }
@@ -139,7 +161,8 @@ export const deleteConnReq = (receiverID) => async (dispatch, getState) => {
       payload: result,
     });
 
-    dispatch(getProfileData(receiverID));
+    const result2 = await dispatch(getConnectionStatus(receiverID));
+    return result2;
   } catch (error) {
     dispatch({ type: USERCONSTANTS.USER_DELETE_REQ_FAIL });
   }
@@ -147,7 +170,7 @@ export const deleteConnReq = (receiverID) => async (dispatch, getState) => {
 
 export const deleteFriend = (receiverID) => async (dispatch) => {
   try {
-    let result = await userApi.deleteFriend(receiverID);
+    const result = await userApi.deleteFriend(receiverID);
 
     if (!result) {
       dispatch({ type: USERCONSTANTS.USER_DELETE_FRIEND_FAIL });
@@ -159,7 +182,8 @@ export const deleteFriend = (receiverID) => async (dispatch) => {
       payload: result,
     });
 
-    dispatch(getProfileData(receiverID));
+    const result2 = await dispatch(getConnectionStatus(receiverID));
+    return result2;
   } catch (error) {
     dispatch({ type: USERCONSTANTS.USER_DELETE_FRIEND_FAIL });
   }

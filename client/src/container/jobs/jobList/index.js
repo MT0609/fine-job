@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Avatar, Grid, Typography, Divider } from "@material-ui/core";
 import { useMediaQuery } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
@@ -11,6 +12,8 @@ function JobList(props) {
   const { jobs = [], onclick, totalPage, currentPage, onPageChange } = props;
 
   const [jobSelection, setJobSelection] = useState(jobs[0]?.id || "");
+
+  const { t } = useTranslation();
 
   const theme = useTheme();
   const jobSelectHightlight = useMediaQuery(theme.breakpoints.up("sm"));
@@ -83,7 +86,9 @@ function JobList(props) {
                     Posted {timeDiff(new Date(job.posted), new Date())}
                   </span>
                   <span className={styles.jobList__applicantCount}>
-                    {job.job.applicantCount} applicants
+                    {t("job.applicantNumber", {
+                      number: job.job.applicantCount,
+                    })}
                   </span>
                 </p>
               </div>

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { Avatar, Divider, Grid } from "@material-ui/core";
 import Pagination from "@material-ui/lab/Pagination";
 import CircularLoading from "../../../components/loading/circular";
@@ -19,6 +20,8 @@ function CompaniesSearchResult(props) {
     onPageChange,
     loading = true,
   } = props;
+
+  const { t } = useTranslation();
 
   const auth = useSelector((state) => state.auth);
 
@@ -69,7 +72,7 @@ function CompaniesSearchResult(props) {
 
   return (
     <div className={styles.companies__container}>
-      <h3 className={styles.companies__header}>Companies</h3>
+      <h3 className={styles.companies__header}>{t("company.companies")}</h3>
       {!loading ? (
         companies.length > 0 ? (
           <>
@@ -108,7 +111,11 @@ function CompaniesSearchResult(props) {
                         {company.name}
                       </Link>
                       <p>{company.industry}</p>
-                      <p>{company.followers?.length} followers</p>
+                      <p>
+                        {t("company.followNumber", {
+                          number: company.followers?.length,
+                        })}
+                      </p>
                     </Grid>
 
                     <Grid item md style={{ textAlign: "right" }}>
@@ -125,14 +132,14 @@ function CompaniesSearchResult(props) {
                             className={`${styles.companies__button} ${styles["companies__button--gray"]}`}
                             onClick={() => handleUnFollowCompany(company.id)}
                           >
-                            Following
+                            <p>{t("company.following")}</p>
                           </button>
                         ) : (
                           <button
                             className={`${styles.companies__button} ${styles["companies__button--blue"]}`}
                             onClick={() => handleFollowCompany(company.id)}
                           >
-                            Follow
+                            <p>{t("company.follow")}</p>
                           </button>
                         ))}
                     </Grid>
@@ -155,7 +162,7 @@ function CompaniesSearchResult(props) {
             )}
           </>
         ) : (
-          <p>No Companies Found</p>
+          <p>{t("company.noCompany")}</p>
         )
       ) : (
         <CircularLoading />

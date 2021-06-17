@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Grid, TextField, IconButton } from "@material-ui/core";
 import { Send } from "@material-ui/icons";
 
 export default function Input({ sendMessage }) {
   const [input, setInput] = useState("");
+  const { t } = useTranslation();
 
   const send = () => {
     if (!input) return;
@@ -23,7 +25,7 @@ export default function Input({ sendMessage }) {
             disableUnderline: true,
           }}
           value={input}
-          placeholder="Type a message..."
+          placeholder={t("message.type")}
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={(e) => (e.key === "Enter" ? send() : null)}
         />

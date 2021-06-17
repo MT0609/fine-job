@@ -1,23 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import jwt_decode from "jwt-decode";
 import { Box, Button, Tooltip, Grid, Typography } from "@material-ui/core";
 import { GridList, GridListTile } from "@material-ui/core";
 import { PersonAdd, RemoveCircle, Edit, LocationOn } from "@material-ui/icons";
-import {
-  getProfileData,
-  updateUser,
-  sendConnReq,
-  acceptConnReq,
-  deleteFriend,
-  deleteConnReq,
-} from "../../actions/userActions";
+import * as userActions from "../../actions/userActions";
 import { getUserData } from "../../actions/authActions";
 import { getMessage } from "../../actions/messageActions";
-import * as USERCONSTANTS from "../../constants/userConstants";
 import ProfileUpdate from "../../container/profile/update";
-import { connectStatus } from "../../utils/connectStatus";
 import styles from "./index.module.scss";
 
 function Profile() {
@@ -27,37 +19,38 @@ function Profile() {
     localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN)
   )?.sub;
 
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getProfileData(id));
+    dispatch(userActions.getProfileData(id));
+    dispatch(userActions.getConnectionStatus(id));
   }, [id, dispatch]);
-
-  const myInfo = useSelector((state) => state.auth?.user);
 
   const userState = useSelector((state) => state.user);
   const user = userState.user;
 
+  console.log(user);
   const [profileUpdateShow, setProfileUpdateShow] = useState(false);
 
   const handleSendConnection = () => {
-    dispatch(sendConnReq(id));
+    dispatch(userActions.sendConnReq(id));
   };
 
   const handleAcceptFriend = () => {
-    dispatch(acceptConnReq(id));
+    dispatch(userActions.acceptConnReq(id));
   };
 
   const handleIgnore = () => {
-    dispatch(deleteConnReq(id));
+    dispatch(userActions.deleteConnReq(id));
   };
 
   const handleDeleteFriend = () => {
-    dispatch(deleteFriend(id));
+    dispatch(userActions.deleteFriend(id));
   };
 
   const handleUpdate = async (data) => {
-    const result = await dispatch(updateUser(data));
+    const result = await dispatch(userActions.updateUser(data));
     if (result?.result) {
       setProfileUpdateShow(false);
       dispatch(getUserData());
@@ -67,8 +60,6 @@ function Profile() {
   const handleGetMessage = () => {
     dispatch(getMessage(id));
   };
-
-  console.log(connectStatus(myInfo, user));
 
   return (
     <div className={styles.profile__container}>
@@ -99,11 +90,8 @@ function Profile() {
             <div className={styles.profile__connect}>
               {id !== myID && (
                 <>
-                  {connectStatus(myInfo, user) === "CONNECTED" && (
-                    <Tooltip
-                      title="Remove Connection"
-                      placement="bottom-center"
-                    >
+                  {userState.connectStatus?.type === "friend" && (
+                    <Tooltip title={t("people.remove")} placement="bottom">
                       <Button
                         onClick={handleDeleteFriend}
                         className={`${styles["profile__connect__button"]}`}
@@ -113,43 +101,41 @@ function Profile() {
                     </Tooltip>
                   )}
 
-                  {connectStatus(myInfo, user) === "ME_WAIT_FOR_ACCEPT" && (
+                  {userState.connectStatus?.type === "connSent" && (
                     <button
                       className={`${styles["profile__connect__button"]} ${styles["profile__connect--disabled"]}`}
                     >
                       <PersonAdd fontSize="small" />
                       <span className={`${styles["profile__connect__text"]}`}>
-                        Pending
+                        {t("people.pending")}
                       </span>
                     </button>
                   )}
 
-                  {connectStatus(myInfo, user) === "PARTNER_WAIT_FOR_ACCEPT" &&
-                    userState.connectStatus !==
-                      USERCONSTANTS.USER_DELETE_REQ_SUCCESS && (
-                      <>
-                        <button
-                          className={`${styles["profile__connect__button"]} ${styles["profile__connect--active"]}`}
-                          onClick={handleAcceptFriend}
-                        >
-                          Accept
-                        </button>
+                  {userState.connectStatus?.type === "waitForRespond" && (
+                    <>
+                      <button
+                        className={`${styles["profile__connect__button"]} ${styles["profile__connect--active"]}`}
+                        onClick={handleAcceptFriend}
+                      >
+                        {t("people.accept")}
+                      </button>
 
-                        <button
-                          className={`${styles["profile__connect__button"]} ${styles["profile__connect--ignore"]}`}
-                          onClick={handleIgnore}
-                        >
-                          Ignore
-                        </button>
-                      </>
-                    )}
+                      <button
+                        className={`${styles["profile__connect__button"]} ${styles["profile__connect--ignore"]}`}
+                        onClick={handleIgnore}
+                      >
+                        {t("people.ignore")}
+                      </button>
+                    </>
+                  )}
 
-                  {connectStatus(myInfo, user) === "NOT_CONNECTED" && (
+                  {userState.connectStatus?.type === "noConn" && (
                     <button
                       className={`${styles["profile__connect__button"]} ${styles["profile__connect--active"]}`}
                       onClick={handleSendConnection}
                     >
-                      Connect
+                      {t("people.connect")}
                     </button>
                   )}
 
@@ -157,7 +143,7 @@ function Profile() {
                     className={`${styles["profile__connect__button"]} ${styles["profile__connect--message"]} ${styles["profile__connect--largescreen"]}`}
                     onClick={handleGetMessage}
                   >
-                    Message
+                    {t("people.message")}
                   </button>
 
                   <button
@@ -167,7 +153,7 @@ function Profile() {
                       style={{ color: "white", textDecoration: "none" }}
                       to="/messages"
                     >
-                      Message
+                      {t("people.message")}
                     </Link>
                   </button>
                 </>
@@ -192,17 +178,21 @@ function Profile() {
 
                   <p className={styles.profile__basicInfoSpan}>
                     {user.contact?.email && (
-                      <span>Email: {user.contact?.email}</span>
+                      <span>
+                        {t("people.email")}: {user.contact?.email}
+                      </span>
                     )}
                     {user.contact?.phone && (
-                      <span>Phone: {user.contact?.phone}</span>
+                      <span>
+                        {t("people.phone")}: {user.contact?.phone}
+                      </span>
                     )}
                   </p>
 
                   <p className={styles.profile__basicInfoSpan}>
                     {user.baseInfo?.dob && (
                       <span>
-                        Birthday:{" "}
+                        {t("people.birthday")}:{" "}
                         {new Date(user.baseInfo?.dob).toLocaleDateString()}
                       </span>
                     )}
@@ -218,7 +208,7 @@ function Profile() {
                       }}
                       href="/resume"
                     >
-                      Resume Collection
+                      {t("resume.myResumes")}
                     </Button>
                   )}
                 </Grid>
@@ -246,7 +236,7 @@ function Profile() {
           <section className={styles.profile__section}>
             <Grid container alignItems="center" justify="space-between">
               <Grid item>
-                <Typography variant="h5">About</Typography>
+                <Typography variant="h5">{t("people.about")}</Typography>
               </Grid>
               <Grid item>
                 {id === myID && (
@@ -264,7 +254,7 @@ function Profile() {
           <section className={styles.profile__section}>
             <Grid container alignItems="center" justify="space-between">
               <Grid item>
-                <Typography variant="h5">Education</Typography>
+                <Typography variant="h5">{t("people.education")}</Typography>
               </Grid>
               <Grid item>
                 {id === myID && (
@@ -284,7 +274,7 @@ function Profile() {
           <section className={styles.profile__section}>
             <Grid container alignItems="center" justify="space-between">
               <Grid item>
-                <Typography variant="h5">Skills</Typography>
+                <Typography variant="h5">{t("people.skills")}</Typography>
               </Grid>
               <Grid item>
                 {id === myID && (
@@ -296,7 +286,6 @@ function Profile() {
                 )}
               </Grid>
             </Grid>
-
             <GridList cols={3} spacing={10}>
               {user.skill?.map((skill, index) => (
                 <GridListTile style={{ height: "fit-content" }} key={index}>

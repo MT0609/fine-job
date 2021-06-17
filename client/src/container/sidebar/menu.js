@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { Divider, Drawer } from "@material-ui/core";
 import {
   ListItem,
@@ -20,6 +21,8 @@ import { signOut } from "./../../actions/authActions";
 
 function SidebarMenu(props) {
   const { show = false, onclose, auth } = props;
+
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const onSidebarClose = () => {
@@ -42,7 +45,7 @@ function SidebarMenu(props) {
             <ListItemIcon>
               <PeopleAlt />
             </ListItemIcon>
-            <ListItemText primary="My Network" />
+            <ListItemText primary={t("header.network")} />
           </ListItem>
         </Link>
         <Divider />
@@ -51,7 +54,7 @@ function SidebarMenu(props) {
             <ListItemIcon>
               <Work />
             </ListItemIcon>
-            <ListItemText primary="Jobs" />
+            <ListItemText primary={t("header.userMenu.job")} />
           </ListItem>
         </Link>
         <Divider />
@@ -60,7 +63,7 @@ function SidebarMenu(props) {
             <ListItemIcon>
               <Chat />
             </ListItemIcon>
-            <ListItemText primary="Messages" />
+            <ListItemText primary={t("header.message")} />
           </ListItem>
         </Link>
         <Divider />
@@ -70,7 +73,7 @@ function SidebarMenu(props) {
               <ListItemIcon>
                 <AccountCircle />
               </ListItemIcon>
-              <ListItemText primary="Login/Register" />
+              <ListItemText primary={t("header.userMenu.auth")} />
             </ListItem>
           </Link>
         ) : (
@@ -83,7 +86,7 @@ function SidebarMenu(props) {
                 <ListItemIcon>
                   <AccountCircle />
                 </ListItemIcon>
-                <ListItemText primary="My Profile" />
+                <ListItemText primary={t("header.userMenu.profile")} />
               </ListItem>
             </Link>
             <Divider />
@@ -91,7 +94,7 @@ function SidebarMenu(props) {
               <ListItemIcon>
                 <ExitToApp />
               </ListItemIcon>
-              <ListItemText primary="Sign Out" />
+              <ListItemText primary={t("header.userMenu.signOut")} />
             </ListItem>
           </>
         )}

@@ -1,0 +1,111 @@
+{
+	"header": {
+		"searchBar": "搜索...",
+		"network": "人脉",
+		"job": "职位",
+		"message": "消息",
+		"auth": "登录/注册",
+		"me": "我",
+		"language": "中文",
+		"userMenu": {
+			"profile": "个人主页",
+			"talent": "职位发布",
+			"job": "我的职位",
+			"signOut": "退出"
+		}
+	},
+	"filterBar": {
+		"all": "全部",
+		"people": "联系人",
+		"job": "职位",
+		"company": "公司"
+	},
+	"people": {
+		"people": "联系人",
+		"connect": "邀请",
+		"pending": "已邀请",
+		"accept": "接受",
+		"ignore": "忽略",
+		"connected": "好友",
+		"remove": "删除好友",
+		"message": "发消息",
+		"friendNumber": "{{number}} 位好友",
+		"noUser": "没有结果",
+		"contactInfo": "联系方式",
+		"editBasicInfo": "编辑简介",
+		"firstName": "名",
+		"lastName": "姓",
+		"email": "电子邮件",
+		"phone": "电话号码",
+		"gender": "性别",
+		"male": "男性",
+		"female": "女性",
+		"birthday": "生日",
+		"about": "关于我",
+		"education": "教育",
+		"skills": "技能",
+		"cancelButton": "取消",
+		"saveButton": "保存"
+	},
+	"company": {
+		"companies": "公司",
+		"follow": "关注",
+		"following": "已关注",
+		"followNumber": "{{number}} 位关注者",
+		"noCompany": "没有结果"
+	},
+	"job": {
+		"searchPlaceholder": "搜索职位...",
+		"searchButton": "搜索",
+		"myJobs": "我的职位",
+		"apply": "申请",
+		"save": "保存",
+		"unSave": "取消保存",
+		"titlePlaceholder": "职位标题",
+		"description": "描述",
+		"skills": "技能",
+		"employmentType": "雇佣类型",
+		"maxSalary": "上限工资",
+		"applicantNumber": "{{number}} 位申请者",
+		"viewCount": "{{number}} 位已看",
+		"post": "发布职位",
+		"postSuccess": "发布成功",
+		"postFail": "发布失败",
+		"updateSuccess": "更新成功",
+		"updateFail": "更新失败",
+		"backToTalentPage": "返回工作发布列表",
+		"noPostedJob": "没有任何工作发布",
+		"createButton": "造新",
+		"updateButton": "更新",
+		"directApplyUrl": "直接申请网址",
+		"jobNotFound": "找不到工作!"
+	},
+	"message": {
+		"messages": "消息",
+		"noMessages": "没有任何消息",
+		"type": "写消息",
+		"deleteConversation": "删除对话"
+	},
+	"resume": {
+		"enterTitle": "输入简历标题",
+		"titlePlaceholder": "标题",
+		"myResumes": "我的个人简历收藏",
+		"empty": "没有任何个人简历",
+		"uploadCondition": "个人简历 - 接受 DOC, DOCX, PDF (上限 5MB)",
+		"uploadButton": "上传",
+		"create": "造个人简历",
+		"cancelButton": "取消",
+		"submit": "完成"
+	},
+	"authPage": {
+		"login": "帐号登录",
+		"register": "注册",
+		"username": "登录名",
+		"password": "密码",
+		"passwordRetype": "确认密码",
+		"forgot": "忘记密码",
+		"loginFail": "登录名或者密码不准确",
+		"signUpSuccess": "注册成功",
+		"emailUsed": "电子邮件已被使用!"
+	}
+}

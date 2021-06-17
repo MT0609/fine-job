@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Avatar, Box, Divider, Typography } from "@material-ui/core";
 import { useSelector } from "react-redux";
 import CircularLoading from "../../../components/loading/circular";
 import styles from "./index.module.scss";
 
 function MessageList({ isLoading = false, messages = [], onMessageClick }) {
+  const { t } = useTranslation();
   const auth = useSelector((state) => state.auth);
 
   const [messageListEnlarge, SetMessageListEnlarge] = useState(false);
@@ -48,7 +50,7 @@ function MessageList({ isLoading = false, messages = [], onMessageClick }) {
           <p style={{ fontWeight: "bold" }}>
             {auth.user?.baseInfo?.firstName} {auth.user?.baseInfo?.lastName}
           </p>
-          <p>Messages</p>
+          <p>{t("message.messages")}</p>
         </Box>
       </Box>
 

@@ -1,11 +1,12 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { Grid, Avatar, Divider } from "@material-ui/core";
-import { LocationOn } from "@material-ui/icons";
+import { useSelector, useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { Grid, Avatar, Tooltip, Button, Divider } from "@material-ui/core";
+import { LocationOn, RemoveCircle } from "@material-ui/icons";
 import Pagination from "@material-ui/lab/Pagination";
 import CircularLoading from "../../../components/loading/circular";
-import { connectStatus } from "../../../utils/connectStatus";
+import * as userActions from "../../../actions/userActions";
 import styles from "./index.module.scss";
 
 function PeopleSearchResult(props) {
@@ -17,7 +18,73 @@ function PeopleSearchResult(props) {
     loading = true,
   } = props;
 
+  const { t } = useTranslation();
+
+  const dispatch = useDispatch();
+
   const auth = useSelector((state) => state.auth);
+
+  const [connectStatusList, setConnectStatusList] = useState([]);
+  useEffect(() => {
+    async function getConnectStatusList() {
+      let connectionStatusList = [];
+      if (people.length > 0) {
+        connectionStatusList = await Promise.all(
+          people.map((user) => {
+            if (user.id === auth.user?.id) return { type: "" };
+            return dispatch(userActions.getConnectionStatus(user.id))
+              .then((result) => {
+                return result.result;
+              })
+              .catch((err) => {
+                console.log(err);
+                return { type: "" };
+              });
+          })
+        );
+      }
+      return connectionStatusList;
+    }
+
+    auth.isAuth &&
+      getConnectStatusList().then((result) => setConnectStatusList(result));
+  }, [people, auth.isAuth]);
+
+  const handleSendConnection = (connectionListIndex, userID) => {
+    if (userID === auth.user?.id) return;
+    dispatch(userActions.sendConnReq(userID)).then((result) => {
+      let newConnectStatusList = [...connectStatusList];
+      newConnectStatusList[connectionListIndex] = result.result;
+      setConnectStatusList(newConnectStatusList);
+    });
+  };
+
+  const handleAcceptFriend = (connectionListIndex, userID) => {
+    if (userID === auth.user?.id) return;
+    dispatch(userActions.acceptConnReq(userID)).then((result) => {
+      let newConnectStatusList = [...connectStatusList];
+      newConnectStatusList[connectionListIndex] = result.result;
+      setConnectStatusList(newConnectStatusList);
+    });
+  };
+
+  const handleIgnore = (connectionListIndex, userID) => {
+    if (userID === auth.user?.id) return;
+    dispatch(userActions.deleteConnReq(userID)).then((result) => {
+      let newConnectStatusList = [...connectStatusList];
+      newConnectStatusList[connectionListIndex] = result.result;
+      setConnectStatusList(newConnectStatusList);
+    });
+  };
+
+  const handleDeleteFriend = (connectionListIndex, userID) => {
+    if (userID === auth.user?.id) return;
+    dispatch(userActions.deleteFriend(userID)).then((result) => {
+      let newConnectStatusList = [...connectStatusList];
+      newConnectStatusList[connectionListIndex] = result.result;
+      setConnectStatusList(newConnectStatusList);
+    });
+  };
 
   const usePrevious = (value) => {
     const ref = useRef();
@@ -34,11 +101,11 @@ function PeopleSearchResult(props) {
 
   return (
     <div className={styles.people__container}>
-      <h3 className={styles.people__header}>People</h3>
+      <h3 className={styles.people__header}>{t("people.people")}</h3>
       {!loading ? (
         people.length > 0 ? (
           <>
-            {people.map((user) => (
+            {people.map((user, index) => (
               <div key={user.id} className={styles.people__item}>
                 <div>
                   <Grid
@@ -75,59 +142,71 @@ function PeopleSearchResult(props) {
                         <span>{user.baseInfo.locations || "Location"}</span>
                       </p>
                       <p className={styles.people__connections}>
-                        {user.connections.length} connections
+                        {t("people.friendNumber", {
+                          number: user.connections.length,
+                        })}
                       </p>
                     </Grid>
                     <Grid item md style={{ textAlign: "right" }}>
-                      {
-                        // write component to show connect status
-                      }
-                      {/* {auth?.isAuth && (
+                      {auth?.isAuth && (
                         <>
-                          {connectStatus(auth.user, user) ===
-                            "NOT_CONNECTED" && (
+                          {connectStatusList[index]?.type === "noConn" && (
                             <button
                               className={`${styles["people__button"]} ${styles["people__button--blue"]}`}
+                              onClick={() =>
+                                handleSendConnection(index, user.id)
+                              }
                             >
-                              Connect
+                              {t("people.connect")}
                             </button>
                           )}
-                          {connectStatus(auth.user, user) === "CONNECTED" && (
-                            <button
-                              className={`${styles["people__button"]} ${styles["people__button--gray"]}`}
+                          {connectStatusList[index]?.type === "friend" && (
+                            <Tooltip
+                              title={t("people.remove")}
+                              placement="bottom"
                             >
-                              Remove Connection
-                            </button>
+                              <Button
+                                onClick={() =>
+                                  handleDeleteFriend(index, user.id)
+                                }
+                                className={`${styles["people__button"]}`}
+                              >
+                                <RemoveCircle />
+                              </Button>
+                            </Tooltip>
                           )}
-                          {connectStatus(auth.user, user) ===
-                            "PARTNER_WAIT_FOR_ACCEPT" && (
+                          {connectStatusList[index]?.type ===
+                            "waitForRespond" && (
                             <Grid container spacing={1}>
                               <Grid item xs={6} md={12}>
                                 <button
                                   className={`${styles["people__button"]} ${styles["people__button--blue"]}`}
+                                  onClick={() =>
+                                    handleAcceptFriend(index, user.id)
+                                  }
                                 >
-                                  Accept
+                                  {t("people.accept")}
                                 </button>
                               </Grid>
                               <Grid item md={12}>
                                 <button
                                   className={`${styles["people__button"]} ${styles["people__button--gray"]}`}
+                                  onClick={() => handleIgnore(index, user.id)}
                                 >
-                                  Ignore
+                                  {t("people.ignore")}
                                 </button>
                               </Grid>
                             </Grid>
                           )}
-                          {connectStatus(auth.user, user) ===
-                            "ME_WAIT_FOR_ACCEPT" && (
+                          {connectStatusList[index]?.type === "connSent" && (
                             <button
                               className={`${styles["people__button"]} ${styles["people__button--gray"]} ${styles["people__button--disable"]}`}
                             >
-                              Pending
+                              {t("people.pending")}
                             </button>
                           )}
                         </>
-                      )} */}
+                      )}
                     </Grid>
                   </Grid>
                 </div>
@@ -148,7 +227,7 @@ function PeopleSearchResult(props) {
             )}
           </>
         ) : (
-          <p>No Users Found</p>
+          <p> {t("people.noUser")}</p>
         )
       ) : (
         <CircularLoading />

@@ -1,0 +1,111 @@
+{
+	"header": {
+		"searchBar": "Search...",
+		"network": "My Network",
+		"job": "Jobs",
+		"message": "Messages",
+		"auth": "Login/Register",
+		"me": "Me",
+		"language": "Eng",
+		"userMenu": {
+			"profile": "My Profile",
+			"talent": "Manage Posting Job",
+			"job": "My Job",
+			"signOut": "Sign Out"
+		}
+	},
+	"filterBar": {
+		"all": "All",
+		"people": "People",
+		"job": "Jobs",
+		"company": "Companies"
+	},
+	"people": {
+		"people": "People",
+		"connect": "Connect",
+		"pending": "Pending",
+		"accept": "Accept",
+		"ignore": "Ignore",
+		"connected": "Connected",
+		"remove": "Remove Connection",
+		"message": "Message",
+		"friendNumber": "{{number}} connections",
+		"noUser": "No Users Found",
+		"contactInfo": "Contact Information",
+		"editBasicInfo": "Edit basic information",
+		"firstName": "First Name",
+		"lastName": "Last Name",
+		"email": "Email",
+		"phone": "Phone",
+		"gender": "Gender",
+		"male": "Male",
+		"female": "Female",
+		"birthday": "Birthday",
+		"about": "About",		
+		"education": "Education",
+		"skills": "Skills",
+		"cancelButton": "Cancel",
+		"saveButton": "Save"
+	},
+	"company": {
+		"companies": "companies",
+		"follow": "Follow",
+		"following": "Following",
+		"followNumber": "{{number}} follows",
+		"noCompany": "No Companies Found"
+	},
+	"job": {
+		"searchPlaceholder": "Search Jobs...",
+		"searchButton": "Search",
+		"myJobs": "My Jobs",
+		"apply": "Apply",
+		"save": "Save",
+		"unSave": "Unsave",
+		"titlePlaceholder": "Title",
+		"description": "Description",
+		"skills": "Skills",
+		"employmentType": "Employment Type",
+		"maxSalary": "Max Salary",
+		"applicantNumber": "{{number}} applicants",
+		"viewCount": "{{number}} views",
+		"post": "Post A Job",
+		"postSuccess": "Post Job Successfully",
+		"postFail": "Fail Posting Job",
+		"updateSuccess": "Update Job Successfully",
+		"updateFail": "Fail Updating Job",
+		"backToTalentPage": "Go back to Talent Page",
+		"noPostedJob": "You do not have any posted job",
+		"createButton": "Create",
+		"updateButton": "Update",
+		"directApplyUrl": "Direct Apply Url",
+		"jobNotFound": "Cannot Find Job"
+	},
+	"message": {
+		"messages": "Messages",
+		"noMessages": "No messages",
+		"type": "Type a message",
+		"deleteConversation": "Delete Conversation"
+	},
+	"resume": {
+		"enterTitle": "Enter CV's Title",
+		"titlePlaceholder": "Title",
+		"myResumes": "My Resumes",
+		"empty": "Your Resume List is Empty",
+		"uploadCondition": "Resume - type: DOC, DOCX, PDF (maximum 5 MB)",
+		"uploadButton": "Upload File",
+		"create": "Create A Resume",
+		"cancelButton": "Cancel",
+		"submit": "Create"
+	},
+	"authPage": {
+		"login": "Login",
+		"register": "Register",
+		"username": "Username",
+		"password": "Password",
+		"passwordRetype": "Confirm Password",
+		"forgot": "Forgot Password",
+		"loginFail": "Username or Password not correct",
+		"signUpSuccess": "Register Successfully",
+		"emailUsed": "Email has been used!"
+	}
+}

@@ -1,8 +1,11 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import styles from "./index.module.scss";
 
 function FilterBar(props) {
   const { option = "", onclick } = props;
+
+  const { t } = useTranslation();
 
   const handleClick = (cate) => {
     if (onclick) onclick(cate);
@@ -15,7 +18,7 @@ function FilterBar(props) {
         }`}
         onClick={() => handleClick("")}
       >
-        All
+        {t("filterBar.all")}
       </button>
       <button
         className={`${styles["filters__button"]} ${
@@ -23,7 +26,7 @@ function FilterBar(props) {
         }`}
         onClick={() => handleClick("people")}
       >
-        People
+        {t("filterBar.people")}
       </button>
       <button
         className={`${styles["filters__button"]} ${
@@ -31,7 +34,7 @@ function FilterBar(props) {
         }`}
         onClick={() => handleClick("job")}
       >
-        Jobs
+        {t("filterBar.job")}
       </button>
       <button
         className={`${styles["filters__button"]} ${
@@ -39,7 +42,7 @@ function FilterBar(props) {
         }`}
         onClick={() => handleClick("company")}
       >
-        Companies
+        {t("filterBar.company")}
       </button>
     </div>
   );

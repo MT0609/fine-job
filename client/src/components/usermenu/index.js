@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { withStyles } from "@material-ui/core/styles";
 import {
   Menu,
@@ -43,6 +44,8 @@ const StyledMenu = withStyles({
 function UserSubMenu(props) {
   const { user, anchorEl, open, onclose } = props;
 
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
 
   const handleClose = () => {
@@ -76,7 +79,7 @@ function UserSubMenu(props) {
             <ListItemIcon>
               <AccountBox fontSize="small" />
             </ListItemIcon>
-            <ListItemText primary="My Profile" />
+            <ListItemText primary={t("header.userMenu.profile")} />
           </MenuItem>
         </Link>
         <Link to={`/talent`}>
@@ -86,7 +89,7 @@ function UserSubMenu(props) {
             >
               <PostAdd fontSize="small" />
             </ListItemIcon>
-            <ListItemText primary="Manage Posting Job" />
+            <ListItemText primary={t("header.userMenu.talent")} />
           </MenuItem>
         </Link>
         <Link to={`/jobs/my-jobs`}>
@@ -96,14 +99,14 @@ function UserSubMenu(props) {
             >
               <Work fontSize="small" />
             </ListItemIcon>
-            <ListItemText primary="My Jobs" />
+            <ListItemText primary={t("header.userMenu.job")} />
           </MenuItem>
         </Link>
         <MenuItem onClick={onSignOutClick}>
           <ListItemIcon>
             <ExitToApp fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary="Sign Out" />
+          <ListItemText primary={t("header.userMenu.signOut")} />
         </MenuItem>
       </StyledMenu>
     </>

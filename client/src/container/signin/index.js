@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Typography, TextField, Link, Container, Box } from "@material-ui/core";
@@ -9,7 +10,6 @@ import { signIn } from "../../actions/authActions";
 import { SignInSchema } from "../../utils/validation";
 import { ROUTES } from "../../constants/routes";
 import * as AUTHCONSTANTS from "../../constants/authConstants";
-
 import styles from "./signIn.module.scss";
 
 function SignIn() {
@@ -17,6 +17,7 @@ function SignIn() {
     resolver: yupResolver(SignInSchema),
   });
 
+  const { t } = useTranslation();
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -39,7 +40,7 @@ function SignIn() {
           <Typography
             style={{ textAlign: "left", color: "red", fontStyle: "italic" }}
           >
-            * Username or Password Not Correct
+            * {t("authPage.loginFail")}
           </Typography>
         )}
 
@@ -47,7 +48,7 @@ function SignIn() {
           variant="outlined"
           margin="normal"
           fullWidth
-          label="Username"
+          label={t("authPage.username")}
           name="username"
           autoFocus
           inputRef={register}
@@ -61,7 +62,7 @@ function SignIn() {
           margin="normal"
           fullWidth
           name="password"
-          label="Password"
+          label={t("authPage.password")}
           type="password"
           inputRef={register}
         />
@@ -71,7 +72,7 @@ function SignIn() {
 
         <Box style={{ textAlign: "right" }}>
           <Link href={ROUTES.forgot} variant="body2">
-            Forgot Password
+            {t("authPage.forgot")}
           </Link>
         </Box>
 
@@ -95,7 +96,7 @@ function SignIn() {
             pending={auth.isLoading}
             variant="outlined"
           >
-            Log In
+            {t("authPage.login")}
           </LoadingButton>
         </div>
       </form>

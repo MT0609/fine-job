@@ -13,6 +13,10 @@ const userApi = {
     const url = `/v1/users/${userID}`;
     return axiosClient.patch(url, data);
   },
+  getConnStatus: (userID) => {
+    const url = `/v1/users/${userID}/getConnStatus`;
+    return axiosClient.get(url);
+  },
   sendConnReq: (receiverID, urlBody) => {
     const url = `/v1/users/${receiverID}/sendConnReq`;
     return axiosClient.post(url, urlBody);
