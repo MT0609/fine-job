@@ -269,7 +269,7 @@ function ResumeUpdate() {
                 >
                   <Edit />
                 </Button>
-                <CVSkillUpdate
+                {/* <CVSkillUpdate
                   allSkills={JOBSKILLS}
                   userSkills={cv.userSnapShort.skills}
                   open={updateDialog.skills}
@@ -280,16 +280,16 @@ function ResumeUpdate() {
                     }))
                   }
                   onsubmit={handleUpdate}
-                />
+                /> */}
               </Grid>
             </Grid>
             <span>
-              {cv.userSnapShort.skills.map((skill, index) => {
+              {/* {cv.userSnapShort.skills.map((skill, index) => {
                 let skillStr = skill;
                 if (index !== cv.userSnapShort.skills.length - 1)
                   skillStr += ", ";
                 return skillStr;
-              })}
+              })} */}
             </span>
           </section>
 

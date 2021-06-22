@@ -1,9 +1,11 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { TextField, Box } from "@material-ui/core";
 
 function JobTypeAutoComplete(props) {
   const { types, selectedTypes = [], onchange, error, setError } = props;
+  const { t } = useTranslation();
 
   return (
     <>
@@ -23,9 +25,8 @@ function JobTypeAutoComplete(props) {
             {...params}
             variant="outlined"
             size="small"
-            label="Job Types"
+            label={t("job.employmentType")}
             name="skills"
-            placeholder="Choose job types"
           />
         )}
       />

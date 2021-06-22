@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { Container, Grid, Typography, useMediaQuery } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
 import SearchJobBar from "../../components/search/searchJob";
@@ -25,7 +26,7 @@ function Jobs() {
   const page = new URLSearchParams(search).get("page") || 1;
   const cate = new URLSearchParams(search).get("cate") || "job";
   const history = useHistory();
-
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -196,7 +197,7 @@ function Jobs() {
             src="https://static-exp1.licdn.com/sc/h/63bdabma35siijudbohu19qxi"
           />
           <Typography variant="h6" style={{ marginTop: "1rem" }}>
-            No matching jobs found
+            {t("job.noJobsFound")}
           </Typography>
         </Container>
       )}

@@ -67,7 +67,9 @@ function SignUp() {
                 autoFocus
               />
               <Box className={styles.error}>
-                {errors.firstName && <span>* {errors.firstName.message}</span>}
+                {errors.firstName && (
+                  <span>* {t(errors.firstName.message)}</span>
+                )}
               </Box>
             </Grid>
 
@@ -82,7 +84,7 @@ function SignUp() {
                 autoFocus
               />
               <Box className={styles.error}>
-                {errors.lastName && <span>* {errors.lastName.message}</span>}
+                {errors.lastName && <span>* {t(errors.lastName.message)}</span>}
               </Box>
             </Grid>
           </Grid>
@@ -98,7 +100,7 @@ function SignUp() {
           inputRef={register}
         />
         <Box className={styles.error}>
-          {errors.email && <span>* {errors.email.message}</span>}
+          {errors.email && <span>* {t(errors.email.message)}</span>}
         </Box>
 
         <TextField
@@ -110,7 +112,7 @@ function SignUp() {
           inputRef={register}
         />
         <Box className={styles.error}>
-          {errors.username && <span>* {errors.username.message}</span>}
+          {errors.username && <span>* {t(errors.username.message)}</span>}
         </Box>
 
         <FormGroup row>
@@ -158,7 +160,7 @@ function SignUp() {
           inputRef={register}
         />
         <Box className={styles.error}>
-          {errors.password && <span>* {errors.password.message}</span>}
+          {errors.password && <span>* {t(errors.password.message)}</span>}
         </Box>
         <TextField
           variant="outlined"
@@ -171,7 +173,7 @@ function SignUp() {
         />
         <Box className={styles.error}>
           {errors.retypePassword && (
-            <span>* {errors.retypePassword.message}</span>
+            <span>* {t(errors.retypePassword.message)}</span>
           )}
         </Box>
         <div className={styles.submitButton}>

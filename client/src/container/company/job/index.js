@@ -1,9 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Avatar, Box, Grid, IconButton, Paper } from "@material-ui/core";
 import { BookmarkBorder, Bookmark } from "@material-ui/icons";
 
 function CompanyJobs({ company, onSave, onUnSave, user }) {
+  const { t } = useTranslation();
+
   const onSaveClick = (jobID) => {
     if (onSave) onSave(jobID);
   };
@@ -17,7 +20,7 @@ function CompanyJobs({ company, onSave, onUnSave, user }) {
       {company && company.jobs?.length ? (
         <Paper style={{ padding: "1rem" }}>
           <Box fontWeight="bold" fontSize={20} mb={2} textAlign="left">
-            Posted jobs
+            {t("company.postedJobs")}
           </Box>
           <Grid container spacing={1}>
             {company.jobs?.slice(0, 6).map((job, index) => (
@@ -95,7 +98,7 @@ function CompanyJobs({ company, onSave, onUnSave, user }) {
             fontSize: 20,
           }}
         >
-          <Box>No Jobs Found</Box>
+          <Box>{t("company.noJobs")}</Box>
         </Paper>
       )}
     </div>

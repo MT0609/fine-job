@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import { Link } from "@material-ui/core";
 import { AddToQueue } from "@material-ui/icons";
 import CompanyHeadContainer from "../../../container/company/headSection";
 import CompanyHome from "../../../container/company/home";
@@ -21,6 +21,7 @@ function Company() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
+  const { t } = useTranslation();
 
   const [tabValue, setTabValue] = useState(0);
   const handleChange = (event, newValue) => {
@@ -65,15 +66,16 @@ function Company() {
     let result = await dispatch(saveJob(jobID));
 
     if (result === JOBCONSTANTS.JOB_SAVE_SUCCESS)
-      toast("👌🏻 Save Job Successfully");
-    else toast.error("Error Saving Job");
+      toast("👌🏻 " + t("job.saveSuccess"));
+    else toast("👌🏻 " + t("job.saveFail"));
   };
 
   const handleUnSaveJob = async (jobID) => {
     let result = await dispatch(unSaveJob(jobID));
 
-    if (result === JOBCONSTANTS.JOB_UNSAVE_SUCCESS) toast("Unsave Job");
-    else toast.error("Error Unsave Job");
+    if (result === JOBCONSTANTS.JOB_UNSAVE_SUCCESS)
+      toast(t("job.unSaveSuccess"));
+    else toast(t("job.unSaveFail"));
   };
 
   return (
@@ -105,14 +107,14 @@ function Company() {
           )}
 
           <div className={styles.company__seemore}>
-            <Link href="/company">
+            <Link to="/company">
               <AddToQueue />
-              <span>View other companies</span>
+              <span>{t("company.viewOthers")}</span>
             </Link>
           </div>
         </>
       ) : (
-        <div>Not Found</div>
+        <div>{t("company.noCompany")}</div>
       )}
     </div>
   );

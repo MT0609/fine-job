@@ -115,10 +115,12 @@ function TalentHomePage() {
                             : styles["talenthome__jobstatus--close"]
                         }`}
                       >
-                        {job.status}
+                        {t("job.status", { status: job.status })}
                       </span>
                       <span className={styles["talenthome__applicants"]}>
-                        {job.job.applicantCount} applicants
+                        {t("job.applicantNumber", {
+                          number: job.job?.applicantCount,
+                        })}
                       </span>
                     </p>
                   </Grid>

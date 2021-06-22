@@ -54,7 +54,7 @@ function SignIn() {
           inputRef={register}
         />
         <Box className={styles.error}>
-          {errors.username && <span>* {errors.username.message}</span>}
+          {errors.username && <span>* {t(errors.username.message)}</span>}
         </Box>
 
         <TextField
@@ -67,7 +67,7 @@ function SignIn() {
           inputRef={register}
         />
         <Box className={styles.error}>
-          {errors.password && <span>* {errors.password.message}</span>}
+          {errors.password && <span>* {t(errors.password.message)}</span>}
         </Box>
 
         <Box style={{ textAlign: "right" }}>

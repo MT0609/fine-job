@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { Box, Avatar, Typography } from "@material-ui/core";
 import { LocationOn, Cancel, OpenInNew } from "@material-ui/icons";
@@ -18,6 +19,7 @@ import styles from "./index.module.scss";
 function JobView() {
   const { id } = useParams();
 
+  const { t } = useTranslation();
   const jobState = useSelector((state) => state.job);
   const job = jobState.job;
 
@@ -74,18 +76,26 @@ function JobView() {
               </Box>
 
               <Typography variant="h5">{job.title}</Typography>
-              {job.status === "close" && (
+              {job.status !== "close" && (
                 <div
                   className={`${styles["section__title"]} ${styles["section__title--close"]}`}
                 >
-                  <Cancel fontSize="small" /> No longer accepting applications
+                  <Cancel fontSize="small" /> {t("job.noLongerAccept")}
                 </div>
               )}
 
               <p>
-                <span>Posted {timeDiff(new Date(job.posted), new Date())}</span>
+                <span>
+                  {t("job.postedTimeAgo", {
+                    timeDiff: timeDiff(new Date(job.posted), new Date()),
+                  })}
+                </span>
                 <span> &#8231; </span>
-                <span>{job.job?.applicantCount} applicants</span>
+                <span>
+                  {t("job.applicantNumber", {
+                    number: job.job?.applicantCount,
+                  })}
+                </span>
               </p>
 
               {job.locations?.length && (
@@ -104,7 +114,7 @@ function JobView() {
                   <a href={job.directApplyUrl} target="_blank" rel="noreferrer">
                     <button className={styles.section__directApply}>
                       <OpenInNew fontSize="small" />
-                      Direct Apply
+                      {t("job.directApply")}
                     </button>
                   </a>
                 )}
@@ -113,15 +123,16 @@ function JobView() {
                   {auth.isAuth &&
                     (auth.user?.applies?.some((job) => job.id === id) ? (
                       <button className={styles.section__applied}>
-                        Applied{" "}
-                        {timeDiff(
-                          new Date(
-                            auth.user.applies.find(
-                              (job) => job.id === id
-                            ).createdAt
+                        {t("job.applyTimeAgo", {
+                          timeDiff: timeDiff(
+                            new Date(
+                              auth.user.applies.find(
+                                (job) => job.id === id
+                              ).createdAt
+                            ),
+                            new Date()
                           ),
-                          new Date()
-                        )}
+                        })}
                       </button>
                     ) : (
                       <>
@@ -129,7 +140,7 @@ function JobView() {
                           onClick={() => setJobApplyDialogShow(true)}
                           className={styles.section__apply}
                         >
-                          Apply Now
+                          {t("job.apply")}
                         </button>
                         <JobApplyDialog
                           show={jobApplyDialogShow}
@@ -151,14 +162,14 @@ function JobView() {
                         onClick={handleUnSaveJob}
                         className={styles.section__save}
                       >
-                        Unsave
+                        {t("job.unSave")}
                       </button>
                     ) : (
                       <button
                         onClick={handleSaveJob}
                         className={styles.section__save}
                       >
-                        Save
+                        {t("job.save")}
                       </button>
                     ))}
                 </Box>
@@ -167,12 +178,12 @@ function JobView() {
 
             <section className={styles.section}>
               <div className={styles.section__item}>
-                <p className={styles.section__title}>Description</p>
+                <p className={styles.section__title}>{t("job.description")}</p>
                 <p>{job.description}</p>
               </div>
 
               <div className={styles.section__item}>
-                <p className={styles.section__title}>Skills</p>
+                <p className={styles.section__title}>{t("job.skills")}</p>
                 {job.skills?.length ? (
                   <p>
                     {job.skills.map((skill, index) => (
@@ -180,12 +191,14 @@ function JobView() {
                     ))}
                   </p>
                 ) : (
-                  `This job has no skills`
+                  <p>{t("job.noSkills")}</p>
                 )}
               </div>
 
               <div className={styles.section__item}>
-                <p className={styles.section__title}>Employment Type</p>
+                <p className={styles.section__title}>
+                  {t("job.employmentType")}
+                </p>
                 {job.job?.jobType ? (
                   <p>
                     {job.job.jobType.map((type, index) => (
@@ -193,19 +206,23 @@ function JobView() {
                     ))}
                   </p>
                 ) : (
-                  `This job has no employment type indicated`
+                  <p>{t("job.noEmploymentType")}</p>
                 )}
               </div>
 
               <div className={styles.section__item}>
-                <p className={styles.section__title}>Max Salary</p>
-                {job.maxSalary ? <p>{job.maxSalary}</p> : `Not revealed`}
+                <p className={styles.section__title}>{t("job.maxSalary")}</p>
+                {!job.maxSalary ? (
+                  <p>{job.maxSalary}</p>
+                ) : (
+                  <p>{t("job.noMaxSalary")}</p>
+                )}
               </div>
             </section>
           </>
         ) : (
           <div>
-            <p className={styles.section__title}>No Job Found</p>
+            <p className={styles.section__title}>{t("job.jobNotFound")}</p>
           </div>
         )
       ) : (

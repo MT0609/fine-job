@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useParams } from "react-router";
+import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { getJobDetail } from "../../../actions/jobActions";
@@ -21,6 +22,7 @@ import styles from "./index.module.scss";
 function JobApplicantsView() {
   const { id } = useParams();
   const history = useHistory();
+  const { t } = useTranslation();
 
   const job = useSelector((state) => state.job?.job);
   const auth = useSelector((state) => state.auth);
@@ -33,14 +35,14 @@ function JobApplicantsView() {
   }, [id, dispatch, history]);
 
   const handleDeleteJob = async (id) => {
-    const confirmation = window.confirm("Do you want to delete this job?");
+    const confirmation = window.confirm(t("job.deleteConfirm"));
     if (!confirmation) return;
     dispatch(deleteJob(id)).then((result) => {
       console.log(result);
       if (result?.status === JOBCONSTANTS.JOB_DELETE_SUCCESS) {
-        toast("🦄 Job Deleted");
+        toast("🦄 " + t("job.deleteSuccess"));
         history.replace("/talent");
-      } else toast.error("Error deleting job. Please Try again");
+      } else toast.error(t("job.deleteFail"));
     });
   };
 
@@ -78,10 +80,12 @@ function JobApplicantsView() {
                           : styles["job__status--close"]
                       }`}
                     >
-                      {job.status}
+                      {t("job.status", { status: job.status })}
                     </span>
                     <span className={styles["job__applicants"]}>
-                      {job.job.applicantCount} applicants
+                      {t("job.applicantNumber", {
+                        number: job.job?.applicantCount,
+                      })}
                     </span>
                   </p>
                 </Grid>
@@ -100,18 +104,18 @@ function JobApplicantsView() {
                 </Grid>
               </Grid>
               <p className={styles.job__postday}>
-                Posted on {new Date(job.posted).toDateString()}
+                {t("job.postedDay", {
+                  date: new Date(job.posted),
+                })}
               </p>
             </>
           </div>
 
           <div className={styles.applicants}>
             <p className={styles.applicants__count}>
-              {job.job.applicantCount === 0
-                ? "No people has found applied for this job"
-                : job.job.applicantCount === 1
-                ? "1 person has applied for this job"
-                : `${job.job.applicantCount} applies for this job`}
+              {t("job.applyNumStatus", {
+                number: job.job.applicantCount,
+              })}
             </p>
             {
               <>
@@ -140,17 +144,19 @@ function JobApplicantsView() {
                         >
                           {user.user.firstName} {user.user.lastName}
                         </Link>
-                        <p>{user.user.headLine || "No introduction"}</p>
+                        <p>{user.user.headLine}</p>
                         <div className={styles.applicant__contact}>
                           <Mail /> {user.user.email}
                         </div>
                         <div className={styles.applicant__contact}>
                           <Phone /> {user.user.phone}
                         </div>
-                        <Box display="flex" mt={1}>
-                          <LocationOn fontSize="small" />
-                          <span>{user.user.locations || "Location"}</span>
-                        </Box>
+                        {user.user.locations && (
+                          <Box display="flex" mt={1}>
+                            <LocationOn fontSize="small" />
+                            <span>{user.user.locations}</span>
+                          </Box>
+                        )}
                       </Grid>
                       {user.user.id === auth.user?.id && (
                         <Grid item md style={{ textAlign: "right" }}>
@@ -158,13 +164,15 @@ function JobApplicantsView() {
                             className={styles.applicant__message}
                             onClick={() => handleGetMessage(user.user.id)}
                           >
-                            Message
+                            {t("people.message")}
                           </button>
                         </Grid>
                       )}
                     </Grid>
                     <p className={styles.job__postday}>
-                      Applied on {new Date(user.createdAt).toDateString()}
+                      {t("job.appliedDay", {
+                        date: new Date(user.createdAt),
+                      })}
                     </p>
                   </div>
                 ))}

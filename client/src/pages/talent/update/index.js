@@ -136,10 +136,9 @@ export default function UpdateJob() {
                   component="label"
                   container
                   alignItems="center"
-                  spacing={1}
                   style={{ width: "fit-content" }}
                 >
-                  <Grid item>Close</Grid>
+                  <Grid item>{t("job.status", { status: "close" })}</Grid>
                   <Grid item>
                     <Switch
                       checked={status}
@@ -148,7 +147,7 @@ export default function UpdateJob() {
                       color="primary"
                     />
                   </Grid>
-                  <Grid item>Open</Grid>
+                  <Grid item>{t("job.status", { status: "open" })}</Grid>
                 </Grid>
               </Grid>
             </Grid>

@@ -83,7 +83,9 @@ function JobList(props) {
                 </Grid>
                 <p className={styles.jobList__caption}>
                   <span>
-                    Posted {timeDiff(new Date(job.posted), new Date())}
+                    {t("job.postedTimeAgo", {
+                      timeDiff: timeDiff(new Date(job.posted), new Date()),
+                    })}
                   </span>
                   <span className={styles.jobList__applicantCount}>
                     {t("job.applicantNumber", {

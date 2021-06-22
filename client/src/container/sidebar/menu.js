@@ -49,7 +49,10 @@ function SidebarMenu(props) {
           </ListItem>
         </Link>
         <Divider />
-        <Link to="/jobs" style={{ textDecoration: "none", color: "black" }}>
+        <Link
+          to="/jobs/my-jobs"
+          style={{ textDecoration: "none", color: "black" }}
+        >
           <ListItem button>
             <ListItemIcon>
               <Work />
@@ -73,7 +76,7 @@ function SidebarMenu(props) {
               <ListItemIcon>
                 <AccountCircle />
               </ListItemIcon>
-              <ListItemText primary={t("header.userMenu.auth")} />
+              <ListItemText primary={t("header.auth")} />
             </ListItem>
           </Link>
         ) : (

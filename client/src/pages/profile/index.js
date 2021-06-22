@@ -1,15 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import moment from "moment";
 import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import jwt_decode from "jwt-decode";
+import { toast } from "react-toastify";
 import { Box, Button, Tooltip, Grid, Typography } from "@material-ui/core";
-import { GridList, GridListTile } from "@material-ui/core";
-import { PersonAdd, RemoveCircle, Edit, LocationOn } from "@material-ui/icons";
+import {
+  PersonAdd,
+  RemoveCircle,
+  Add,
+  Edit,
+  Delete,
+  LocationOn,
+} from "@material-ui/icons";
 import * as userActions from "../../actions/userActions";
 import { getUserData } from "../../actions/authActions";
 import { getMessage } from "../../actions/messageActions";
-import ProfileUpdate from "../../container/profile/update";
+import BasicInfoUpdate from "../../container/profile/update/basicInfo";
+import AboutUpdate from "../../container/profile/update/about";
+import EducationUpdate from "../../container/profile/update/education";
+import SkillUpdate from "../../container/profile/update/skill";
 import styles from "./index.module.scss";
 
 function Profile() {
@@ -30,8 +41,11 @@ function Profile() {
   const userState = useSelector((state) => state.user);
   const user = userState.user;
 
-  console.log(user);
-  const [profileUpdateShow, setProfileUpdateShow] = useState(false);
+  const [basicInfoUpdateShow, setBasicInfoUpdateShow] = useState(false);
+  const [aboutUpdateShow, setAboutUpdateShow] = useState(false);
+  const [skillUpdateShow, setSkillUpdateShow] = useState(false);
+  const [eduUpdateShow, setEduUpdateShow] = useState(false);
+  const [eduUpdateInfo, setEduUpdateInfo] = useState(null);
 
   const handleSendConnection = () => {
     dispatch(userActions.sendConnReq(id));
@@ -49,10 +63,42 @@ function Profile() {
     dispatch(userActions.deleteFriend(id));
   };
 
-  const handleUpdate = async (data) => {
+  const handleUpdateBasicInfo = async (data) => {
     const result = await dispatch(userActions.updateUser(data));
     if (result?.result) {
-      setProfileUpdateShow(false);
+      setBasicInfoUpdateShow(false);
+      dispatch(getUserData());
+    }
+  };
+
+  const handleUpdateAbout = async (data) => {
+    const result = await dispatch(userActions.updateUser(data));
+    if (result?.result) {
+      setAboutUpdateShow(false);
+      dispatch(getUserData());
+    }
+  };
+
+  const handleModifyEdu = async (data, type = "modify") => {
+    let result;
+    if (type === "modify")
+      result = await dispatch(userActions.modifyEducation(data));
+    else {
+      // type delete
+      const confirm = window.confirm(t("people.confirmDeleteEducation"));
+      if (confirm) result = await dispatch(userActions.deleteEducation(data));
+    }
+    if (result?.result) {
+      setEduUpdateShow(false);
+      if (type !== "modify") toast("🦄 " + t("people.deleteEducationSuccess"));
+      dispatch(getUserData());
+    }
+  };
+
+  const handleUpdateSkills = async (skills) => {
+    const result = await dispatch(userActions.updateUser({ skills }));
+    if (result?.result) {
+      setSkillUpdateShow(false);
       dispatch(getUserData());
     }
   };
@@ -192,8 +238,9 @@ function Profile() {
                   <p className={styles.profile__basicInfoSpan}>
                     {user.baseInfo?.dob && (
                       <span>
-                        {t("people.birthday")}:{" "}
-                        {new Date(user.baseInfo?.dob).toLocaleDateString()}
+                        {t("people.birthday", {
+                          date: new Date(user.baseInfo?.dob),
+                        })}
                       </span>
                     )}
                   </p>
@@ -216,15 +263,15 @@ function Profile() {
                 <Grid item xs md style={{ textAlign: "right" }}>
                   {id === myID && (
                     <>
-                      <Button onClick={() => setProfileUpdateShow(true)}>
+                      <Button onClick={() => setBasicInfoUpdateShow(true)}>
                         <Edit />
                       </Button>
 
-                      <ProfileUpdate
+                      <BasicInfoUpdate
                         data={user}
-                        show={profileUpdateShow}
-                        onclose={() => setProfileUpdateShow(false)}
-                        onsubmit={handleUpdate}
+                        show={basicInfoUpdateShow}
+                        onclose={() => setBasicInfoUpdateShow(false)}
+                        onsubmit={handleUpdateBasicInfo}
                       />
                     </>
                   )}
@@ -236,14 +283,21 @@ function Profile() {
           <section className={styles.profile__section}>
             <Grid container alignItems="center" justify="space-between">
               <Grid item>
-                <Typography variant="h5">{t("people.about")}</Typography>
+                <Typography variant="h6">{t("people.about")}</Typography>
               </Grid>
               <Grid item>
                 {id === myID && (
                   <>
-                    <Button>
+                    <Button onClick={() => setAboutUpdateShow(true)}>
                       <Edit />
                     </Button>
+
+                    <AboutUpdate
+                      data={user.about}
+                      show={aboutUpdateShow}
+                      onclose={() => setAboutUpdateShow(false)}
+                      onsubmit={handleUpdateAbout}
+                    />
                   </>
                 )}
               </Grid>
@@ -254,45 +308,156 @@ function Profile() {
           <section className={styles.profile__section}>
             <Grid container alignItems="center" justify="space-between">
               <Grid item>
-                <Typography variant="h5">{t("people.education")}</Typography>
+                <Typography variant="h6">{t("people.education")}</Typography>
               </Grid>
               <Grid item>
                 {id === myID && (
                   <>
-                    <Button>
-                      <Edit />
+                    <Button
+                      onClick={() => {
+                        setEduUpdateInfo(null);
+                        setEduUpdateShow(true);
+                      }}
+                    >
+                      <Add />
                     </Button>
+
+                    <EducationUpdate
+                      data={eduUpdateInfo}
+                      show={eduUpdateShow}
+                      onclose={() => setEduUpdateShow(false)}
+                      onsubmit={handleModifyEdu}
+                    />
                   </>
                 )}
               </Grid>
             </Grid>
-            {user.baseInfo?.education?.map((education, index) => (
-              <p>{education}</p>
+            {user.baseInfo?.educations?.map((education, index) => (
+              <Box
+                key={index}
+                display="flex"
+                mb={1}
+                justifyContent="space-between"
+              >
+                <div>
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={education.school?.web_pages[0]}
+                    className={styles.profile__educations__name}
+                  >
+                    {education.school?.name}
+                  </a>
+                  <p>
+                    <span className={styles.profile__educations__sub}>
+                      {education.degree}
+                    </span>
+                    <span className={styles.profile__educations__sub}>
+                      {education.degree && education.major && ", "}
+                    </span>
+                    <span className={styles.profile__educations__sub}>
+                      {education.major}
+                    </span>
+                  </p>
+                  {(education.start_date || education.end_date) && (
+                    <p>
+                      <span className={styles.profile__educations__date}>
+                        {education.start_date
+                          ? // ? moment(education.start_date).format("MM/YYYY")
+                            t("people.education_startTime", {
+                              time: new Date(education.start_date),
+                            })
+                          : "?"}
+                      </span>
+                      <span className={styles.profile__educations__date}>
+                        {education.end_date &&
+                          `- ${t("people.education_endTime", {
+                            time: new Date(education.end_date),
+                          })}`}
+                      </span>
+                    </p>
+                  )}
+                </div>
+                {id === myID && (
+                  <div style={{ textAlign: "right" }}>
+                    <Button
+                      onClick={() => {
+                        setEduUpdateInfo(education);
+                        setEduUpdateShow(true);
+                      }}
+                    >
+                      <Edit />
+                    </Button>
+                    <Button
+                      onClick={() =>
+                        handleModifyEdu({ id: education.id }, "delete")
+                      }
+                      color="primary"
+                    >
+                      <Delete />
+                    </Button>
+                  </div>
+                )}
+              </Box>
             ))}
           </section>
 
           <section className={styles.profile__section}>
             <Grid container alignItems="center" justify="space-between">
               <Grid item>
-                <Typography variant="h5">{t("people.skills")}</Typography>
+                <Typography variant="h6">{t("people.skills")}</Typography>
               </Grid>
               <Grid item>
                 {id === myID && (
                   <>
-                    <Button>
+                    <Button onClick={() => setSkillUpdateShow(true)}>
                       <Edit />
                     </Button>
+
+                    <SkillUpdate
+                      user={user}
+                      show={skillUpdateShow}
+                      onclose={() => setSkillUpdateShow(false)}
+                      onsubmit={handleUpdateSkills}
+                    />
                   </>
                 )}
               </Grid>
             </Grid>
-            <GridList cols={3} spacing={10}>
-              {user.skill?.map((skill, index) => (
-                <GridListTile style={{ height: "fit-content" }} key={index}>
+            <Grid container component="ul" wrap="wrap">
+              {user.skills?.map((skill, index) => (
+                <Grid item xs={6} md={4} key={index}>
                   <p>{skill}</p>
-                </GridListTile>
+                </Grid>
               ))}
-            </GridList>
+            </Grid>
+          </section>
+
+          <section className={styles.profile__section}>
+            <Typography variant="h6">{t("people.interests")}</Typography>
+            <Grid container spacing={2}>
+              {user.followings?.map((item, index) => (
+                <Grid item xs={12} md={6} key={index}>
+                  <Box display="flex" spacing={2}>
+                    <img
+                      src={
+                        item.avatar ||
+                        "https://media-exp1.licdn.com/dms/image/C4E0BAQG8Z55xihwvTw/company-logo_100_100/0/1560280656846?e=1632355200&v=beta&t=GJhd1ZFgWRZ4C4tPPD_hkaZITHVPPmG--SQmpzi6tSk"
+                      }
+                      alt="Company"
+                      width={70}
+                      height={70}
+                    />
+                    <Box pl={1}>
+                      <p style={{ fontWeight: "bold", fontSize: "1.1rem" }}>
+                        {item.name}
+                      </p>
+                      <p>{item.baseInfo.industry}</p>
+                    </Box>
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
           </section>
         </>
       )}

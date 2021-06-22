@@ -41,12 +41,31 @@ const updateUser = {
       firstName: Joi.string(),
       lastName: Joi.string(),
       dob: Joi.date().raw(),
+      about: Joi.string(),
       country: Joi.string(),
       locations: Joi.string(),
       industry: Joi.string(),
-      educations: Joi.string(),
+      education: Joi.object(), // educations: education[]
+      skills: Joi.array(),
     })
     .min(1),
+};
+
+const modifyEducation = {
+  body: Joi.object().keys({
+    id: Joi.allow(null, ''),
+    school: Joi.object().required(),
+    degree: Joi.allow(null, ''),
+    major: Joi.allow(null, ''),
+    start_date: Joi.date().allow(null, ''),
+    end_date: Joi.date().allow(null, ''),
+  }),
+};
+
+const deleteEducation = {
+  body: Joi.object().keys({
+    id: Joi.string().custom(objectId),
+  }),
 };
 
 const deleteUser = {
@@ -106,6 +125,8 @@ module.exports = {
   getUsers,
   getUser,
   updateUser,
+  modifyEducation,
+  deleteEducation,
   deleteUser,
   sendConnReq,
   acceptConnReq,

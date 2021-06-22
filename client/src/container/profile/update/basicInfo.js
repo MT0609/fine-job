@@ -42,7 +42,8 @@ export default function ProfileUpdate(props) {
                 label={t("people.firstName")}
                 defaultValue={data.baseInfo?.firstName}
                 helperText={
-                  errors.firstName?.message && `* ${errors.firstName?.message}`
+                  errors.firstName?.message &&
+                  `* ${t(errors.firstName?.message)}`
                 }
                 InputLabelProps={{
                   shrink: true,
@@ -56,7 +57,7 @@ export default function ProfileUpdate(props) {
                 label={t("people.lastName")}
                 defaultValue={data.baseInfo?.lastName}
                 helperText={
-                  errors.lastName?.message && `* ${errors.lastName?.message}`
+                  errors.lastName?.message && `* ${t(errors.lastName?.message)}`
                 }
                 name="lastName"
                 inputRef={register}

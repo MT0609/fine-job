@@ -13,6 +13,14 @@ const userApi = {
     const url = `/v1/users/${userID}`;
     return axiosClient.patch(url, data);
   },
+  modifyEducation: (userID, data) => {
+    const url = `/v1/users/${userID}/modifyEducation`;
+    return axiosClient.patch(url, data);
+  },
+  deleteEducation: (userID, idObject) => {
+    const url = `/v1/users/${userID}/modifyEducation`;
+    return axiosClient.delete(url, { data: idObject });
+  },
   getConnStatus: (userID) => {
     const url = `/v1/users/${userID}/getConnStatus`;
     return axiosClient.get(url);
