@@ -8,3 +8,4 @@ module.exports.messageService = require('./message.service');
 module.exports.CVService = require('./cv.service');
 module.exports.notificationService = require('./notification.service');
 module.exports.subscriptionService = require('./subscription.service');
+module.exports.universityService = require('./university.service');
