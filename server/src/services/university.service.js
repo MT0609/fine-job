@@ -12,13 +12,13 @@ const path = require('path');
  * @returns {Promise<QueryResult>}
  */
 const queryUniversities = (filter, options, res) => {
-  const { name, country } = filter;
+  const { q } = filter;
 
   try {
     University.search(
       {
         query_string: {
-          query: name || country || 'Viet Nam',
+          query: q || 'Viet Nam',
         },
       },
       {
