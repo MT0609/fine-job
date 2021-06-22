@@ -1,4 +1,6 @@
 const { University } = require('../models');
+const fs = require('fs');
+const path = require('path');
 
 /**
  * Query for universities
@@ -9,22 +11,8 @@ const { University } = require('../models');
  * @param {number} [options.page] - Current page (default = 1)
  * @returns {Promise<QueryResult>}
  */
-const queryUniversities = async (filter, options, res) => {
+const queryUniversities = (filter, options, res) => {
   const { name, country } = filter;
-
-  // const fil = {};
-
-  // if (name) {
-  //   fil.name = { $regex: '.*' + name + '.*' };
-  // }
-  // if (country) {
-  //   fil.country = { $regex: '.*' + country + '.*' };
-  // }
-
-  // if (!Object.keys(fil).length) return [];
-
-  // const universities = await University.find({ ...fil });
-  // return universities;
 
   try {
     University.search(
@@ -55,6 +43,25 @@ const queryUniversities = async (filter, options, res) => {
   } catch (error) {
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
   }
+
+  // fs.readFile(path.join(__dirname, './../../world_universities_and_domains.json'), 'utf8', async (err, data) => {
+  //   if (err) console.log(err);
+  //   else {
+  //     // parse JSON string to JSON object
+  //     const databases = JSON.parse(data);
+
+  //     const listUniversity = databases.map(async (uni) => {
+  //       const dt = new University(uni);
+  //       await dt.save();
+  //     });
+
+  //     await Promise.all(listUniversity);
+
+  //     console.log(databases.length);
+  //   }
+  // });
+
+  // res.status(200).send([]);
 };
 
 module.exports = {
