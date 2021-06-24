@@ -6,14 +6,12 @@ const CVController = require('../../controllers/cv.controller');
 
 const router = express.Router();
 
+router.route('/').post(auth('getUser'), validate(CVValidation.createCV), CVController.createCV);
+
 router
   .route('/')
-  .post(auth('getUser'), validate(CVValidation.createCV), CVController.createCV)
-  
-router 
-  .route('/')
   .get(auth('getAllCV'), validate(CVValidation.getAllUserCV), CVController.getUserCV)
-  .patch(auth('getaCV'), validate(CVValidation.updateACV), CVController.updateCV)
+  .patch(auth('getaCV'), validate(CVValidation.updateACV), CVController.updateCV);
 
 module.exports = router;
 
@@ -49,12 +47,12 @@ module.exports = router;
  *               contact:
  *                  type: object
  *                  description: contact information of a user, such as phone, email, facebook,..
- *               about: 
+ *               about:
  *                  type: string
- *                  description: information about yourself  
+ *                  description: information about yourself
  *               featured:
  *                 type: array
- *                 description: Cai nay t k biet no la gi
+ *                 description: Your highlights
  *               experiences:
  *                 type: array
  *                 description: the experience of a user
@@ -72,10 +70,10 @@ module.exports = router;
  *                     type: string
  *                  description: the volunteer of a user
  *               skills:
- *                  type: string  
+ *                  type: string
  *                  description: the volunteer of a user
  *             example:
- *               title: Toeic 990000000000000000000000
+ *               title: Backend Developer
  *     responses:
  *       "201":
  *         description: Created
@@ -92,7 +90,7 @@ module.exports = router;
  *
  */
 
-/** 
+/**
  * @swagger
  * /cvs/?cvId={cvid}:
  *   get:
@@ -148,7 +146,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: CV Id 
+ *         description: CV Id
  *     requestBody:
  *       required: true
  *       content:
@@ -178,9 +176,9 @@ module.exports = router;
  *               contact:
  *                  type: object
  *                  description: contact information of a user, such as phone, email, facebook,..
- *               about: 
+ *               about:
  *                  type: string
- *                  description: information about yourself  
+ *                  description: information about yourself
  *               featured:
  *                  type: array
  *                  description: Cai nay t k biet no la gi
@@ -196,7 +194,7 @@ module.exports = router;
  *                     type: object
  *                  description: the volunteer of a user
  *               skills:
- *                  type: array  
+ *                  type: array
  *                  items:
  *                     type: object
  *                  properties:
@@ -208,11 +206,11 @@ module.exports = router;
  *             example:
  *               firstName: Anh Thai dinh cao nghe thuat
  *               about: Anh thai khung qua anh oi
- *               skills: 
+ *               skills:
  *                 - title: football sport
  *                   accomplishment: a quan world cup 2020 giai ao lang
  *               headLine: Nguyen Quoc Thai voi trinh do vuot xa loai nguoi, ngang bang loai cho.
- *               
+ *
  *     responses:
  *       "200":
  *         description: OK
@@ -251,4 +249,4 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
-*/
+ */

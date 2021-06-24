@@ -90,7 +90,6 @@ const userSchema = mongoose.Schema(
       type: String,
       enum: enumStatus,
     },
-    ///--------------------------------------------
     contact: {
       email: {
         type: String,
@@ -118,12 +117,14 @@ const userSchema = mongoose.Schema(
     connections: {
       type: Array,
       default: [],
-      //mot object lu user_id cua ban be
     },
     features: {
       type: String,
       default: '',
-      //link blog, site
+    },
+    cvs: {
+      type: Array,
+      default: [],
     },
     dashboard: {
       type: Array,
@@ -133,7 +134,6 @@ const userSchema = mongoose.Schema(
     experiences: {
       type: Array,
       default: [],
-      //luu kinh nghiem cua nguoi do, nhung job da lam
     },
     applies: {
       type: Array,
@@ -146,22 +146,18 @@ const userSchema = mongoose.Schema(
     savePosts: {
       type: Array,
       default: [],
-      //save cac bai post tuyen dung
     },
     licenseAndCerts: {
       type: Array,
       default: [],
-      //cac giay chung nhan
     },
     volunteers: {
       type: Array,
       default: [],
-      //Hoat dong tinh nguyen
     },
     skills: {
       type: Array,
       default: [],
-      //cac ki nang ngoai
     },
     username: {
       type: String,
@@ -198,7 +194,6 @@ const userSchema = mongoose.Schema(
     },
     passwordResetToken: {
       type: String,
-      //default: randomPassword(10),
     },
     passwordResetExpires: {
       type: Date,
