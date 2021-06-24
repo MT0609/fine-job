@@ -5,7 +5,7 @@ const universityController = require('../../controllers/university.controller');
 
 const router = express.Router();
 
-router.route('/').get(validate(universityValidation.getUniversities), universityController.getUniversities);
+router.route('/search').get(validate(universityValidation.getUniversities), universityController.getUniversities);
 
 module.exports = router;
 
@@ -18,7 +18,7 @@ module.exports = router;
 
 /**
  * @swagger
- * /universities:
+ * /universities/search:
  *   get:
  *     summary: Get all Universities
  *     description: Only admins can retrieve all Universities.
@@ -26,15 +26,10 @@ module.exports = router;
  *     security:
  *     parameters:
  *       - in: query
- *         name: name
+ *         name: q
  *         schema:
  *           type: string
- *         description: University name
- *       - in: query
- *         name: country
- *         schema:
- *           type: string
- *         description: University country
+ *         description: Key word
  *       - in: query
  *         name: sortBy
  *         schema:
