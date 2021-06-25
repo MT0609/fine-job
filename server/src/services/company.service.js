@@ -2,6 +2,8 @@ const httpStatus = require('http-status');
 const { Company } = require('../models');
 const ApiError = require('../utils/ApiError');
 
+const elasticService = require('../services/elastic.service');
+
 const { getUserById } = require('./user.service');
 
 /**
@@ -10,11 +12,27 @@ const { getUserById } = require('./user.service');
  * @returns {Promise<Company>}
  */
 const createCompany = async (userBody) => {
-  if (await Company.isNameTaken(userBody.name)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Company name already taken');
+  try {
+    if (await Company.isNameTaken(userBody.name)) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Company name already taken');
+    }
+    const company = await Company.create(userBody);
+
+    // Elastic index
+    const body = {
+      name: company.name,
+      headLine: company.headLine,
+      about: company.about,
+      industry: company.baseInfo.industry,
+      data: company,
+    };
+
+    elasticService.addIndex('companies', company._id, body);
+
+    return company;
+  } catch (error) {
+    console.log(error);
   }
-  const company = await Company.create(userBody);
-  return company;
 };
 
 /**
@@ -72,6 +90,17 @@ const updateCompanyById = async (companyID, updateBody) => {
 
   Object.assign(company, updateBody);
   await company.save();
+
+  // Elastic update
+  const source = [
+    `ctx._source.name = ${company.name}`,
+    `ctx._source.headLine = ${company.headLine}`,
+    `ctx._source.about = ${company.about}`,
+    `ctx._source.industry = ${company.industry}`,
+  ];
+
+  await elasticService.update('companies', company._id, source, company);
+
   return company;
 };
 
@@ -86,6 +115,10 @@ const deleteCompanyById = async (companyID) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Company not found');
   }
   await company.remove();
+
+  // Elastic delete
+  await elasticService.delete('companies', company._id);
+
   return company;
 };
 
@@ -180,32 +213,48 @@ const postUnFollowCompany = async (companyID, userID) => {
  * @param {Object} res - Respond variable
  * @returns {Promise<QueryResult>}
  */
-const searchCompanies = (filter, options, res) => {
+const searchCompanies = async (filter, options, res) => {
   try {
-    Company.search(
-      {
-        query_string: {
-          query: filter.q || '*',
-        },
-      },
-      {
-        hydrate: true,
-      },
-      function (err, results) {
-        if (err) {
-          console.log('Search failed: ', err);
-          throw new Error(err.message);
-        }
-        let allResults = results.hits.hits;
-        allResults = allResults.filter(function (result) {
-          return result !== undefined;
-        });
-        const { page, limit } = options;
-        const paginatedResults = allResults.slice((page - 1) * limit, page * limit);
-        const totalPages = Math.ceil(allResults.length / limit);
-        res.status(200).send({ results: paginatedResults, totalPages, page });
-      }
-    );
+    // Company.search(
+    //   {
+    //     query_string: {
+    //       query: filter.q || '*',
+    //     },
+    //   },
+    //   {
+    //     hydrate: true,
+    //   },
+    //   function (err, results) {
+    //     if (err) {
+    //       console.log('Search failed: ', err);
+    //       throw new Error(err.message);
+    //     }
+    //     let allResults = results.hits.hits;
+    //     allResults = allResults.filter(function (result) {
+    //       return result !== undefined;
+    //     });
+    //     const { page, limit } = options;
+    //     const paginatedResults = allResults.slice((page - 1) * limit, page * limit);
+    //     const totalPages = Math.ceil(allResults.length / limit);
+    //     res.status(200).send({ results: paginatedResults, totalPages, page });
+    //   }
+    // );
+
+    // const must = [
+    //   { match: { name: filter.q } },
+    //   { match: { headLine: filter.q } },
+    //   { match: { about: filter.q } },
+    //   { match: { industry: filter.q } },
+    // ];
+
+    let allResults = await elasticService.search('companies', filter.q);
+    allResults = allResults.filter(function (result) {
+      return result !== undefined;
+    });
+    const { page, limit } = options;
+    const paginatedResults = allResults.slice((page - 1) * limit, page * limit);
+    const totalPages = Math.ceil(allResults.length / limit);
+    res.status(200).send({ results: paginatedResults, totalPages, page });
   } catch (error) {
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
   }
