@@ -17,6 +17,10 @@ const resumeApi = {
     const url = "/v1/cvs/?cvId=" + cvId;
     return axiosClient.patch(url, data);
   },
+  delete: (cvId, body) => {
+    const url = "/v1/cvs/?cvId=" + cvId;
+    return axiosClient.delete(url, { data: body });
+  },
 };
 
 export default resumeApi;

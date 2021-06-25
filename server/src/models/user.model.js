@@ -151,6 +151,11 @@ const userSchema = mongoose.Schema(
       type: Array,
       default: [],
     },
+    accomplishments: {
+      type: Array,
+      default: [],
+      // cac thanh tich (projects)
+    },
     volunteers: {
       type: Array,
       default: [],

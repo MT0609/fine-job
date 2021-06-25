@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { AppBar, Tabs, Tab, Paper, Container } from "@material-ui/core";
@@ -8,7 +9,7 @@ import SignUp from "../../container/signup";
 function Authen() {
   const [value, setValue] = useState(0);
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const auth = useSelector((state) => state.auth);
 
   const handleChange = (event, newValue) => {
@@ -17,6 +18,10 @@ function Authen() {
 
   return (
     <Container maxWidth="sm" style={{ paddingTop: "1rem" }}>
+      <Helmet>
+        <html lang={i18n.language || "en"} />
+        <title>Login/Register | Fine Job</title>
+      </Helmet>
       <Paper>
         <AppBar position="static">
           <Tabs

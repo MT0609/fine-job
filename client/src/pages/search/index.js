@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Helmet } from "react-helmet";
 import { useHistory, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Paper } from "@material-ui/core";
@@ -92,6 +93,11 @@ function SearchPage() {
 
   return (
     <div className={styles.search}>
+      <Helmet>
+        <html lang="en" />
+        <title>Search | Fine Job</title>
+      </Helmet>
+
       <FilterBar onclick={handleSearchByCate} option={cate || ""} />
 
       <div className={styles.search__main}>

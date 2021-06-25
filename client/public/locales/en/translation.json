@@ -55,6 +55,19 @@
 		"confirmDeleteEducation": "Delete this education title?",
 		"deleteEducationSuccess": "Education deleted",
 		"skills": "Skills",
+		"accomplishments": "Accomplishments",
+		"projectName": "Project name",
+		"projectDescription": "Project description",
+		"projectURL": "Project URL",
+		"addAccomplishment": "Add new accomplishment",
+		"editAccomplishment": "Update accomplishment",
+		"accomplishment_start": "Start time",
+		"accomplishment_startTime": "{{time, MMM YYYY}}",
+		"accomplishment_end": "End time",
+		"accomplishment_endTime": "{{time, MMM YYYY}}",
+		"accomplishment_StartEndTime_error": "Start time cannot be greater than end time",
+		"confirmDeleteAccomplishment": "Delete this accomplishment?",
+		"deleteAccomplishmentSuccess": "Accomplishment deleted",
 		"interests": "Interests",
 		"cancelButton": "Cancel",
 		"saveButton": "Save"
@@ -137,8 +150,12 @@
 		"uploadCondition": "Resume - type: DOC, DOCX, PDF (maximum 5 MB)",
 		"uploadButton": "Upload File",
 		"create": "Create A Resume",
+		"lastEditedDate": "Last edited: {{date, LL}}",
 		"cancelButton": "Cancel",
-		"submit": "Create"
+		"submit": "Create",
+		"deleteConfirm": "Are you sure you want to delete?",
+		"deleteSuccess": "CV deleted",
+		"deleteFail": "Error deleting CV!"
 	},
 	"authPage": {
 		"login": "Login",

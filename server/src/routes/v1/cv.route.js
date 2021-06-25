@@ -11,7 +11,10 @@ router.route('/').post(auth('getUser'), validate(CVValidation.createCV), CVContr
 router
   .route('/')
   .get(auth('getAllCV'), validate(CVValidation.getAllUserCV), CVController.getUserCV)
-  .patch(auth('getaCV'), validate(CVValidation.updateACV), CVController.updateCV);
+  .patch(auth('getaCV'), validate(CVValidation.updateACV), CVController.updateCV)
+  .delete(auth('getaCV'), CVController.deleteCV);
+
+router.route('/download').post(auth('getUser'), validate(CVValidation.createCV), CVController.downloadCV);
 
 module.exports = router;
 

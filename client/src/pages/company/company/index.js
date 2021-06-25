@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useParams, useHistory, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
@@ -21,7 +22,7 @@ function Company() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [tabValue, setTabValue] = useState(0);
   const handleChange = (event, newValue) => {
@@ -80,6 +81,14 @@ function Company() {
 
   return (
     <div className={styles.company__container}>
+      <Helmet>
+        <html lang={i18n.language || "en"} />
+        <title>
+          {company && company.name ? `${company.name} | ` : ""}
+          Company | Fine Job
+        </title>
+      </Helmet>
+
       {company ? (
         <>
           <CompanyHeadContainer

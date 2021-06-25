@@ -16,29 +16,29 @@ i18n
       format: function (value, format, lng) {
         if (value instanceof Date) return moment(value).format(format);
         if (format === "timeDiff") {
-          if (value.timeType === "today" && lng === "cn") return `今天`;
+          if (value.timeType === "today" && lng === "zh") return `今天`;
           if (value.timeType === "today" && lng === "vi") return `hôm nay`;
           if (value.timeType === "days" || value.timeType === "day") {
-            if (lng === "cn") return `${value.number} 天前`;
+            if (lng === "zh") return `${value.number} 天前`;
             if (lng === "vi") return `${value.number} ngày trước`;
           }
           if (value.timeType === "months" || value.timeType === "month") {
-            if (lng === "cn") return `${value.number} 月前`;
+            if (lng === "zh") return `${value.number} 月前`;
             if (lng === "vi") return `${value.number} tháng trước`;
           }
           if (value.timeType === "years" || value.timeType === "year") {
-            if (lng === "cn") return `${value.number} 年前`;
+            if (lng === "zh") return `${value.number} 年前`;
 
             if (lng === "vi") return `${value.number} năm trước`;
           }
           return `${value.number} ${value.timeType} ago`;
         }
         if (value === "close") {
-          if (lng === "cn") return "关闭";
+          if (lng === "zh") return "关闭";
           if (lng === "vi") return "Đã đóng";
         }
         if (value === "open") {
-          if (lng === "cn") return "打开中";
+          if (lng === "zh") return "打开中";
           if (lng === "vi") return "Đang mở";
         }
         return value;

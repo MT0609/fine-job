@@ -62,6 +62,18 @@ const modifyEducation = {
   }),
 };
 
+const modifyAccomplishment = {
+  body: Joi.object().keys({
+    id: Joi.allow(null, ''),
+    name: Joi.string().required(),
+    description: Joi.allow(null, ''),
+    url: Joi.allow(null, ''),
+    major: Joi.allow(null, ''),
+    start_date: Joi.date().allow(null, ''),
+    end_date: Joi.date().allow(null, ''),
+  }),
+};
+
 const deleteEducation = {
   body: Joi.object().keys({
     id: Joi.string().custom(objectId),
@@ -126,6 +138,7 @@ module.exports = {
   getUser,
   updateUser,
   modifyEducation,
+  modifyAccomplishment,
   deleteEducation,
   deleteUser,
   sendConnReq,

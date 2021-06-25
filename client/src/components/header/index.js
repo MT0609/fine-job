@@ -65,14 +65,16 @@ function Header() {
     <header className={styles.header}>
       <section className={styles.header__container}>
         <div className={styles.header__left}>
-          <div className={styles.header__thumbnail}>
-            <Link to={ROUTES.jobs}>
+          <Link to={ROUTES.jobs}>
+            <div className={styles.header__thumbnail}>
               <img
-                src="https://res.cloudinary.com/dghvjalhh/image/upload/v1623952564/avatars/job_xjiuyn.svg"
+                // src="https://res.cloudinary.com/dghvjalhh/image/upload/v1623952564/avatars/job_xjiuyn.svg"
+                src="https://res.cloudinary.com/dghvjalhh/image/upload/v1624443294/avatars/fine_job_logo_bfbrfr.svg"
                 alt="Fine_Job"
               />
-            </Link>
-          </div>
+            </div>
+          </Link>
+
           <input
             className={styles.header__search}
             placeholder={t("header.searchBar")}

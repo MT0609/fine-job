@@ -19,6 +19,7 @@ const getAllUserCV = {
 const updateACV = {
   query: Joi.object().keys({
     cvId: Joi.allow(null, ''),
+    type: Joi.allow(null, ''),
   }),
   body: Joi.object().keys({
     email: Joi.string().email(),
@@ -35,7 +36,8 @@ const updateACV = {
     industry: Joi.string(),
     skills: Joi.array(),
     headLine: Joi.string(),
-    education: Joi.string(),
+    education: Joi.object().allow(null, ''),
+    accomplish: Joi.object().allow(null, ''),
     experience: Joi.string(),
     fetured: Joi.string(),
     licenseAndCerts: Joi.array(),

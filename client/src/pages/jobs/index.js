@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
 import { Container, Grid, Typography, useMediaQuery } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
@@ -26,7 +27,7 @@ function Jobs() {
   const page = new URLSearchParams(search).get("page") || 1;
   const cate = new URLSearchParams(search).get("cate") || "job";
   const history = useHistory();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -122,9 +123,15 @@ function Jobs() {
 
   return (
     <div>
+      <Helmet>
+        <html lang={i18n.language || "en"} />
+        <title>Jobs | Fine Job</title>
+      </Helmet>
+
       <FilterBar onclick={handleSearchByCate} option={cate} />
 
       <SearchJobBar onsearch={handleInputSearch} defaultValue={keyword} />
+
       <Container
         maxWidth="lg"
         style={{

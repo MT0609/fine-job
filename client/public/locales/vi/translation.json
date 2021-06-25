@@ -55,6 +55,19 @@
 		"confirmDeleteEducation": "Xóa thông tin học vấn này?",
 		"deleteEducationSuccess": "Đã xóa thông tin học vấn",
 		"skills": "Kĩ năng",
+		"accomplishments": "Thành tích",
+		"projectName": "Tên dự án/công việc",
+		"projectDescription": "Mô tả công việc",
+		"projectURL": "Địa chỉ trang web",
+		"addAccomplishment": "Thêm thành tích",
+		"editAccomplishment": "Chính sửa thành tích",
+		"accomplishment_start": "Thời gian bắt đầu",
+		"accomplishment_startTime": "{{time, MM/YYYY}}",
+		"accomplishment_end": "Thời gian kết thúc",
+		"accomplishment_endTime": "{{time, MM/YYYY}}",
+		"accomplishment_StartEndTime_error": "Thời gian bắt đầu không được lớn hơn thời gian kết thúc",
+		"confirmDeleteAccomplishment": "Xóa thành tích này?",
+		"deleteAccomplishmentSuccess": "Đã xóa thành tích thành công",
 		"interests": "Quan tâm",
 		"cancelButton": "Hủy",
 		"saveButton": "Lưu"
@@ -137,8 +150,12 @@
 		"uploadCondition": "CV - DOC, DOCX, PDF (tối đa 5 MB)",
 		"uploadButton": "Tải lên",
 		"create": "Tạo CV",
+		"lastEditedDate": "Sửa lần cuối: {{date, DD/MM/YYYY}}",
 		"cancelButton": "Hủy bỏ",
-		"submit": "Tạo"
+		"submit": "Tạo",
+		"deleteConfirm": "Chắc chắn xóa?",
+		"deleteSuccess": "Đã xóa CV",
+		"deleteFail": "Có lỗi xóa CV. Hãy thử lại!"
 	},
 	"authPage": {
 		"login": "Đăng nhập",

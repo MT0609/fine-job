@@ -20,9 +20,12 @@
     text-align: left;
   }
   &__thumbnail {
-    width: 2rem;
+    width: 4rem;
     height: 2rem;
     margin-right: 0.5rem;
+    a {
+      display: inline-block;
+    }
     img {
       width: 100%;
     }
@@ -77,6 +80,7 @@
 
 @media screen and (max-width: 800px) {
   .header {
+    padding-left: 1rem;
     &__left {
       width: 30%;
     }
@@ -100,6 +104,7 @@
           display: none;
         }
         li {
+          margin-right: 0;
           span {
             display: none;
           }

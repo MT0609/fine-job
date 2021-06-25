@@ -1,6 +1,5 @@
 import resumeApi from "../api/resumeApi";
 import * as RESUMECONSTANTS from "../constants/resumeConstants";
-import jwt_decode from "jwt-decode";
 
 export const getAllResume = () => async (dispatch) => {
   // params: {title, limit, ...}
@@ -45,7 +44,6 @@ export const getResume = (cvId) => async (dispatch) => {
 };
 
 export const createResume = (data) => async (dispatch) => {
-  // data: {title: "...""}
   try {
     dispatch({
       type: RESUMECONSTANTS.RESUME_CREATE_REQUEST,
@@ -78,7 +76,6 @@ export const createResume = (data) => async (dispatch) => {
 };
 
 export const updateResume = (cvId, data) => async (dispatch) => {
-  // data: {title: "...""}
   try {
     dispatch({
       type: RESUMECONSTANTS.RESUME_UPDATE_REQUEST,
@@ -109,3 +106,24 @@ export const updateResume = (cvId, data) => async (dispatch) => {
     });
   }
 };
+
+export const deleteResume =
+  (cvId, body = {}) =>
+  async (dispatch) => {
+    // body: {education, ...}
+    try {
+      let result = await resumeApi.delete(cvId, body);
+
+      if (!result) {
+        return {};
+      }
+
+      if (Object.keys(body).length > 0) dispatch(getResume(cvId));
+      else dispatch(getAllResume());
+      return {
+        result: {},
+      };
+    } catch (error) {
+      return {};
+    }
+  };

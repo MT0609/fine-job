@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import moment from "moment";
+import { Helmet } from "react-helmet";
 import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import jwt_decode from "jwt-decode";
 import { toast } from "react-toastify";
 import { Box, Button, Tooltip, Grid, Typography } from "@material-ui/core";
@@ -21,6 +21,7 @@ import BasicInfoUpdate from "../../container/profile/update/basicInfo";
 import AboutUpdate from "../../container/profile/update/about";
 import EducationUpdate from "../../container/profile/update/education";
 import SkillUpdate from "../../container/profile/update/skill";
+import AccomplishUpdate from "../../container/profile/update/accomplish";
 import styles from "./index.module.scss";
 
 function Profile() {
@@ -30,7 +31,7 @@ function Profile() {
     localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN)
   )?.sub;
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -46,6 +47,8 @@ function Profile() {
   const [skillUpdateShow, setSkillUpdateShow] = useState(false);
   const [eduUpdateShow, setEduUpdateShow] = useState(false);
   const [eduUpdateInfo, setEduUpdateInfo] = useState(null);
+  const [accomplishUpdateShow, setAccomplishUpdateShow] = useState(false);
+  const [accomplishUpdateInfo, setAccomplishUpdateInfo] = useState(null);
 
   const handleSendConnection = () => {
     dispatch(userActions.sendConnReq(id));
@@ -95,6 +98,24 @@ function Profile() {
     }
   };
 
+  const handleModifyAccomplish = async (data, type = "modify") => {
+    let result;
+    if (type === "modify")
+      result = await dispatch(userActions.modifyAccomplishment(data));
+    else {
+      // type delete
+      const confirm = window.confirm(t("people.confirmDeleteAccomplishment"));
+      if (confirm)
+        result = await dispatch(userActions.deleteAccomplishment(data));
+    }
+    if (result?.result) {
+      setAccomplishUpdateShow(false);
+      if (type !== "modify")
+        toast("🦄 " + t("people.deleteAccomplishmentSuccess"));
+      dispatch(getUserData());
+    }
+  };
+
   const handleUpdateSkills = async (skills) => {
     const result = await dispatch(userActions.updateUser({ skills }));
     if (result?.result) {
@@ -109,6 +130,16 @@ function Profile() {
 
   return (
     <div className={styles.profile__container}>
+      <Helmet>
+        <html lang={i18n.language || "en"} />
+        <title>
+          {user && user?.baseInfo?.firstName
+            ? `${user?.baseInfo?.firstName} ${user?.baseInfo?.lastName} | `
+            : ""}
+          Profile | Fine Job
+        </title>
+      </Helmet>
+
       {user && (
         <>
           <section
@@ -338,6 +369,7 @@ function Profile() {
                 display="flex"
                 mb={1}
                 justifyContent="space-between"
+                alignItems="center"
               >
                 <div>
                   <a
@@ -363,8 +395,7 @@ function Profile() {
                     <p>
                       <span className={styles.profile__educations__date}>
                         {education.start_date
-                          ? // ? moment(education.start_date).format("MM/YYYY")
-                            t("people.education_startTime", {
+                          ? t("people.education_startTime", {
                               time: new Date(education.start_date),
                             })
                           : "?"}
@@ -431,6 +462,107 @@ function Profile() {
                 </Grid>
               ))}
             </Grid>
+          </section>
+
+          <section className={styles.profile__section}>
+            <Grid container alignItems="center" justify="space-between">
+              <Grid item>
+                <Typography variant="h6">
+                  {t("people.accomplishments")}
+                </Typography>
+              </Grid>
+              <Grid item>
+                {id === myID && (
+                  <>
+                    <Button
+                      onClick={() => {
+                        setAccomplishUpdateInfo(null);
+                        setAccomplishUpdateShow(true);
+                      }}
+                    >
+                      <Add />
+                    </Button>
+
+                    <AccomplishUpdate
+                      data={accomplishUpdateInfo}
+                      show={accomplishUpdateShow}
+                      onclose={() => setAccomplishUpdateShow(false)}
+                      onsubmit={handleModifyAccomplish}
+                    />
+                  </>
+                )}
+              </Grid>
+            </Grid>
+            {user.accomplishments?.map((accomplishment, index) => (
+              <Box
+                key={index}
+                display="flex"
+                mb={1}
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <div>
+                  {accomplishment.url ? (
+                    <a
+                      href={accomplishment.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={styles.profile__accomplish__name}
+                    >
+                      {accomplishment?.name}
+                    </a>
+                  ) : (
+                    <p className={styles.profile__accomplish__name}>
+                      {accomplishment?.name}
+                    </p>
+                  )}
+
+                  <p className={styles.profile__accomplish__sub}>
+                    {accomplishment.description}
+                  </p>
+                  {(accomplishment.start_date || accomplishment.end_date) && (
+                    <p>
+                      <span className={styles.profile__accomplish__date}>
+                        {accomplishment.start_date
+                          ? t("people.accomplishment_startTime", {
+                              time: new Date(accomplishment.start_date),
+                            })
+                          : "?"}
+                      </span>
+                      <span className={styles.profile__accomplish__date}>
+                        {accomplishment.end_date &&
+                          ` - ${t("people.accomplishment_endTime", {
+                            time: new Date(accomplishment.end_date),
+                          })}`}
+                      </span>
+                    </p>
+                  )}
+                </div>
+                {id === myID && (
+                  <div style={{ textAlign: "right" }}>
+                    <Button
+                      onClick={() => {
+                        setAccomplishUpdateInfo(accomplishment);
+                        setAccomplishUpdateShow(true);
+                      }}
+                    >
+                      <Edit />
+                    </Button>
+                    <Button
+                      onClick={() =>
+                        handleModifyAccomplish(
+                          { id: accomplishment.id },
+                          "delete"
+                        )
+                      }
+                      color="primary"
+                    >
+                      <Delete />
+                    </Button>
+                  </div>
+                )}
+              </Box>
+            ))}
           </section>
 
           <section className={styles.profile__section}>

@@ -44,8 +44,8 @@ export default function AboutUpdate(props) {
       clearTimeout(typingTimeoutRef.current);
     }
     typingTimeoutRef.current = setTimeout(async () => {
-      const result = await axios.get("/v1/universities", {
-        params: { name: e.target.value, limit: 10, page: 1 },
+      const result = await axios.get("/v1/universities/search", {
+        params: { q: e.target.value, limit: 10, page: 1 },
       });
       setSchoolSearchResult(result.results);
     }, 300);
@@ -66,7 +66,6 @@ export default function AboutUpdate(props) {
       return;
     }
     if (onsubmit) onsubmit(submitData);
-    console.log(submitData);
   };
 
   return (

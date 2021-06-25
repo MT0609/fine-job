@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -19,7 +20,7 @@ import styles from "./index.module.scss";
 function JobView() {
   const { id } = useParams();
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const jobState = useSelector((state) => state.job);
   const job = jobState.job;
 
@@ -47,6 +48,13 @@ function JobView() {
 
   return (
     <div className={styles.container}>
+      <Helmet>
+        <html lang={i18n.language || "en"} />
+        <title>
+          {job && job.title ? `${job.title} |` : ""} Jobs | Fine Job
+        </title>
+      </Helmet>
+
       {!jobState.isLoading ? (
         job ? (
           <>

@@ -39,6 +39,16 @@ const deleteEducation = catchAsync(async (req, res) => {
   res.send(user);
 });
 
+const modifyAccomplishment = catchAsync(async (req, res) => {
+  const user = await userService.modifyAccomplishment(req.params.userId, req.body);
+  res.send(user);
+});
+
+const deleteAccomplishment = catchAsync(async (req, res) => {
+  const user = await userService.deleteAccomplishment(req.params.userId, req.body);
+  res.send(user);
+});
+
 const deleteUser = catchAsync(async (req, res) => {
   await userService.deleteUserById(req.params.userId);
   res.status(httpStatus.NO_CONTENT).send();
@@ -81,6 +91,8 @@ module.exports = {
   getUser,
   updateUser,
   modifyEducation,
+  modifyAccomplishment,
+  deleteAccomplishment,
   deleteEducation,
   deleteUser,
   sendConnReq,

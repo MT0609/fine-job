@@ -52,14 +52,9 @@ function LanguageSubMenu(props) {
         onClose={handleClose}
       >
         <MenuItem onClick={() => handleChangeLanguage("en")}>
-          {/* <ListItemIcon
-            style={{ minWidth: "fit-content", marginRight: "1rem" }}
-          >
-            <Work fontSize="small" />
-          </ListItemIcon> */}
           <ListItemText primary="English" />
         </MenuItem>
-        <MenuItem onClick={() => handleChangeLanguage("cn")}>
+        <MenuItem onClick={() => handleChangeLanguage("zh")}>
           <ListItemText primary="简体中文" />
         </MenuItem>
         <MenuItem onClick={() => handleChangeLanguage("vi")}>

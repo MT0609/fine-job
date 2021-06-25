@@ -131,6 +131,40 @@ const deleteEducation = async (userID, reqBody) => {
   return user;
 };
 
+const modifyAccomplishment = async (userID, data) => {
+  const user = await getUserById(userID);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+
+  if (!data.id) {
+    data.id = require('mongoose').Types.ObjectId();
+    user.accomplishments.push(data);
+  } else {
+    let index = user.accomplishments.findIndex((item) => item.id.toString() === data.id.toString());
+    if (index > -1) {
+      user.accomplishments.splice(index, 1);
+      user.accomplishments.splice(index, 0, data);
+    }
+  }
+  await user.save();
+  return user;
+};
+
+const deleteAccomplishment = async (userID, reqBody) => {
+  const user = await getUserById(userID);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+
+  let index = user.accomplishments.findIndex((item) => item.id.toString() === reqBody.id.toString());
+  if (index > -1) {
+    user.accomplishments.splice(index, 1);
+    await user.save();
+  }
+  return user;
+};
+
 /**
  * Delete user by id
  * @param {ObjectId} userId
@@ -607,6 +641,8 @@ module.exports = {
   updateUserById,
   modifyEducation,
   deleteEducation,
+  modifyAccomplishment,
+  deleteAccomplishment,
   deleteUserById,
   formatUser,
   mergeDeep,
