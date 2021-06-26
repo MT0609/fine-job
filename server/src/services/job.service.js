@@ -170,13 +170,19 @@ const updateJobById = async (jobID, updateBody) => {
   await job.save();
 
   // Elastic update
-  const source = [
-    `ctx._source.title = ${job.title}`,
-    `ctx._source.company = ${job.company.name}`,
-    `ctx._source.description = ${job.description}`,
-  ];
 
-  await elasticService.update('jobs', job._id, source, job);
+  // Elastic delete
+  await elasticService.delete('jobs', job._id);
+
+  // Elastic index
+  const body = {
+    title: job.title,
+    company: job.company.name,
+    description: job.description,
+    data: job,
+  };
+
+  elasticService.index('jobs', job._id, body);
 
   return job;
 };
@@ -283,31 +289,6 @@ const postUnSaveJob = async (jobID, userID) => {
  */
 const searchJobs = async (filter, options, res) => {
   try {
-    // Job.search(
-    //   {
-    //     query_string: {
-    //       query: filter.q || '*',
-    //     },
-    //   },
-    //   {
-    //     hydrate: true,
-    //   },
-    //   function (err, results) {
-    //     if (err) {
-    //       console.log('Search failed: ', err);
-    //       throw new Error(err.message);
-    //     }
-    //     let allResults = results.hits.hits;
-    //     allResults = allResults.filter(function (result) {
-    //       return result !== undefined;
-    //     });
-    //     const { page, limit } = options;
-    //     const paginatedResults = allResults.slice((page - 1) * limit, page * limit);
-    //     const totalPages = Math.ceil(allResults.length / limit);
-    //     res.status(200).send({ results: paginatedResults, totalPages, page });
-    //   }
-    // );
-
     let allResults = await elasticService.search('jobs', filter.q);
     allResults = allResults.filter(function (result) {
       return result !== undefined;

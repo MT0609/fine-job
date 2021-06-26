@@ -92,14 +92,20 @@ const updateCompanyById = async (companyID, updateBody) => {
   await company.save();
 
   // Elastic update
-  const source = [
-    `ctx._source.name = ${company.name}`,
-    `ctx._source.headLine = ${company.headLine}`,
-    `ctx._source.about = ${company.about}`,
-    `ctx._source.industry = ${company.industry}`,
-  ];
 
-  await elasticService.update('companies', company._id, source, company);
+  // Elastic delete
+  await elasticService.delete('companies', company._id);
+
+  // Elastic index
+  const body = {
+    name: company.name,
+    headLine: company.headLine,
+    about: company.about,
+    industry: company.baseInfo.industry,
+    data: company,
+  };
+
+  elasticService.index('companies', company._id, body);
 
   return company;
 };
@@ -215,38 +221,6 @@ const postUnFollowCompany = async (companyID, userID) => {
  */
 const searchCompanies = async (filter, options, res) => {
   try {
-    // Company.search(
-    //   {
-    //     query_string: {
-    //       query: filter.q || '*',
-    //     },
-    //   },
-    //   {
-    //     hydrate: true,
-    //   },
-    //   function (err, results) {
-    //     if (err) {
-    //       console.log('Search failed: ', err);
-    //       throw new Error(err.message);
-    //     }
-    //     let allResults = results.hits.hits;
-    //     allResults = allResults.filter(function (result) {
-    //       return result !== undefined;
-    //     });
-    //     const { page, limit } = options;
-    //     const paginatedResults = allResults.slice((page - 1) * limit, page * limit);
-    //     const totalPages = Math.ceil(allResults.length / limit);
-    //     res.status(200).send({ results: paginatedResults, totalPages, page });
-    //   }
-    // );
-
-    // const must = [
-    //   { match: { name: filter.q } },
-    //   { match: { headLine: filter.q } },
-    //   { match: { about: filter.q } },
-    //   { match: { industry: filter.q } },
-    // ];
-
     let allResults = await elasticService.search('companies', filter.q);
     allResults = allResults.filter(function (result) {
       return result !== undefined;

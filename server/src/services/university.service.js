@@ -29,6 +29,7 @@ const queryUniversities = async (filter, options, res) => {
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
   }
 
+  // Script insert
   // fs.readFile(path.join(__dirname, './../../world_universities_and_domains.json'), 'utf8', async (err, data) => {
   //   if (err) console.log(err);
   //   else {
