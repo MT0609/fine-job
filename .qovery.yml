@@ -1,0 +1,11 @@
+---
+application:
+  name: "fine-job"
+  project: "fine-job"
+  organization: "QoveryCommunity"
+routers:
+- name: "main-fine-job"
+  routes:
+  - application_name: "fine-job"
+    paths:
+    - "/*"
