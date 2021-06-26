@@ -71,9 +71,9 @@ function MessageList(props) {
                     </Box>
                     <Box>
                       <p>
-                        {new Date(
-                          message.latestMessage[0]?.time
-                        ).toLocaleDateString()}
+                        {t("message.date", {
+                          date: new Date(message.latestMessage[0]?.time),
+                        })}
                       </p>
                     </Box>
                   </Box>

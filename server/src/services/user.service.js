@@ -128,6 +128,74 @@ const updateUserById = async (userId, updateBody) => {
   return user;
 };
 
+const modifyEducation = async (userID, eduData) => {
+  const user = await getUserById(userID);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+
+  if (!eduData.id) {
+    eduData.id = require('mongoose').Types.ObjectId();
+    user.baseInfo.educations.push(eduData);
+  } else {
+    let index = user.baseInfo.educations.findIndex((item) => item.id.toString() === eduData.id.toString());
+    if (index > -1) {
+      user.baseInfo.educations.splice(index, 1);
+      user.baseInfo.educations.splice(index, 0, eduData);
+    }
+  }
+  await user.save();
+  return user;
+};
+
+const deleteEducation = async (userID, reqBody) => {
+  const user = await getUserById(userID);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+
+  let index = user.baseInfo.educations.findIndex((item) => item.id.toString() === reqBody.id.toString());
+  if (index > -1) {
+    user.baseInfo.educations.splice(index, 1);
+    await user.save();
+  }
+  return user;
+};
+
+const modifyAccomplishment = async (userID, data) => {
+  const user = await getUserById(userID);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+
+  if (!data.id) {
+    data.id = require('mongoose').Types.ObjectId();
+    user.accomplishments.push(data);
+  } else {
+    let index = user.accomplishments.findIndex((item) => item.id.toString() === data.id.toString());
+    if (index > -1) {
+      user.accomplishments.splice(index, 1);
+      user.accomplishments.splice(index, 0, data);
+    }
+  }
+  await user.save();
+  return user;
+};
+
+const deleteAccomplishment = async (userID, reqBody) => {
+  const user = await getUserById(userID);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+
+  let index = user.accomplishments.findIndex((item) => item.id.toString() === reqBody.id.toString());
+  if (index > -1) {
+    user.accomplishments.splice(index, 1);
+    await user.save();
+  }
+  return user;
+};
+
 /**
  * Delete user by id
  * @param {ObjectId} userId
@@ -590,6 +658,10 @@ module.exports = {
   getUserByEmail,
   getUserByUsername,
   updateUserById,
+  modifyEducation,
+  deleteEducation,
+  modifyAccomplishment,
+  deleteAccomplishment,
   deleteUserById,
   formatUser,
   mergeDeep,

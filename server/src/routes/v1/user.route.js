@@ -17,6 +17,16 @@ router
   .patch(auth('updateUser'), validate(userValidation.updateUser), userController.updateUser)
   .delete(auth('manageUsers'), validate(userValidation.deleteUser), userController.deleteUser);
 
+router
+  .route('/:userId/modifyEducation')
+  .patch(auth('updateUser'), validate(userValidation.modifyEducation), userController.modifyEducation)
+  .delete(auth('manageUsers'), userController.deleteEducation);
+
+router
+  .route('/:userId/modifyAccomplishment')
+  .patch(auth('updateUser'), validate(userValidation.modifyAccomplishment), userController.modifyAccomplishment)
+  .delete(auth('manageUsers'), userController.deleteAccomplishment);
+
 router.route('/:receiverID/sendConnReq').post(auth(), validate(userValidation.sendConnReq), userController.sendConnReq);
 
 router

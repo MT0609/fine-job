@@ -6,4 +6,28 @@
       font-weight: bold;
     }
   }
+  &__educations {
+    &__name {
+      font-weight: 500;
+    }
+    &__sub {
+      font-size: 0.8rem;
+    }
+    &__date {
+      color: #666666;
+      font-size: 0.8rem;
+    }
+  }
+  &__accomplish {
+    &__name {
+      font-weight: 500;
+    }
+    &__sub {
+      font-size: 0.8rem;
+    }
+    &__date {
+      color: #666666;
+      font-size: 0.8rem;
+    }
+  }
 }

@@ -6,7 +6,7 @@ function Home() {
   const history = useHistory();
 
   useEffect(() => {
-    history.push(ROUTES.jobs);
+    history.replace(ROUTES.jobs);
   }, [history]);
 
   return (

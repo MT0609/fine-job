@@ -69,6 +69,110 @@ export const updateUser = (data) => async (dispatch) => {
   }
 };
 
+export const modifyEducation = (data) => async (dispatch) => {
+  try {
+    const token = localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN);
+    const userID = jwt_decode(token)?.sub;
+
+    let result = await userApi.modifyEducation(userID, data);
+
+    if (!result) {
+      dispatch({ type: USERCONSTANTS.USER_INFO_FAIL });
+      return;
+    }
+
+    dispatch({
+      type: USERCONSTANTS.USER_INFO_SUCCESS,
+      payload: result,
+    });
+
+    return {
+      result,
+      status: USERCONSTANTS.USER_INFO_SUCCESS,
+    };
+  } catch (error) {
+    dispatch({ type: USERCONSTANTS.USER_INFO_FAIL });
+  }
+};
+
+export const deleteEducation = (id) => async (dispatch) => {
+  try {
+    const token = localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN);
+    const userID = jwt_decode(token)?.sub;
+
+    let result = await userApi.deleteEducation(userID, id);
+
+    if (!result) {
+      dispatch({ type: USERCONSTANTS.USER_INFO_FAIL });
+      return;
+    }
+
+    dispatch({
+      type: USERCONSTANTS.USER_INFO_SUCCESS,
+      payload: result,
+    });
+
+    return {
+      result,
+      status: USERCONSTANTS.USER_INFO_SUCCESS,
+    };
+  } catch (error) {
+    dispatch({ type: USERCONSTANTS.USER_INFO_FAIL });
+  }
+};
+
+export const modifyAccomplishment = (data) => async (dispatch) => {
+  try {
+    const token = localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN);
+    const userID = jwt_decode(token)?.sub;
+
+    let result = await userApi.modifyAccomplishment(userID, data);
+
+    if (!result) {
+      dispatch({ type: USERCONSTANTS.USER_INFO_FAIL });
+      return;
+    }
+
+    dispatch({
+      type: USERCONSTANTS.USER_INFO_SUCCESS,
+      payload: result,
+    });
+
+    return {
+      result,
+      status: USERCONSTANTS.USER_INFO_SUCCESS,
+    };
+  } catch (error) {
+    dispatch({ type: USERCONSTANTS.USER_INFO_FAIL });
+  }
+};
+
+export const deleteAccomplishment = (id) => async (dispatch) => {
+  try {
+    const token = localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN);
+    const userID = jwt_decode(token)?.sub;
+
+    let result = await userApi.deleteAccomplishment(userID, id);
+
+    if (!result) {
+      dispatch({ type: USERCONSTANTS.USER_INFO_FAIL });
+      return;
+    }
+
+    dispatch({
+      type: USERCONSTANTS.USER_INFO_SUCCESS,
+      payload: result,
+    });
+
+    return {
+      result,
+      status: USERCONSTANTS.USER_INFO_SUCCESS,
+    };
+  } catch (error) {
+    dispatch({ type: USERCONSTANTS.USER_INFO_FAIL });
+  }
+};
+
 export const getConnectionStatus = (userID) => async (dispatch) => {
   try {
     let result = await userApi.getConnStatus(userID);

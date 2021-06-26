@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Grid, Button, TextField, Box } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 function LocationsAdd(props) {
   const { defaultValues = [""], onEdit, error, setError } = props;
-
+  const { t } = useTranslation();
   const [locations, setLocations] = useState(defaultValues);
 
   const handleChangeLocation = (e, index) => {
@@ -35,7 +36,9 @@ function LocationsAdd(props) {
   return (
     <Grid container spacing={2}>
       <Grid item sm={2} xs={12}>
-        <div style={{ paddingTop: "1rem" }}>Locations</div>
+        <div style={{ paddingTop: "1rem", textAlign: "left" }}>
+          {t("job.location")}
+        </div>
       </Grid>
       <Grid item sm={10} xs={12}>
         <Grid container spacing={2} direction="column" alignItems="flex-start">
@@ -43,7 +46,7 @@ function LocationsAdd(props) {
             <Grid item style={{ width: "100%" }}>
               <TextField
                 style={{ marginTop: "-10px", width: "60%" }}
-                label={`Location ${index + 1}`}
+                label={`${t("job.location")} ${index + 1}`}
                 value={location}
                 fullWidth
                 inputProps={{ style: { fontSize: 15 } }} // font size of input text

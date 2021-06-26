@@ -1,9 +1,11 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { TextField, Box } from "@material-ui/core";
 
 function SkillAutoComplete(props) {
   const { skills, selectedSkills = [], onchange, error, setError } = props;
+  const { t } = useTranslation();
 
   return (
     <>
@@ -23,9 +25,8 @@ function SkillAutoComplete(props) {
             {...params}
             variant="outlined"
             size="small"
-            label="Skills"
+            label={t("job.skills")}
             name="skills"
-            placeholder="Add more skills"
           />
         )}
       />

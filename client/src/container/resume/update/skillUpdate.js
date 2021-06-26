@@ -21,9 +21,9 @@ export default function CVSkillUpdate(props) {
   };
 
   return (
-    <Dialog maxWidth="xs" fullWidth open={open} onClose={handleClose}>
-      <DialogTitle style={{ paddingBottom: 0 }}>Edit Summary</DialogTitle>
-      <DialogContent style={{ paddingTop: 0 }}>
+    <Dialog fullWidth open={open} onClose={handleClose}>
+      <DialogTitle style={{ paddingBottom: 0 }}>Edit Skills</DialogTitle>
+      <DialogContent>
         <Autocomplete
           multiple
           options={allSkills}

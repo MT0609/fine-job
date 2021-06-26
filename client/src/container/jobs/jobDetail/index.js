@@ -58,7 +58,11 @@ function JobDetail(props) {
                 {job.company?.name}
               </Link>
               <p className={styles.detail__subheader}>
-                <span>Posted on: {new Date(job.posted).toDateString()}</span>
+                <span>
+                  {t("job.postedDay", {
+                    date: new Date(job.posted),
+                  })}
+                </span>
                 <span className={styles.detail__viewcount}>
                   {t("job.viewCount", { number: job.viewCount })}
                 </span>
@@ -74,7 +78,7 @@ function JobDetail(props) {
                     width: "fit-content",
                   }}
                 >
-                  {job.status}
+                  {t("job.status", { status: job.status })}
                 </Box>
               </Grid>
             )}
@@ -86,22 +90,23 @@ function JobDetail(props) {
                 <a href={job.directApplyUrl} target="_blank" rel="noreferrer">
                   <button className={styles.detail__directApply}>
                     <OpenInNew fontSize="small" />
-                    Direct Apply
+                    {t("job.directApply")}
                   </button>
                 </a>
               )}
               <Box mt={1} mr={1} mb={1}>
                 {user.user?.applies?.some((el) => el.id === job.id) ? (
                   <button className={styles.detail__applied}>
-                    Applied{" "}
-                    {timeDiff(
-                      new Date(
-                        user.user.applies.find(
-                          (el) => el.id === job.id
-                        ).createdAt
+                    {t("job.applyTimeAgo", {
+                      timeDiff: timeDiff(
+                        new Date(
+                          user.user.applies.find(
+                            (el) => el.id === job.id
+                          ).createdAt
+                        ),
+                        new Date()
                       ),
-                      new Date()
-                    )}
+                    })}
                   </button>
                 ) : (
                   <>
@@ -163,7 +168,7 @@ function JobDetail(props) {
             </div>
 
             <div className={styles.detail__section}>
-              <p> {t("job.skills")}</p>
+              <p>{t("job.skills")}</p>
               <ul className={styles.detail__list}>
                 {job.skills.length &&
                   job.skills.map((skill, index) => (
@@ -173,7 +178,7 @@ function JobDetail(props) {
             </div>
 
             <div className={styles.detail__section}>
-              <p> {t("job.employmentType")}</p>
+              <p>{t("job.employmentType")}</p>
               <ul className={styles.detail__list}>
                 {job.job.jobType.map((type, index) => (
                   <li key={index}>{type}</li>
@@ -182,7 +187,7 @@ function JobDetail(props) {
             </div>
 
             <div className={styles.detail__section}>
-              <p> {t("job.maxSalary")}</p>
+              <p>{t("job.maxSalary")}</p>
               <span>{job.maxSalary}</span>
             </div>
           </section>

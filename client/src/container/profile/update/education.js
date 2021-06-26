@@ -65,13 +65,16 @@ export default function AboutUpdate(props) {
       setRangeDateError(t("people.education_StartEndTime_error"));
       return;
     }
-    if (onsubmit) onsubmit({ education: submitData });
+    if (onsubmit) onsubmit(submitData);
   };
 
   return (
     <Dialog fullWidth open={show} onClose={handleClose}>
       <DialogTitle>
         {data ? t("people.updateEducation") : t("people.insertEducation")}
+        {/* {type === "insert"
+          ? t("people.insertEducation")
+          : t("people.updateEducation")} */}
       </DialogTitle>
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>

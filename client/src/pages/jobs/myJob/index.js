@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
 import { useHistory, useLocation } from "react-router-dom";
 import { Container, Divider, Typography } from "@material-ui/core";
@@ -52,6 +53,11 @@ function MyJob() {
 
   return (
     <div className={styles.myjob}>
+      <Helmet>
+        <html lang="en" />
+        <title>My Jobs | Fine Job</title>
+      </Helmet>
+
       <Container
         maxWidth="sm"
         style={{

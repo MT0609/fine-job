@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import {
   Container,
   Grid,
@@ -13,21 +15,21 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Add, Edit, RemoveCircle } from "@material-ui/icons";
-import { getAllResume, createResume } from "../../actions/resumeActions";
+import {
+  getAllResume,
+  createResume,
+  deleteResume,
+} from "../../actions/resumeActions";
 import TitleFieldDialog from "../../container/resume/create/titleDialog";
-import ResumePreview from "../../container/resume/preview";
 import * as RESUMECONSTANTS from "./../../constants/resumeConstants";
 import styles from "./index.module.scss";
 
 function ResumeHomePage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const resumeState = useSelector((state) => state.resume);
   const cvs = resumeState?.cvs;
 
   const [titleFieldDialogShow, setTitleFielDialogShow] = useState(false);
-  const [resumePreviewData, setResumePreviewData] = useState(null);
-  const [resumePreviewOpen, setResumePreviewOpen] = useState(false);
-
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -44,9 +46,13 @@ function ResumeHomePage() {
     }
   };
 
-  const handleOpenResumePreview = (data) => {
-    setResumePreviewData(data);
-    setResumePreviewOpen(true);
+  const handleDeleteCV = async (cvID) => {
+    const confirm = window.confirm(t("resume.deleteConfirm"));
+    if (confirm) {
+      const result = await dispatch(deleteResume(cvID));
+      if (result.result) toast(`🦄 ${t("resume.deleteSuccess")}`);
+      else toast(`🦄 ${t("resume.deleteFail")}`);
+    }
   };
 
   const useStyles = makeStyles({
@@ -62,6 +68,11 @@ function ResumeHomePage() {
 
   return (
     <div>
+      <Helmet>
+        <html lang={i18n.language || "en"} />
+        <title>Resume | Fine Job</title>
+      </Helmet>
+
       {cvs && cvs.length ? (
         <Container
           maxWidth="sm"
@@ -109,7 +120,9 @@ function ResumeHomePage() {
                   <Grid item xs={7} style={{ textAlign: "left" }}>
                     <p className={styles.cvhome__cvtitle}>{cv.title}</p>
                     <p className={styles.cvhome__lastedit}>
-                      Posted on {new Date(cv.lastEdited).toDateString()}
+                      {t("resume.lastEditedDate", {
+                        date: new Date(cv.lastEdited),
+                      })}
                     </p>
                   </Grid>
                   <Grid item xs style={{ textAlign: "right" }}>
@@ -118,11 +131,11 @@ function ResumeHomePage() {
                         <Edit />
                       </Button>
                     </Link>
-                    <Button className={classes.btnDelete}>
+                    <Button
+                      className={classes.btnDelete}
+                      onClick={() => handleDeleteCV(cv.id)}
+                    >
                       <RemoveCircle />
-                    </Button>
-                    <Button onClick={() => handleOpenResumePreview(cv)}>
-                      Preview
                     </Button>
                   </Grid>
                 </Grid>
@@ -130,12 +143,6 @@ function ResumeHomePage() {
               <Divider />
             </div>
           ))}
-
-          <ResumePreview
-            data={resumePreviewData}
-            open={resumePreviewOpen}
-            onclose={() => setResumePreviewOpen(false)}
-          />
         </Container>
       ) : (
         <Paper

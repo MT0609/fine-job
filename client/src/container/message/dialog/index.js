@@ -60,7 +60,7 @@ export default function MessageDialog(props) {
             <InboxMessages
               myInfo={{
                 avatar: myInfo?.avatar,
-                name: myInfo.baseInfo?.lastName,
+                name: myInfo?.baseInfo?.lastName,
               }}
               receiver={{
                 avatar: `${message.avatar}`,

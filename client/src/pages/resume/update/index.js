@@ -9,22 +9,25 @@ import {
   Typography,
   Box,
 } from "@material-ui/core";
-import { Email, Phone, Edit } from "@material-ui/icons";
+import { toast } from "react-toastify";
+import { Helmet } from "react-helmet";
+import { useTranslation } from "react-i18next";
+import { Email, Phone, Edit, Add, Delete } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import CVBasicInfoUpdate from "../../../container/resume/update/basicUpdate";
 import CVAboutUpdate from "../../../container/resume/update/aboutUpdate";
-import CVExpUpdate from "../../../container/resume/update/expUpdate";
 import CVEduUpdate from "../../../container/resume/update/eduUpdate";
 import CVSkillUpdate from "../../../container/resume/update/skillUpdate";
-// import LicenseAndCertUpdate from "../../../container/resume/update/licenseAndCertUpdate";
+import AccomplishUpdate from "../../../container/resume/update/accomplishUpdate";
 import { JOBSKILLS } from "../../../constants/jobConstants";
+import * as cvActions from "../../../actions/resumeActions";
 import * as RESUMECONSTANTS from "../../../constants/resumeConstants";
-import { getResume, updateResume } from "../../../actions/resumeActions";
 import styles from "./index.module.scss";
 
 function ResumeUpdate() {
   const { id } = useParams();
   const resumeState = useSelector((state) => state.resume);
+  const auth = useSelector((state) => state.auth);
   const cv = resumeState.cv;
 
   const updateInitialState = {
@@ -33,24 +36,35 @@ function ResumeUpdate() {
     experience: false,
     education: false,
     skills: false,
+    accomplish: false,
     license: false,
   };
   const [updateDialog, setUpdateDialog] = useState(updateInitialState);
+  const [eduUpdateInfo, setEduUpdateInfo] = useState(null);
+  const [accomplishUpdateInfo, setAccomplishUpdateInfo] = useState(null);
 
+  const { t } = useTranslation();
   const dispatch = useDispatch();
-
   useEffect(() => {
     if (id) {
-      dispatch(getResume(id));
+      dispatch(cvActions.getResume(id));
     }
   }, [id, dispatch]);
 
-  const handleUpdate = async (data) => {
-    console.log(data);
-    const result = await dispatch(updateResume(id, data));
-
+  const handleUpdate = async (data, type = "modify") => {
+    let result;
+    if (type === "modify")
+      result = await dispatch(cvActions.updateResume(id, data));
+    else {
+      // type delete
+      const confirm = window.confirm(t("resume.deleteConfirm"));
+      if (confirm) result = await dispatch(cvActions.deleteResume(id, data));
+    }
     if (result?.status === RESUMECONSTANTS.RESUME_UPDATE_SUCCESS) {
       setUpdateDialog(updateInitialState);
+      setEduUpdateInfo(null);
+      if (type !== "modify" && data.educations)
+        toast("🦄 " + t("people.deleteEducationSuccess"));
     }
   };
 
@@ -64,6 +78,12 @@ function ResumeUpdate() {
 
   return (
     <>
+      <Helmet>
+        <title>
+          {cv && cv?.title ? `${cv.title} | ` : ""}
+          Resume | Fine Job
+        </title>
+      </Helmet>
       {cv?.userSnapShort && (
         <Container
           maxWidth="sm"
@@ -87,29 +107,31 @@ function ResumeUpdate() {
                   <p>{cv.userSnapShort.baseInfo.location}</p>
                 </Typography>
               </Grid>
-              <Grid item>
-                <Button
-                  className={classes.btnEdit}
-                  onClick={() =>
-                    setUpdateDialog((state) => ({ ...state, basic: true }))
-                  }
-                >
-                  <Edit />
-                </Button>
-                <CVBasicInfoUpdate
-                  open={updateDialog.basic}
-                  onclose={() =>
-                    setUpdateDialog((state) => ({ ...state, basic: false }))
-                  }
-                  data={{
-                    firstName: cv.userSnapShort.baseInfo?.firstName,
-                    lastName: cv.userSnapShort.baseInfo?.lastName,
-                    email: cv.userSnapShort.contact?.email,
-                    phone: cv.userSnapShort.contact?.phone,
-                  }}
-                  onsubmit={handleUpdate}
-                />
-              </Grid>
+              {cv.userID === auth?.user?.id && (
+                <Grid item>
+                  <Button
+                    className={classes.btnEdit}
+                    onClick={() =>
+                      setUpdateDialog((state) => ({ ...state, basic: true }))
+                    }
+                  >
+                    <Edit />
+                  </Button>
+                  <CVBasicInfoUpdate
+                    open={updateDialog.basic}
+                    onclose={() =>
+                      setUpdateDialog((state) => ({ ...state, basic: false }))
+                    }
+                    data={{
+                      firstName: cv.userSnapShort.baseInfo?.firstName,
+                      lastName: cv.userSnapShort.baseInfo?.lastName,
+                      email: cv.userSnapShort.contact?.email,
+                      phone: cv.userSnapShort.contact?.phone,
+                    }}
+                    onsubmit={handleUpdate}
+                  />
+                </Grid>
+              )}
             </Grid>
 
             {cv.userSnapShort.contact.email && (
@@ -137,71 +159,30 @@ function ResumeUpdate() {
           <section className={styles.cvupdate__section}>
             <Grid container justify="space-between">
               <Grid item>
-                <Typography variant="h6">About</Typography>
+                <Typography variant="h6">{t("people.about")}</Typography>
               </Grid>
-              <Grid item>
-                <Button
-                  className={classes.btnEdit}
-                  onClick={() =>
-                    setUpdateDialog((state) => ({ ...state, about: true }))
-                  }
-                >
-                  <Edit />
-                </Button>
-                <CVAboutUpdate
-                  open={updateDialog.about}
-                  onclose={() =>
-                    setUpdateDialog((state) => ({ ...state, about: false }))
-                  }
-                  data={cv.userSnapShort.about}
-                  onsubmit={handleUpdate}
-                />
-              </Grid>
+              {cv.userID === auth?.user?.id && (
+                <Grid item>
+                  <Button
+                    className={classes.btnEdit}
+                    onClick={() =>
+                      setUpdateDialog((state) => ({ ...state, about: true }))
+                    }
+                  >
+                    <Edit />
+                  </Button>
+                  <CVAboutUpdate
+                    open={updateDialog.about}
+                    onclose={() =>
+                      setUpdateDialog((state) => ({ ...state, about: false }))
+                    }
+                    data={cv.userSnapShort.about}
+                    onsubmit={handleUpdate}
+                  />
+                </Grid>
+              )}
             </Grid>
             <Box>{cv.userSnapShort.about}</Box>
-          </section>
-
-          <Divider />
-
-          {/* Experience */}
-          <section className={styles.cvupdate__section}>
-            <Grid container justify="space-between">
-              <Grid item>
-                <Typography variant="h6">Experience</Typography>
-              </Grid>
-              <Grid item>
-                <Button
-                  className={classes.btnEdit}
-                  onClick={() =>
-                    setUpdateDialog((state) => ({ ...state, experience: true }))
-                  }
-                >
-                  <Edit />
-                </Button>
-                <CVExpUpdate
-                  open={updateDialog.experience}
-                  onclose={() =>
-                    setUpdateDialog((state) => ({
-                      ...state,
-                      experience: false,
-                    }))
-                  }
-                  data={cv.userSnapShort.experiences}
-                  onsubmit={handleUpdate}
-                />
-              </Grid>
-            </Grid>
-            {cv.userSnapShort.experiences.map((experience, index1) => {
-              return (
-                <Box style={{ marginBottom: "1rem" }}>
-                  {Object.keys(experience).map((key, index2) => (
-                    <p key={index1 + index2}>
-                      {key}: {experience[key]}
-                    </p>
-                  ))}
-                </Box>
-              );
-            })}
           </section>
 
           <Divider />
@@ -210,41 +191,110 @@ function ResumeUpdate() {
           <section className={styles.cvupdate__section}>
             <Grid container justify="space-between">
               <Grid item>
-                <Typography variant="h6">Educations</Typography>
+                <Typography variant="h6">{t("people.education")}</Typography>
               </Grid>
-              <Grid item>
-                <Button
-                  className={classes.btnEdit}
-                  onClick={() =>
-                    setUpdateDialog((state) => ({ ...state, education: true }))
-                  }
-                >
-                  <Edit />
-                </Button>
-                <CVEduUpdate
-                  open={updateDialog.education}
-                  onclose={() =>
-                    setUpdateDialog((state) => ({
-                      ...state,
-                      education: false,
-                    }))
-                  }
-                  data={cv.userSnapShort.baseInfo.educations}
-                  onsubmit={handleUpdate}
-                />
-              </Grid>
+              {cv.userID === auth?.user?.id && (
+                <Grid item>
+                  <Button
+                    className={classes.btnEdit}
+                    onClick={() => {
+                      setEduUpdateInfo(null);
+                      setUpdateDialog((state) => ({
+                        ...state,
+                        education: true,
+                      }));
+                    }}
+                  >
+                    <Add />
+                  </Button>
+                  <CVEduUpdate
+                    show={updateDialog.education}
+                    onclose={() =>
+                      setUpdateDialog((state) => ({
+                        ...state,
+                        education: false,
+                      }))
+                    }
+                    data={eduUpdateInfo}
+                    onsubmit={(data) => handleUpdate(data)}
+                  />
+                </Grid>
+              )}
             </Grid>
-            {cv.userSnapShort.baseInfo.educations.map((edu, index1) => {
-              return (
-                <Box style={{ marginBottom: "1rem" }}>
-                  {Object.keys(edu).map((key, index2) => (
-                    <p key={index1 + index2}>
-                      {key}: {edu[key]}
+            {cv.userSnapShort?.baseInfo.educations?.map((education, index) => (
+              <Box
+                key={index}
+                display="flex"
+                mb={1}
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <div>
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={education.school?.web_pages[0]}
+                    className={styles.cvupdate__educations__name}
+                  >
+                    {education.school?.name}
+                  </a>
+                  <p>
+                    <span className={styles.cvupdate__educations__sub}>
+                      {education.degree}
+                    </span>
+                    <span className={styles.cvupdate__educations__sub}>
+                      {education.degree && education.major && ", "}
+                    </span>
+                    <span className={styles.cvupdate__educations__sub}>
+                      {education.major}
+                    </span>
+                  </p>
+                  {(education.start_date || education.end_date) && (
+                    <p>
+                      <span className={styles.cvupdate__educations__date}>
+                        {education.start_date
+                          ? t("people.education_startTime", {
+                              time: new Date(education.start_date),
+                            })
+                          : "?"}
+                      </span>
+                      <span className={styles.cvupdate__educations__date}>
+                        {education.end_date &&
+                          ` - ${t("people.education_endTime", {
+                            time: new Date(education.end_date),
+                          })}`}
+                      </span>
                     </p>
-                  ))}
-                </Box>
-              );
-            })}
+                  )}
+                </div>
+                {cv.userID === auth?.user?.id && (
+                  <div style={{ textAlign: "right" }}>
+                    <Button
+                      onClick={() => {
+                        setEduUpdateInfo(education);
+                        setUpdateDialog((state) => ({
+                          ...state,
+                          education: true,
+                        }));
+                      }}
+                    >
+                      <Edit />
+                    </Button>
+                    <Button
+                      onClick={() =>
+                        handleUpdate(
+                          { education: { id: education.id } },
+                          "delete"
+                        )
+                      }
+                      color="primary"
+                    >
+                      <Delete />
+                    </Button>
+                  </div>
+                )}
+              </Box>
+            ))}
           </section>
 
           <Divider />
@@ -254,34 +304,36 @@ function ResumeUpdate() {
             <Grid container justify="space-between">
               <Grid item>
                 <Typography variant="h6" style={{ marginBottom: "1rem" }}>
-                  Skills
+                  {t("people.skills")}
                 </Typography>
               </Grid>
-              <Grid item>
-                <Button
-                  className={classes.btnEdit}
-                  onClick={() =>
-                    setUpdateDialog((prevState) => ({
-                      ...prevState,
-                      skills: true,
-                    }))
-                  }
-                >
-                  <Edit />
-                </Button>
-                <CVSkillUpdate
-                  allSkills={JOBSKILLS}
-                  userSkills={cv.userSnapShort.skills}
-                  open={updateDialog.skills}
-                  onclose={() =>
-                    setUpdateDialog((prevState) => ({
-                      ...prevState,
-                      skills: false,
-                    }))
-                  }
-                  onsubmit={handleUpdate}
-                />
-              </Grid>
+              {cv.userID === auth?.user?.id && (
+                <Grid item>
+                  <Button
+                    className={classes.btnEdit}
+                    onClick={() =>
+                      setUpdateDialog((prevState) => ({
+                        ...prevState,
+                        skills: true,
+                      }))
+                    }
+                  >
+                    <Edit />
+                  </Button>
+                  <CVSkillUpdate
+                    allSkills={JOBSKILLS}
+                    userSkills={cv.userSnapShort.skills}
+                    open={updateDialog.skills}
+                    onclose={() =>
+                      setUpdateDialog((prevState) => ({
+                        ...prevState,
+                        skills: false,
+                      }))
+                    }
+                    onsubmit={handleUpdate}
+                  />
+                </Grid>
+              )}
             </Grid>
             <span>
               {cv.userSnapShort.skills.map((skill, index) => {
@@ -295,48 +347,115 @@ function ResumeUpdate() {
 
           <Divider />
 
-          {/* Licenses & certifications */}
-          {/* <section className={styles.cvupdate__section}>
-            <Grid container justify="space-between">
+          {/* Accomplishments */}
+          <section className={styles.cvupdate__section}>
+            <Grid container alignItems="center" justify="space-between">
               <Grid item>
-                <Typography variant="h6" style={{ marginBottom: "1rem" }}>
-                  Licenses & certifications
+                <Typography variant="h6">
+                  {t("people.accomplishments")}
                 </Typography>
               </Grid>
-              <Grid item>
-                <Button
-                  className={classes.btnEdit}
-                  onClick={() =>
-                    setUpdateDialog((prevState) => ({
-                      ...prevState,
-                      license: true,
-                    }))
-                  }
-                >
-                  <Edit />
-                </Button>
-                <LicenseAndCertUpdate
-                  licenseAndCerts={cv.userSnapShort.licenseAndCerts}
-                  open={updateDialog.license}
-                  onclose={() =>
-                    setUpdateDialog((prevState) => ({
-                      ...prevState,
-                      license: false,
-                    }))
-                  }
-                  onsubmit={handleUpdate}
-                />
-              </Grid>
+              {cv.userID === auth?.user?.id && (
+                <Grid item>
+                  <Button
+                    onClick={() => {
+                      setAccomplishUpdateInfo(null);
+                      setUpdateDialog((prevState) => ({
+                        ...prevState,
+                        accomplish: true,
+                      }));
+                    }}
+                  >
+                    <Add />
+                  </Button>
+
+                  <AccomplishUpdate
+                    data={accomplishUpdateInfo}
+                    show={updateDialog.accomplish}
+                    onclose={() =>
+                      setUpdateDialog((prevState) => ({
+                        ...prevState,
+                        accomplish: false,
+                      }))
+                    }
+                    onsubmit={handleUpdate}
+                  />
+                </Grid>
+              )}
             </Grid>
-            {cv.userSnapShort.licenseAndCerts.map((cert, index) => {
-              return (
-                <Box style={{ marginBottom: "1rem" }} key={index}>
-                  <p>{cert.name}</p>
-                  <p>{cert.issueDate}</p>
-                </Box>
-              );
-            })}
-          </section> */}
+            {cv.userSnapShort.accomplishments?.map((accomplishment, index) => (
+              <Box
+                key={index}
+                display="flex"
+                mb={1}
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <div>
+                  {accomplishment.url ? (
+                    <a
+                      href={accomplishment.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={styles.cvupdate__accomplish__name}
+                    >
+                      {accomplishment?.name}
+                    </a>
+                  ) : (
+                    <p className={styles.cvupdate__accomplish__name}>
+                      {accomplishment?.name}
+                    </p>
+                  )}
+                  <p className={styles.cvupdate__accomplish__sub}>
+                    {accomplishment.description}
+                  </p>
+                  {(accomplishment.start_date || accomplishment.end_date) && (
+                    <p>
+                      <span className={styles.cvupdate__accomplish__date}>
+                        {accomplishment.start_date
+                          ? t("people.accomplishment_startTime", {
+                              time: new Date(accomplishment.start_date),
+                            })
+                          : "?"}
+                      </span>
+                      <span className={styles.cvupdate__accomplish__date}>
+                        {accomplishment.end_date &&
+                          ` - ${t("people.accomplishment_endTime", {
+                            time: new Date(accomplishment.end_date),
+                          })}`}
+                      </span>
+                    </p>
+                  )}
+                </div>
+                {cv.userID === auth?.user?.id && (
+                  <div style={{ textAlign: "right" }}>
+                    <Button
+                      onClick={() => {
+                        setAccomplishUpdateInfo(accomplishment);
+                        setUpdateDialog((prevState) => ({
+                          ...prevState,
+                          accomplish: true,
+                        }));
+                      }}
+                    >
+                      <Edit />
+                    </Button>
+                    <Button
+                      onClick={() =>
+                        handleUpdate(
+                          { accomplish: { id: accomplishment.id } },
+                          "delete"
+                        )
+                      }
+                      color="primary"
+                    >
+                      <Delete />
+                    </Button>
+                  </div>
+                )}
+              </Box>
+            ))}
+          </section>
         </Container>
       )}
     </>

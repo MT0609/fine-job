@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -20,7 +21,7 @@ import styles from "./index.module.scss";
 function TalentHomePage() {
   const state = useSelector((state) => state.job);
   const jobs = state?.jobs;
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const dispatch = useDispatch();
 
@@ -47,6 +48,11 @@ function TalentHomePage() {
 
   return (
     <div className={styles.talenthome}>
+      <Helmet>
+        <html lang={i18n.language || "en"} />
+        <title>Talent | Fine Job</title>
+      </Helmet>
+
       {jobs.length ? (
         <Container
           maxWidth="sm"
@@ -115,10 +121,12 @@ function TalentHomePage() {
                             : styles["talenthome__jobstatus--close"]
                         }`}
                       >
-                        {job.status}
+                        {t("job.status", { status: job.status })}
                       </span>
                       <span className={styles["talenthome__applicants"]}>
-                        {job.job.applicantCount} applicants
+                        {t("job.applicantNumber", {
+                          number: job.job?.applicantCount,
+                        })}
                       </span>
                     </p>
                   </Grid>

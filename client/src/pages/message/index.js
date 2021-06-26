@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useSelector, useDispatch } from "react-redux";
 import { Container, Grid, useMediaQuery } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
@@ -31,44 +32,51 @@ function MessagePage() {
   };
 
   return (
-    <Container
-      style={{
-        height: "70vh",
-        padding: 0,
-        backgroundColor: "white",
-        boxShadow: "0 3px 8px rgba(0, 0, 0, 0.15)",
-      }}
-    >
-      <Grid container style={{ height: "100%" }}>
-        <Grid
-          item
-          xs={12}
-          md={6}
-          style={{ height: "100%", borderRight: "2px solid #F4F4F4" }}
-        >
-          <MessageList
-            messages={messages}
-            onMessageClick={handleMessageClick}
-            jobSelectHightLight={messageGridAllow}
-          />
-        </Grid>
+    <>
+      <Helmet>
+        <html lang="en" />
+        <title>Message | Fine Job</title>
+      </Helmet>
 
-        {messageGridAllow && (
-          <Grid item md style={{ height: "100%" }}>
-            <MessageDetail myInfo={myInfo} message={message} />
+      <Container
+        style={{
+          height: "70vh",
+          padding: 0,
+          backgroundColor: "white",
+          boxShadow: "0 3px 8px rgba(0, 0, 0, 0.15)",
+        }}
+      >
+        <Grid container style={{ height: "100%" }}>
+          <Grid
+            item
+            xs={12}
+            md={6}
+            style={{ height: "100%", borderRight: "2px solid #F4F4F4" }}
+          >
+            <MessageList
+              messages={messages}
+              onMessageClick={handleMessageClick}
+              jobSelectHightLight={messageGridAllow}
+            />
           </Grid>
-        )}
 
-        {messageDialogAllow && (
-          <MessageDialog
-            myInfo={myInfo}
-            show={messageDialogShow && messageDialogAllow}
-            message={message}
-            close={() => setMessageDialogShow(false)}
-          />
-        )}
-      </Grid>
-    </Container>
+          {messageGridAllow && (
+            <Grid item md style={{ height: "100%" }}>
+              <MessageDetail myInfo={myInfo} message={message} />
+            </Grid>
+          )}
+
+          {messageDialogAllow && (
+            <MessageDialog
+              myInfo={myInfo}
+              show={messageDialogShow && messageDialogAllow}
+              message={message}
+              close={() => setMessageDialogShow(false)}
+            />
+          )}
+        </Grid>
+      </Container>
+    </>
   );
 }
 

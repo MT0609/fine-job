@@ -19,7 +19,7 @@ export const getJobs =
       // if (page) params.page = +page;
 
       let result = await jobApi.get(title, page, limit);
-      console.log(result);
+
       dispatch({
         type: JOBCONSTANTS.JOB_GET_ALL_SUCCESS,
         payload: result,
@@ -168,8 +168,6 @@ export const deleteJob = (id) => async (dispatch) => {
     });
 
     let result = await jobApi.delete(id);
-
-    console.log(result);
 
     if (!result) {
       dispatch({

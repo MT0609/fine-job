@@ -55,6 +55,9 @@ const cvSchema = mongoose.Schema(
       skills: {
         type: Array,
       },
+      accomplishments: {
+        type: Array,
+      },
     },
     blacklisted: {
       type: Boolean,

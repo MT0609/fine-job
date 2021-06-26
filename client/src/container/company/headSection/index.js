@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Divider, Grid, Typography } from "@material-ui/core";
 import { AppBar, Tabs, Tab } from "@material-ui/core";
 import { Add, Check, OpenInNew, LocationOn } from "@material-ui/icons";
@@ -7,6 +8,7 @@ import styles from "./index.module.scss";
 
 function CompanyHeadContainer(props) {
   const { company, tabValue, onTabChange, user, onFollow, onUnFollow } = props;
+  const { t } = useTranslation();
 
   const handleOnFollowClick = () => {
     if (onFollow) onFollow();
@@ -61,13 +63,19 @@ function CompanyHeadContainer(props) {
 
           <p>
             {company.followers ? (
-              <span>{company.followers.length} followers</span>
+              <span>
+                {t("company.followNumber", {
+                  number: company.followers.length,
+                })}
+              </span>
             ) : (
               ""
             )}
             {company.employees ? (
               <span className={styles.company__head__employees}>
-                {company.employees.length} employees
+                {t("company.employeeNumber", {
+                  number: company.employees.length,
+                })}
               </span>
             ) : (
               ""
@@ -86,7 +94,7 @@ function CompanyHeadContainer(props) {
                   onClick={handleOnUnFollowClick}
                 >
                   <Check style={{ marginRight: "0.5rem" }} />
-                  <span>Following</span>
+                  <span>{t("company.following")}</span>
                 </button>
               </Grid>
             ) : (
@@ -96,7 +104,7 @@ function CompanyHeadContainer(props) {
                   onClick={handleOnFollowClick}
                 >
                   <Add style={{ marginRight: "0.5rem" }} />
-                  <span>Follow</span>
+                  <span>{t("company.follow")}</span>
                 </button>
               </Grid>
             ))}
@@ -111,7 +119,7 @@ function CompanyHeadContainer(props) {
               rel="noreferrer"
             >
               <button className={styles.company__head__visit}>
-                Visit Website
+                {t("company.visitWebsite")}
                 <OpenInNew style={{ marginLeft: "0.5rem" }} />
               </button>
             </a>
@@ -137,13 +145,13 @@ function CompanyHeadContainer(props) {
           >
             <Tab
               style={{ fontWeight: "bold", textDecoration: "none" }}
-              label="Home"
+              label={t("company.home")}
               component={Link}
               to={`/company/${company.id}`}
             />
             <Tab
               style={{ fontWeight: "bold", textDecoration: "none" }}
-              label="Jobs"
+              label={t("company.jobs")}
               component={Link}
               to={`/company/${company.id}/jobs`}
             />

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Dialog, DialogActions, DialogContent, Slide } from "@material-ui/core";
 import { Button, Avatar, Grid, Box } from "@material-ui/core";
 import { LocationOn, OpenInNew } from "@material-ui/icons";
@@ -15,6 +16,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function JobDetailDialog(props) {
   const { job = null, show = false, close, onApply, onSave, onUnSave } = props;
 
+  const { t } = useTranslation();
   const user = useSelector((state) => state.auth);
   const [jobApplyDialogShow, setJobApplyDialogShow] = useState(false);
 
@@ -78,9 +80,13 @@ export default function JobDetailDialog(props) {
                   {job.company?.name}
                 </Link>
                 <p className={styles.detail__subheader}>
-                  <span>Posted on: {new Date(job.posted).toDateString()}</span>
+                  <span>
+                    {t("job.postedDay", {
+                      date: new Date(job.posted),
+                    })}
+                  </span>
                   <span className={styles.detail__viewcount}>
-                    {job.viewCount} views
+                    {t("job.viewCount", { number: job.viewCount })}
                   </span>
                 </p>
               </Grid>
@@ -94,7 +100,7 @@ export default function JobDetailDialog(props) {
                       width: "fit-content",
                     }}
                   >
-                    {job.status}
+                    {t("job.status", { status: job.status })}
                   </Box>
                 </Grid>
               )}
@@ -106,22 +112,23 @@ export default function JobDetailDialog(props) {
                   <a href={job.directApplyUrl} target="_blank" rel="noreferrer">
                     <button className={styles.detail__directApply}>
                       <OpenInNew fontSize="small" />
-                      Direct Apply
+                      {t("job.directApply")}
                     </button>
                   </a>
                 )}
                 <Box mt={1} mr={1} mb={1}>
                   {user.user?.applies?.some((el) => el.id === job.id) ? (
                     <button className={styles.detail__applied}>
-                      Applied{" "}
-                      {timeDiff(
-                        new Date(
-                          user.user.applies.find(
-                            (el) => el.id === job.id
-                          ).createdAt
+                      {t("job.applyTimeAgo", {
+                        timeDiff: timeDiff(
+                          new Date(
+                            user.user.applies.find(
+                              (el) => el.id === job.id
+                            ).createdAt
+                          ),
+                          new Date()
                         ),
-                        new Date()
-                      )}
+                      })}
                     </button>
                   ) : (
                     <>
@@ -129,7 +136,7 @@ export default function JobDetailDialog(props) {
                         onClick={() => setJobApplyDialogShow(true)}
                         className={styles.detail__apply}
                       >
-                        Apply Now
+                        {t("job.apply")}
                       </button>
                       <JobApplyDialog
                         show={jobApplyDialogShow}
@@ -152,14 +159,14 @@ export default function JobDetailDialog(props) {
                         onClick={onUnSaveJob}
                         className={styles.detail__save}
                       >
-                        Unsave
+                        {t("job.unSave")}
                       </button>
                     ) : (
                       <button
                         onClick={onSaveJob}
                         className={styles.detail__save}
                       >
-                        Save
+                        {t("job.save")}
                       </button>
                     ))}
                 </Box>
@@ -179,12 +186,12 @@ export default function JobDetailDialog(props) {
               )}
 
               <div className={styles.detail__section}>
-                <p>Description</p>
+                <p>{t("job.description")}</p>
                 <span>{job.description}</span>
               </div>
 
               <div className={styles.detail__section}>
-                <p>Skills</p>
+                <p>{t("job.skills")}</p>
                 <ul className={styles.detail__list}>
                   {job.skills.length &&
                     job.skills.map((skill, index) => (
@@ -194,7 +201,8 @@ export default function JobDetailDialog(props) {
               </div>
 
               <div className={styles.detail__section}>
-                <p>Employment Type</p>
+                <p>{t("job.employmentType")}</p>
+
                 <ul className={styles.detail__list}>
                   {job.job.jobType.map((type, index) => (
                     <li key={index}>{type}</li>
@@ -203,7 +211,7 @@ export default function JobDetailDialog(props) {
               </div>
 
               <div className={styles.detail__section}>
-                <p>Max Salary</p>
+                <p>{t("job.maxSalary")}</p>
                 <span>{job.maxSalary}</span>
               </div>
             </section>
@@ -212,7 +220,7 @@ export default function JobDetailDialog(props) {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="primary">
-          Cancel
+          {t("job.cancelButton")}
         </Button>
       </DialogActions>
     </Dialog>

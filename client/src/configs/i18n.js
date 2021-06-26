@@ -2,47 +2,47 @@ import i18n from "i18next";
 import Backend from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
-
-const fallbackLng = ["en"];
-const availableLanguages = ["en", "cn", "vi"];
-
-const options = {
-  // order and from where user language should be detected
-  order: ["cookie", "navigator", "htmlTag", "path", "subdomain"],
-
-  // keys or params to lookup language from
-  lookupQuerystring: "lng",
-  lookupCookie: "i18next",
-  lookupLocalStorage: "i18nextLng",
-  lookupFromPathIndex: 0,
-  lookupFromSubdomainIndex: 0,
-
-  // cache user language on
-  caches: ["localStorage", "cookie"],
-  excludeCacheFor: ["cimode"], // languages to not persist (cookie, localStorage)
-
-  // optional expire and domain for set cookie
-  cookieMinutes: 10,
-  cookieDomain: "myDomain",
-
-  // optional htmlTag with lang attribute, the default is:
-  htmlTag: document.documentElement,
-
-  // only detect languages that are in the whitelist
-  checkWhitelist: true,
-};
+import moment from "moment";
 
 i18n
-  .use(Backend) // load translation using xhr -> see /public/locales. We will add locales in the next step
+  .use(Backend)
   .use(LanguageDetector) // detect user language
   .use(initReactI18next) // pass the i18n instance to react-i18next.
   .init({
-    fallbackLng, // if user computer language is not on the list of available languages, than we will be using the fallback language specified earlier
+    fallbackLng: "en", // if user computer language is not on the list of available languages, than we will be using the fallback language specified earlier
     debug: true,
-    whitelist: availableLanguages,
-    detection: options,
     interpolation: {
       escapeValue: false,
+      format: function (value, format, lng) {
+        if (value instanceof Date) return moment(value).format(format);
+        if (format === "timeDiff") {
+          if (value.timeType === "today" && lng === "zh") return `今天`;
+          if (value.timeType === "today" && lng === "vi") return `hôm nay`;
+          if (value.timeType === "days" || value.timeType === "day") {
+            if (lng === "zh") return `${value.number} 天前`;
+            if (lng === "vi") return `${value.number} ngày trước`;
+          }
+          if (value.timeType === "months" || value.timeType === "month") {
+            if (lng === "zh") return `${value.number} 月前`;
+            if (lng === "vi") return `${value.number} tháng trước`;
+          }
+          if (value.timeType === "years" || value.timeType === "year") {
+            if (lng === "zh") return `${value.number} 年前`;
+
+            if (lng === "vi") return `${value.number} năm trước`;
+          }
+          return `${value.number} ${value.timeType} ago`;
+        }
+        if (value === "close") {
+          if (lng === "zh") return "关闭";
+          if (lng === "vi") return "Đã đóng";
+        }
+        if (value === "open") {
+          if (lng === "zh") return "打开中";
+          if (lng === "vi") return "Đang mở";
+        }
+        return value;
+      },
     },
   });
 
