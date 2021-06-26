@@ -9,3 +9,4 @@ module.exports.CVService = require('./cv.service');
 module.exports.notificationService = require('./notification.service');
 module.exports.subscriptionService = require('./subscription.service');
 module.exports.universityService = require('./university.service');
+module.exports.elasticService = require('./elastic.service');

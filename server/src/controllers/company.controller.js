@@ -7,7 +7,7 @@ const { uploadSingleAvatar } = require('../config/cloudinary');
 
 const isUserOwnerCompany = async (companyID, userID) => {
   const company = await companyService.getCompanyById(companyID);
-  return company.owner === userID;
+  return company.owner == userID;
 };
 
 const createCompany = catchAsync(async (req, res) => {

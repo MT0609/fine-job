@@ -1,9 +1,6 @@
 const mongoose = require('mongoose');
 const validate = require('validator');
 const { toJSON, paginate } = require('./plugins');
-const { tokenTypes } = require('../config/tokens');
-const { number, string } = require('joi');
-const mongoosastic = require('mongoosastic');
 
 const enumIndustry = {
   values: ['Information Technology & Services', 'Services', 'Information Technology'],
@@ -30,13 +27,11 @@ const jobSchema = new mongoose.Schema(
       type: String,
       required: true,
       index: true,
-      es_indexed: true,
     },
     company: {
       name: {
         type: String,
         required: true,
-        es_indexed: true,
       },
       id: {
         type: mongoose.Schema.ObjectId,
@@ -90,7 +85,6 @@ const jobSchema = new mongoose.Schema(
     description: {
       type: String,
       require: true,
-      es_indexed: true,
     },
     locations: [
       {
@@ -120,20 +114,10 @@ const jobSchema = new mongoose.Schema(
 // add plugin that converts mongoose to json
 jobSchema.plugin(toJSON);
 jobSchema.plugin(paginate);
-jobSchema.plugin(mongoosastic, {
-  hosts: ['localhost:9200'],
-  hydrate: true,
-});
 
 /**
  * @typedef Job
  */
 const Job = mongoose.model('Job', jobSchema);
-
-// Start elastic mapping
-Job.createMapping(function (err, mapping) {
-  if (err) console.log('Job mapping error: ', err);
-  else console.log('Job mapping success: ', mapping);
-});
 
 module.exports = Job;
