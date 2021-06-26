@@ -27,7 +27,7 @@ const createCompany = async (userBody) => {
       data: company,
     };
 
-    elasticService.addIndex('companies', company._id, body);
+    elasticService.index('companies', company._id, body);
 
     return company;
   } catch (error) {

@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const validate = require('validator');
 const { toJSON, paginate } = require('./plugins');
-const { tokenTypes } = require('../config/tokens');
-const { number, string } = require('joi');
 const mongoosastic = require('mongoosastic');
 
 const enumIndustry = {

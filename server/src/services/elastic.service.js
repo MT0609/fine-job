@@ -1,6 +1,6 @@
 const elasticClient = require('./../config/elastic');
 
-module.exports.addIndex = async (indexName, id, body) => {
+module.exports.index = async (indexName, id, body) => {
   await elasticClient.index({
     id,
     index: indexName,
@@ -16,7 +16,7 @@ module.exports.search = async (indexName, q) => {
     q,
   });
 
-  return body.hits.hits;
+  return body.hits.hits.map((el) => el._source.data);
 };
 
 module.exports.update = async (indexName, id, source, body) => {

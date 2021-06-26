@@ -3,6 +3,8 @@ const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { sendEmail } = require('./email.service');
 
+const elasticService = require('../services/elastic.service');
+
 const {
   createNotification,
   getNotificationById,
@@ -26,6 +28,18 @@ const createUser = async (userBody) => {
   const user = await User.create(newUser);
   await sendEmail(newUser.contact.email, 'Verify your account!', 'Click below button to verify account!');
 
+  // Elastic index
+  const body = {
+    firstName: user.baseInfo.firstName,
+    lastName: user.baseInfo.lastName,
+    headLine: user.baseInfo.headLine,
+    email: user.contact.email,
+    phone: user.contact.phone,
+    about: user.about,
+    data: user,
+  };
+
+  elasticService.index('users', user._id, body);
   return user;
 };
 
@@ -89,11 +103,22 @@ const updateUserById = async (userId, updateBody) => {
   let changeUser = formatUser(updateBody);
 
   let newUser = mergeDeep(user, changeUser);
-  console.log(newUser);
-  //de giu lai thanh phan user
   Object.assign(user, newUser);
 
   await user.save();
+
+  // Elastic update
+  const source = [
+    `ctx._source.firstName = ${user.baseInfo.firstName}`,
+    `ctx._source.lastName = ${user.baseInfo.lastName}`,
+    `ctx._source.headLine = ${user.baseInfo.headLine}`,
+    `ctx._source.email = ${user.contact.email}`,
+    `ctx._source.phone = ${user.contact.phone}`,
+    `ctx._source.about = ${user.about}`,
+  ];
+
+  await elasticService.update('users', user._id, source, user);
+
   return user;
 };
 
@@ -108,6 +133,10 @@ const deleteUserById = async (userId) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
   await user.remove();
+
+  // Elastic delete
+  await elasticService.delete('users', user._id);
+
   return user;
 };
 
@@ -531,32 +560,41 @@ const getConnStatus = async (sender, receiverID) => {
  * @param {Object} res - Respond variable
  * @returns {Promise<QueryResult>}
  */
-const searchUsers = (filter, options, res) => {
+const searchUsers = async (filter, options, res) => {
   try {
-    User.search(
-      {
-        query_string: {
-          query: filter.q || '*',
-        },
-      },
-      {
-        hydrate: true,
-      },
-      function (err, results) {
-        if (err) {
-          console.log('Search failed: ', err);
-          throw new Error(err.message);
-        }
-        let allResults = results.hits.hits;
-        allResults = allResults.filter(function (result) {
-          return result !== undefined;
-        });
-        const { page, limit } = options;
-        const paginatedResults = allResults.slice((page - 1) * limit, page * limit);
-        const totalPages = Math.ceil(allResults.length / limit);
-        res.status(200).send({ results: paginatedResults, totalPages, page });
-      }
-    );
+    // User.search(
+    //   {
+    //     query_string: {
+    //       query: filter.q || '*',
+    //     },
+    //   },
+    //   {
+    //     hydrate: true,
+    //   },
+    //   function (err, results) {
+    //     if (err) {
+    //       console.log('Search failed: ', err);
+    //       throw new Error(err.message);
+    //     }
+    //     let allResults = results.hits.hits;
+    //     allResults = allResults.filter(function (result) {
+    //       return result !== undefined;
+    //     });
+    //     const { page, limit } = options;
+    //     const paginatedResults = allResults.slice((page - 1) * limit, page * limit);
+    //     const totalPages = Math.ceil(allResults.length / limit);
+    //     res.status(200).send({ results: paginatedResults, totalPages, page });
+    //   }
+    // );
+
+    let allResults = await elasticService.search('users', filter.q);
+    allResults = allResults.filter(function (result) {
+      return result !== undefined;
+    });
+    const { page, limit } = options;
+    const paginatedResults = allResults.slice((page - 1) * limit, page * limit);
+    const totalPages = Math.ceil(allResults.length / limit);
+    res.status(200).send({ results: paginatedResults, totalPages, page });
   } catch (error) {
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
   }

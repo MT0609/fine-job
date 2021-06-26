@@ -3,6 +3,8 @@ const moment = require('moment');
 const { Job } = require('../models');
 const ApiError = require('../utils/ApiError');
 
+const elasticService = require('../services/elastic.service');
+
 const { getCompanyById } = require('../services/company.service');
 const { getUserById } = require('../services/user.service');
 
@@ -43,6 +45,16 @@ const createJob = async (userBody) => {
 
   company.jobs.push(jobSub);
   await company.save();
+
+  // Elastic index
+  const body = {
+    title: job.title,
+    company: job.company.name,
+    description: job.description,
+    data: job,
+  };
+
+  elasticService.index('jobs', job._id, body);
 
   return job;
 };
@@ -156,6 +168,16 @@ const updateJobById = async (jobID, updateBody) => {
 
   Object.assign(job, updateBody);
   await job.save();
+
+  // Elastic update
+  const source = [
+    `ctx._source.title = ${job.title}`,
+    `ctx._source.company = ${job.company.name}`,
+    `ctx._source.description = ${job.description}`,
+  ];
+
+  await elasticService.update('jobs', job._id, source, job);
+
   return job;
 };
 
@@ -170,6 +192,10 @@ const deleteJobById = async (jobID) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Job not found');
   }
   await job.remove();
+
+  // Elastic delete
+  await elasticService.delete('jobs', job._id);
+
   return job;
 };
 
@@ -255,32 +281,41 @@ const postUnSaveJob = async (jobID, userID) => {
  * @param {Object} res - Respond variable
  * @returns {Promise<QueryResult>}
  */
-const searchJobs = (filter, options, res) => {
+const searchJobs = async (filter, options, res) => {
   try {
-    Job.search(
-      {
-        query_string: {
-          query: filter.q || '*',
-        },
-      },
-      {
-        hydrate: true,
-      },
-      function (err, results) {
-        if (err) {
-          console.log('Search failed: ', err);
-          throw new Error(err.message);
-        }
-        let allResults = results.hits.hits;
-        allResults = allResults.filter(function (result) {
-          return result !== undefined;
-        });
-        const { page, limit } = options;
-        const paginatedResults = allResults.slice((page - 1) * limit, page * limit);
-        const totalPages = Math.ceil(allResults.length / limit);
-        res.status(200).send({ results: paginatedResults, totalPages, page });
-      }
-    );
+    // Job.search(
+    //   {
+    //     query_string: {
+    //       query: filter.q || '*',
+    //     },
+    //   },
+    //   {
+    //     hydrate: true,
+    //   },
+    //   function (err, results) {
+    //     if (err) {
+    //       console.log('Search failed: ', err);
+    //       throw new Error(err.message);
+    //     }
+    //     let allResults = results.hits.hits;
+    //     allResults = allResults.filter(function (result) {
+    //       return result !== undefined;
+    //     });
+    //     const { page, limit } = options;
+    //     const paginatedResults = allResults.slice((page - 1) * limit, page * limit);
+    //     const totalPages = Math.ceil(allResults.length / limit);
+    //     res.status(200).send({ results: paginatedResults, totalPages, page });
+    //   }
+    // );
+
+    let allResults = await elasticService.search('jobs', filter.q);
+    allResults = allResults.filter(function (result) {
+      return result !== undefined;
+    });
+    const { page, limit } = options;
+    const paginatedResults = allResults.slice((page - 1) * limit, page * limit);
+    const totalPages = Math.ceil(allResults.length / limit);
+    res.status(200).send({ results: paginatedResults, totalPages, page });
   } catch (error) {
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
   }
