@@ -20,7 +20,7 @@ function MessageBubbleContainer(props) {
 	const { partnerId } = props;
 
 	useEffect(() => {
-		handleGetMessage(partnerId.partnerId);
+		if (partnerId.partnerId) handleGetMessage(partnerId.partnerId);
 	}, [partnerId]);
 
 	const handleGetMessage = (partnerID) => {
