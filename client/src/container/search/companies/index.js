@@ -92,7 +92,7 @@ function CompaniesSearchResult(props) {
                           alt="Company"
                           src={
                             company.avatar ||
-                            "https://mcnewsmd1.keeng.net/netnews/archive/images/2020/07/20/tinngan_011115_916156142_0.jpg"
+                            "https://carleton.ca/career/wp-content/uploads/icon_job_postings.png"
                           }
                         />
                       </Link>

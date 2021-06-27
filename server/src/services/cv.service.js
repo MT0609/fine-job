@@ -2,6 +2,7 @@ const httpStatus = require('http-status');
 const { CV } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { formatUser, mergeDeep } = require('./user.service');
+const pdf = require('pdf-creator-node');
 const fs = require('fs');
 const path = require('path');
 
@@ -40,34 +41,48 @@ const getCVbyId = async (cvID) => {
   return CV.findById(cvID);
 };
 
-// const getCVbyId = async (res, cvID) => {
-//   // Download file
+const downloadCV = async (req, res) => {
+  const userID = req.user.id;
+  const cv = await getCVbyId(req.query.id);
+  if (!cv) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'CV not found');
+  }
+  const fileName = `${userID}_${req.query.id}_${req.query.title}.pdf`;
 
-//   // const file = fs.createReadStream(
-//   //   path.join(__dirname, './../../cvs/60a1e302308c3e2aa40c0619_Backend Developer_2021-06-24T11-01-14.191Z.pdf')
-//   // );
-//   // const stat = fs.statSync(
-//   //   path.join(__dirname, './../../cvs/60a1e302308c3e2aa40c0619_Backend Developer_2021-06-24T11-01-14.191Z.pdf')
-//   // );
+  const templateHtml = fs.readFileSync(path.join(__dirname, './../resources/CVTemplates/normal.html'), 'utf8');
 
-//   // res.setHeader('Content-Length', stat.size);
-//   // res.setHeader('Content-Type', 'application/pdf');
-//   // res.setHeader('Content-Disposition', 'attachment; filename=quote.pdf');
+  const options = {
+    format: 'A4',
+    orientation: 'portrait',
+  };
 
-//   // file.pipe(res);
-//   // res.status(200).json({ status: 'success' });
+  const document = {
+    html: templateHtml,
+    data: {
+      cvs: [{ ...cv['_doc'], profileURL: `${req.protocol}://${req.hostname}/profile/${cv.userID}` }],
+    },
+    path: path.join(__dirname, './../../cvs/', fileName),
+    type: '',
+  };
 
-//   // Send file
+  pdf
+    .create(document, options)
+    .then((responseData) => {
+      const filePath = path.join(__dirname, `./../../cvs/${fileName}`);
+      const file = fs.createReadStream(filePath);
+      const stat = fs.statSync(filePath);
 
-//   const filePath = path.join(
-//     __dirname,
-//     './../../cvs/60a1e302308c3e2aa40c0619_Backend Developer_2021-06-24T11-01-14.191Z.pdf'
-//   );
-//   fs.readFile(filePath, function (err, data) {
-//     res.contentType('application/pdf');
-//     res.send(data);
-//   });
-// };
+      res.setHeader('Content-Length', stat.size);
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename=quote.pdf');
+
+      file.pipe(res);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ status: 'failed', error });
+    });
+};
 
 /**
  * Update user by id
@@ -213,6 +228,7 @@ module.exports = {
   createCVbyUserandTitle,
   getAllCVbyUserId,
   getCVbyId,
+  downloadCV,
   updateCVById,
   updateEducation,
   deleteEducation,

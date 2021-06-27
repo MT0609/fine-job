@@ -16,6 +16,7 @@ i18n
       format: function (value, format, lng) {
         if (value instanceof Date) return moment(value).format(format);
         if (format === "timeDiff") {
+          if (value.timeType === "today" && lng === "en") return `today`;
           if (value.timeType === "today" && lng === "zh") return `今天`;
           if (value.timeType === "today" && lng === "vi") return `hôm nay`;
           if (value.timeType === "days" || value.timeType === "day") {

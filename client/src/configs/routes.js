@@ -12,6 +12,9 @@ import Profile from "../pages/profile";
 const JobView = lazy(() => import("../pages/jobs/job"));
 const MyJob = lazy(() => import("../pages/jobs/myJob"));
 const Companies = lazy(() => import("../pages/company/companies"));
+const MyCompanies = lazy(() => import("../pages/company/mine"));
+const MyCompaniesCreate = lazy(() => import("../pages/company/mine/create"));
+const MyCompaniesUpdate = lazy(() => import("../pages/company/mine/update"));
 const Company = lazy(() => import("../pages/company/company"));
 const PostJob = lazy(() => import("../pages/talent/post"));
 const JobApplicantsView = lazy(() => import("../pages/talent/applicants"));
@@ -60,6 +63,21 @@ const routes = [
     path: ROUTES.job,
     exact: true,
     main: () => <JobView />,
+  },
+  {
+    path: ROUTES.myCompanies,
+    exact: true,
+    main: () => <MyCompanies />,
+  },
+  {
+    path: ROUTES.myCompaniesCreate,
+    exact: true,
+    main: () => <MyCompaniesCreate />,
+  },
+  {
+    path: ROUTES.myCompaniesUpdate,
+    exact: true,
+    main: () => <MyCompaniesUpdate />,
   },
   {
     path: ROUTES.company,

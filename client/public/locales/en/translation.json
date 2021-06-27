@@ -73,6 +73,7 @@
 		"saveButton": "Save"
 	},
 	"company": {
+		"myCompanies": "My Companies",
 		"companies": "companies",
 		"home": "Home",
 		"jobs": "Jobs",

@@ -52,6 +52,22 @@ const companyReducer = (state = initialState, action) => {
         isLoading: false,
       };
 
+    case COMPANYCONSTANTS.COMPANY_MODIFY_ONE_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case COMPANYCONSTANTS.COMPANY_MODIFY_ONE_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+      };
+    case COMPANYCONSTANTS.COMPANY_MODIFY_ONE_FAIL:
+      return {
+        ...state,
+        isLoading: false,
+      };
+
     case COMPANYCONSTANTS.C0MPANY_FOLLOW_ONE_SUCCESS:
       return {
         ...state,

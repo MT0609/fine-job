@@ -21,6 +21,8 @@ router
   .post(auth(), validate(companyValidation.createCompany), companyController.createCompany)
   .get(validate(companyValidation.getCompanies), companyController.getCompanies);
 
+router.route('/mine').get(auth(), companyController.getMyCompanies);
+
 router
   .route('/:companyID')
   .get(validate(companyValidation.getCompany), companyController.getCompany)

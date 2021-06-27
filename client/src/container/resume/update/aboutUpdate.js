@@ -14,7 +14,7 @@ export default function CVBasicInfoUpdate(props) {
   const { data, open, onclose, onsubmit } = props;
 
   const { t } = useTranslation();
-  const { register, handleSubmit, errors } = useForm({
+  const { register, handleSubmit } = useForm({
     resolver: yupResolver(CVAboutUpdateSchema),
   });
 

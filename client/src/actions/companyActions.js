@@ -28,8 +28,28 @@ export const getCompanies =
     }
   };
 
+export const getMyCompanies = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: COMPANYCONSTANTS.COMPANY_GET_ALL_REQUEST,
+    });
+
+    let results = await companyApi.getAllMyCompanies();
+    console.log(results);
+
+    dispatch({
+      type: COMPANYCONSTANTS.C0MPANY_GET_ALL_SUCCESS,
+      payload: { results },
+    });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: COMPANYCONSTANTS.COMPANY_GET_ALL_FAIL,
+    });
+  }
+};
+
 export const getCompanyDetail = (id) => async (dispatch) => {
-  // params: {title, limit, ...}
   try {
     dispatch({
       type: COMPANYCONSTANTS.COMPANY_GET_ONE_REQUEST,
@@ -45,6 +65,73 @@ export const getCompanyDetail = (id) => async (dispatch) => {
     console.log(error);
     dispatch({
       type: COMPANYCONSTANTS.COMPANY_GET_ONE_FAIL,
+    });
+  }
+};
+
+export const updateCompany = (id, body) => async (dispatch) => {
+  try {
+    dispatch({
+      type: COMPANYCONSTANTS.COMPANY_MODIFY_ONE_REQUEST,
+    });
+
+    let result = await companyApi.updateOne(id, body);
+
+    if (result) {
+      dispatch({
+        type: COMPANYCONSTANTS.COMPANY_MODIFY_ONE_SUCCESS,
+      });
+      return result;
+    }
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: COMPANYCONSTANTS.COMPANY_MODIFY_ONE_FAIL,
+    });
+  }
+};
+
+export const createCompany = (body) => async (dispatch) => {
+  try {
+    dispatch({
+      type: COMPANYCONSTANTS.COMPANY_MODIFY_ONE_REQUEST,
+    });
+
+    let result = await companyApi.createOne(body);
+
+    if (result) {
+      dispatch({
+        type: COMPANYCONSTANTS.COMPANY_MODIFY_ONE_SUCCESS,
+      });
+      return result;
+    }
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: COMPANYCONSTANTS.COMPANY_MODIFY_ONE_FAIL,
+    });
+  }
+};
+
+export const deleteCompany = (companyID) => async (dispatch) => {
+  try {
+    dispatch({
+      type: COMPANYCONSTANTS.COMPANY_MODIFY_ONE_REQUEST,
+    });
+
+    let result = await companyApi.deleteOne(companyID);
+
+    if (result) {
+      dispatch({
+        type: COMPANYCONSTANTS.COMPANY_MODIFY_ONE_SUCCESS,
+      });
+      dispatch(getMyCompanies());
+      return result;
+    }
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: COMPANYCONSTANTS.COMPANY_MODIFY_ONE_FAIL,
     });
   }
 };

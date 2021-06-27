@@ -10,7 +10,13 @@ import {
   ListItemText,
   Typography,
 } from "@material-ui/core";
-import { ExitToApp, AccountBox, PostAdd, Work } from "@material-ui/icons";
+import {
+  ExitToApp,
+  AccountBox,
+  PostAdd,
+  Work,
+  Business,
+} from "@material-ui/icons";
 import { signOut } from "./../../actions/authActions";
 
 const StyledMenu = withStyles({
@@ -100,6 +106,16 @@ function UserSubMenu(props) {
               <Work fontSize="small" />
             </ListItemIcon>
             <ListItemText primary={t("header.userMenu.job")} />
+          </MenuItem>
+        </Link>
+        <Link to={`/company/mine`}>
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon
+              style={{ minWidth: "fit-content", marginRight: "1rem" }}
+            >
+              <Business fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary={t("company.myCompanies")} />
           </MenuItem>
         </Link>
         <MenuItem onClick={onSignOutClick}>

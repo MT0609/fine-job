@@ -32,6 +32,14 @@ const getCompany = catchAsync(async (req, res) => {
   res.send(company);
 });
 
+const getMyCompanies = catchAsync(async (req, res) => {
+  const company = await companyService.getMyCompanies(req.user.id);
+  if (!company) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Company not found');
+  }
+  res.send(company);
+});
+
 const updateCompany = catchAsync(async (req, res) => {
   // Users can update own companies.
   const validOwner = await isUserOwnerCompany(req.params.companyID, req.user.id);
@@ -98,6 +106,7 @@ module.exports = {
   createCompany,
   getCompanies,
   getCompany,
+  getMyCompanies,
   updateCompany,
   deleteCompany,
   postFollow,
