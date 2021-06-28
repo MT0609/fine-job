@@ -1,0 +1,38 @@
+.companies {
+  width: 65%;
+  margin: auto;
+}
+
+.company {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: white;
+  box-shadow: 0 2px 5px #929191;
+  text-align: left;
+  &__name {
+    font-size: 1.1rem;
+    line-height: 1;
+    font-weight: bold;
+  }
+  &__caption {
+    margin-top: 0.5rem;
+  }
+}
+
+.update {
+  &__imageDiv {
+    position: relative;
+    &__remove {
+      padding: 0;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .companies {
+    width: 100%;
+  }
+}

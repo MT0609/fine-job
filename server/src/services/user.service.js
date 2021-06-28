@@ -494,6 +494,7 @@ const deleteConnReq = async (userBody, sender, receiverID, notificationID) => {
 
     return {};
   } catch (error) {
+    console.log({ error });
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
   }
 };

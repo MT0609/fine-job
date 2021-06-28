@@ -73,6 +73,7 @@
 		"saveButton": "保存"
 	},
 	"company": {
+		"myCompanies": "我的公司",
 		"companies": "公司",
 		"home": "首页",
 		"jobs": "职位",
@@ -127,7 +128,7 @@
 		"deleteFail": "删除职位失败。可以重试！",
 		"backToTalentPage": "返回工作发布列表",
 		"noPostedJob": "没有任何工作发布",
-		"createButton": "造新",
+		"createButton": "创建",
 		"updateButton": "更改",
 		"cancelButton": "取消",
 		"directApply": "直接申请",
@@ -149,7 +150,7 @@
 		"empty": "没有任何个人简历",
 		"uploadCondition": "个人简历 - 接受 DOC, DOCX, PDF (上限 5MB)",
 		"uploadButton": "上传",
-		"create": "造个人简历",
+		"create": "创建个人简历",
 		"lastEditedDate": "最后编辑: {{date, YYYY[年] MM [月] DD[日]}}",
 		"cancelButton": "取消",
 		"submit": "完成",

@@ -45,6 +45,17 @@ const resumeReducer = (state = initialState, action) => {
         initialState,
       };
 
+    case RESUMECONSTANTS.RESUME_DOWNLOAD_ONE_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case RESUMECONSTANTS.RESUME_DOWNLOAD_ONE_DONE:
+      return {
+        ...state,
+        isLoading: false,
+      };
+
     case RESUMECONSTANTS.RESUME_CREATE_REQUEST:
       return {
         ...state,

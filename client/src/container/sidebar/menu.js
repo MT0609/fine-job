@@ -14,6 +14,7 @@ import {
   PeopleAlt,
   Work,
   Chat,
+  Business,
   Close,
   ExitToApp,
 } from "@material-ui/icons";
@@ -67,6 +68,18 @@ function SidebarMenu(props) {
               <Chat />
             </ListItemIcon>
             <ListItemText primary={t("header.message")} />
+          </ListItem>
+        </Link>
+        <Divider />
+        <Link
+          to="/company/mine"
+          style={{ textDecoration: "none", color: "black" }}
+        >
+          <ListItem button>
+            <ListItemIcon>
+              <Business />
+            </ListItemIcon>
+            <ListItemText primary={t("company.myCompanies")} />
           </ListItem>
         </Link>
         <Divider />

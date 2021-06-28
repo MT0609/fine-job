@@ -8,24 +8,24 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(auth('manageUsers'), validate(userValidation.createUser), userController.createUser)
-  .get(auth('getUsers'), validate(userValidation.getUsers), userController.getUsers);
+  .post(auth(), validate(userValidation.createUser), userController.createUser)
+  .get(auth(), validate(userValidation.getUsers), userController.getUsers);
 
 router
   .route('/:userId')
-  .get(auth('getUsers'), validate(userValidation.getUser), userController.getUser)
-  .patch(auth('updateUser'), validate(userValidation.updateUser), userController.updateUser)
-  .delete(auth('manageUsers'), validate(userValidation.deleteUser), userController.deleteUser);
+  .get(auth(), validate(userValidation.getUser), userController.getUser)
+  .patch(auth(), validate(userValidation.updateUser), userController.updateUser)
+  .delete(auth(), validate(userValidation.deleteUser), userController.deleteUser);
 
 router
   .route('/:userId/modifyEducation')
-  .patch(auth('updateUser'), validate(userValidation.modifyEducation), userController.modifyEducation)
-  .delete(auth('manageUsers'), userController.deleteEducation);
+  .patch(auth(), validate(userValidation.modifyEducation), userController.modifyEducation)
+  .delete(auth(), userController.deleteEducation);
 
 router
   .route('/:userId/modifyAccomplishment')
-  .patch(auth('updateUser'), validate(userValidation.modifyAccomplishment), userController.modifyAccomplishment)
-  .delete(auth('manageUsers'), userController.deleteAccomplishment);
+  .patch(auth(), validate(userValidation.modifyAccomplishment), userController.modifyAccomplishment)
+  .delete(auth(), userController.deleteAccomplishment);
 
 router.route('/:receiverID/sendConnReq').post(auth(), validate(userValidation.sendConnReq), userController.sendConnReq);
 

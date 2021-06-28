@@ -46,7 +46,7 @@ function CompanyJobs({ company, onSave, onUnSave, user }) {
                         alt="company"
                         src={
                           company.avatar ||
-                          "https://mcnewsmd1.keeng.net/netnews/archive/images/2020/07/20/tinngan_011115_916156142_0.jpg"
+                          "https://res.cloudinary.com/dghvjalhh/image/upload/v1624787605/avatars/tckwkukf8gqfviv2oqkj.png"
                         }
                       />
                     </Box>
