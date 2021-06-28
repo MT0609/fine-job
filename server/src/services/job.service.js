@@ -146,6 +146,40 @@ const applyJob = async (jobID, body, userID, cvPath) => {
     user.applies.push(jobSnap);
 
     await Promise.all([job.save(), user.save()]);
+
+    // Elastic update
+
+    // Elastic delete
+    await elasticService.delete('jobs', job._id);
+
+    // Elastic index
+    const body = {
+      title: job.title,
+      company: job.company.name,
+      description: job.description,
+      data: job,
+    };
+
+    elasticService.index('jobs', job._id, body);
+
+    // Elastic update user
+
+    // Elastic delete
+    await elasticService.delete('users', user._id);
+
+    // Elastic index
+    const bodyUser = {
+      firstName: user.baseInfo.firstName,
+      lastName: user.baseInfo.lastName,
+      headLine: user.baseInfo.headLine,
+      email: user.contact.email,
+      phone: user.contact.phone,
+      about: user.about,
+      data: user,
+    };
+
+    elasticService.index('users', user._id, bodyUser);
+
     return {};
   } catch (error) {
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
@@ -242,6 +276,24 @@ const postSaveJob = async (jobID, userID) => {
 
     await user.save();
 
+    // Elastic update user
+
+    // Elastic delete
+    await elasticService.delete('users', user._id);
+
+    // Elastic index
+    const bodyUser = {
+      firstName: user.baseInfo.firstName,
+      lastName: user.baseInfo.lastName,
+      headLine: user.baseInfo.headLine,
+      email: user.contact.email,
+      phone: user.contact.phone,
+      about: user.about,
+      data: user,
+    };
+
+    elasticService.index('users', user._id, bodyUser);
+
     return {};
   } catch (error) {
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
@@ -270,6 +322,24 @@ const postUnSaveJob = async (jobID, userID) => {
     user.savePosts = user.savePosts.filter((el) => el.jobID != jobID);
 
     await user.save();
+
+    // Elastic update user
+
+    // Elastic delete
+    await elasticService.delete('users', user._id);
+
+    // Elastic index
+    const bodyUser = {
+      firstName: user.baseInfo.firstName,
+      lastName: user.baseInfo.lastName,
+      headLine: user.baseInfo.headLine,
+      email: user.contact.email,
+      phone: user.contact.phone,
+      about: user.about,
+      data: user,
+    };
+
+    elasticService.index('users', user._id, bodyUser);
 
     return {};
   } catch (error) {

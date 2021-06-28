@@ -145,6 +145,25 @@ const modifyEducation = async (userID, eduData) => {
     }
   }
   await user.save();
+
+  // Elastic update
+
+  // Elastic delete
+  await elasticService.delete('users', user._id);
+
+  // Elastic index
+  const body = {
+    firstName: user.baseInfo.firstName,
+    lastName: user.baseInfo.lastName,
+    headLine: user.baseInfo.headLine,
+    email: user.contact.email,
+    phone: user.contact.phone,
+    about: user.about,
+    data: user,
+  };
+
+  elasticService.index('users', user._id, body);
+
   return user;
 };
 
@@ -158,6 +177,24 @@ const deleteEducation = async (userID, reqBody) => {
   if (index > -1) {
     user.baseInfo.educations.splice(index, 1);
     await user.save();
+
+    // Elastic update
+
+    // Elastic delete
+    await elasticService.delete('users', user._id);
+
+    // Elastic index
+    const body = {
+      firstName: user.baseInfo.firstName,
+      lastName: user.baseInfo.lastName,
+      headLine: user.baseInfo.headLine,
+      email: user.contact.email,
+      phone: user.contact.phone,
+      about: user.about,
+      data: user,
+    };
+
+    elasticService.index('users', user._id, body);
   }
   return user;
 };
@@ -179,6 +216,25 @@ const modifyAccomplishment = async (userID, data) => {
     }
   }
   await user.save();
+
+  // Elastic update
+
+  // Elastic delete
+  await elasticService.delete('users', user._id);
+
+  // Elastic index
+  const body = {
+    firstName: user.baseInfo.firstName,
+    lastName: user.baseInfo.lastName,
+    headLine: user.baseInfo.headLine,
+    email: user.contact.email,
+    phone: user.contact.phone,
+    about: user.about,
+    data: user,
+  };
+
+  elasticService.index('users', user._id, body);
+
   return user;
 };
 
@@ -192,6 +248,24 @@ const deleteAccomplishment = async (userID, reqBody) => {
   if (index > -1) {
     user.accomplishments.splice(index, 1);
     await user.save();
+
+    // Elastic update
+
+    // Elastic delete
+    await elasticService.delete('users', user._id);
+
+    // Elastic index
+    const body = {
+      firstName: user.baseInfo.firstName,
+      lastName: user.baseInfo.lastName,
+      headLine: user.baseInfo.headLine,
+      email: user.contact.email,
+      phone: user.contact.phone,
+      about: user.about,
+      data: user,
+    };
+
+    elasticService.index('users', user._id, body);
   }
   return user;
 };
@@ -354,6 +428,42 @@ const sendConnReq = async (userBody, sender, receiverID) => {
     await sender.save();
     await receiver.save();
 
+    // Elastic update sender
+
+    // Elastic delete
+    await elasticService.delete('users', sender._id);
+
+    // Elastic index
+    const bodySender = {
+      firstName: sender.baseInfo.firstName,
+      lastName: sender.baseInfo.lastName,
+      headLine: sender.baseInfo.headLine,
+      email: sender.contact.email,
+      phone: sender.contact.phone,
+      about: sender.about,
+      data: sender,
+    };
+
+    elasticService.index('users', sender._id, bodySender);
+
+    // Elastic update receiver
+
+    // Elastic delete
+    await elasticService.delete('users', receiver._id);
+
+    // Elastic index
+    const bodyReceiver = {
+      firstName: receiver.baseInfo.firstName,
+      lastName: receiver.baseInfo.lastName,
+      headLine: receiver.baseInfo.headLine,
+      email: receiver.contact.email,
+      phone: receiver.contact.phone,
+      about: receiver.about,
+      data: receiver,
+    };
+
+    elasticService.index('users', receiver._id, bodyReceiver);
+
     return {};
   } catch (error) {
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
@@ -434,6 +544,42 @@ const acceptConnReq = async (userBody, sender, receiverID, notificationID) => {
     await receiver.save();
     await notification.save();
 
+    // Elastic update sender
+
+    // Elastic delete
+    await elasticService.delete('users', sender._id);
+
+    // Elastic index
+    const bodySender = {
+      firstName: sender.baseInfo.firstName,
+      lastName: sender.baseInfo.lastName,
+      headLine: sender.baseInfo.headLine,
+      email: sender.contact.email,
+      phone: sender.contact.phone,
+      about: sender.about,
+      data: sender,
+    };
+
+    elasticService.index('users', sender._id, bodySender);
+
+    // Elastic update receiver
+
+    // Elastic delete
+    await elasticService.delete('users', receiver._id);
+
+    // Elastic index
+    const bodyReceiver = {
+      firstName: receiver.baseInfo.firstName,
+      lastName: receiver.baseInfo.lastName,
+      headLine: receiver.baseInfo.headLine,
+      email: receiver.contact.email,
+      phone: receiver.contact.phone,
+      about: receiver.about,
+      data: receiver,
+    };
+
+    elasticService.index('users', receiver._id, bodyReceiver);
+
     return {};
   } catch (error) {
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
@@ -491,6 +637,24 @@ const deleteConnReq = async (userBody, sender, receiverID, notificationID) => {
 
     await sender.save();
     await notification.save();
+
+    // Elastic update sender
+
+    // Elastic delete
+    await elasticService.delete('users', sender._id);
+
+    // Elastic index
+    const bodySender = {
+      firstName: sender.baseInfo.firstName,
+      lastName: sender.baseInfo.lastName,
+      headLine: sender.baseInfo.headLine,
+      email: sender.contact.email,
+      phone: sender.contact.phone,
+      about: sender.about,
+      data: sender,
+    };
+
+    elasticService.index('users', sender._id, bodySender);
 
     return {};
   } catch (error) {
@@ -564,6 +728,42 @@ const deleteFriend = async (userBody, sender, receiverID) => {
     await sender.save();
     await receiver.save();
     await notification.save();
+
+    // Elastic update sender
+
+    // Elastic delete
+    await elasticService.delete('users', sender._id);
+
+    // Elastic index
+    const bodySender = {
+      firstName: sender.baseInfo.firstName,
+      lastName: sender.baseInfo.lastName,
+      headLine: sender.baseInfo.headLine,
+      email: sender.contact.email,
+      phone: sender.contact.phone,
+      about: sender.about,
+      data: sender,
+    };
+
+    elasticService.index('users', sender._id, bodySender);
+
+    // Elastic update receiver
+
+    // Elastic delete
+    await elasticService.delete('users', receiver._id);
+
+    // Elastic index
+    const bodyReceiver = {
+      firstName: receiver.baseInfo.firstName,
+      lastName: receiver.baseInfo.lastName,
+      headLine: receiver.baseInfo.headLine,
+      email: receiver.contact.email,
+      phone: receiver.contact.phone,
+      about: receiver.about,
+      data: receiver,
+    };
+
+    elasticService.index('users', receiver._id, bodyReceiver);
 
     return {};
   } catch (error) {
