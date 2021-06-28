@@ -9,25 +9,25 @@ import {
 	deleteConversation,
 } from '../../../actions/messageActions';
 import styles from './index.module.scss';
-import jwt_decode from 'jwt-decode';
+import { TimerOffRounded } from '@material-ui/icons';
 
 function MessageBubble({ myInfo = {}, message, onClose, socket }) {
 	const [largeBubble, setLargeBubble] = useState(true);
+	console.log({ message });
 
 	const dispatch = useDispatch();
 
-	// Socket
-	const auth = useSelector((state) => state.auth);
-
-	if (auth.isAuth) {
-		const token = localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN);
-		const userId = jwt_decode(token)?.sub;
-		userId && socket?.emit('update-user-id', userId);
-	}
-
 	const handleSendMessage = (msg) => {
-		socket?.emit('new-1-1-msg', { receiver: message.partnerID, data: msg });
 		dispatch(sendMessage(message.partnerID, msg));
+
+		try {
+			const tmo = setTimeout(() => {
+				socket?.emit('new-1-1-msg', { receiver: message.partnerID, data: msg });
+				clearTimeout(tmo);
+			}, 1000);
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	const handleDeleteMessage = (msgID) => {

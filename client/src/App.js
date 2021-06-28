@@ -9,6 +9,7 @@ import MessageBubbleContainer from './container/message/bubbleContainer';
 import Loading from './components/loading/circular';
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
+import jwt_decode from 'jwt-decode';
 
 function App(props) {
 	const auth = useSelector((state) => state.auth);
@@ -16,6 +17,14 @@ function App(props) {
 
 	const [partnerId, setPartnerId] = useState({});
 	const { socket } = props;
+
+	try {
+		const token = localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN);
+		const userId = jwt_decode(token)?.sub;
+		userId && socket?.emit('update-user-id', userId);
+	} catch (error) {
+		console.log(error);
+	}
 
 	useEffect(() => {
 		dispatch(getUserData());
