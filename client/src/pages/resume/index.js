@@ -13,11 +13,13 @@ import {
   Typography,
   Link,
 } from "@material-ui/core";
+import LoadingButton from "@material-ui/lab/LoadingButton";
 import { makeStyles } from "@material-ui/core/styles";
-import { Add, Edit, RemoveCircle } from "@material-ui/icons";
+import { Add, Edit, RemoveCircle, GetApp } from "@material-ui/icons";
 import {
   getAllResume,
   createResume,
+  downloadResume,
   deleteResume,
 } from "../../actions/resumeActions";
 import TitleFieldDialog from "../../container/resume/create/titleDialog";
@@ -44,6 +46,11 @@ function ResumeHomePage() {
       setTitleFielDialogShow(false);
       history.push(`/resume/${result.result.id}`);
     }
+  };
+
+  const handleOpenDownLoad = (reqBody) => {
+    // reqBody {id, title}
+    dispatch(downloadResume(reqBody));
   };
 
   const handleDeleteCV = async (cvID) => {
@@ -131,6 +138,15 @@ function ResumeHomePage() {
                         <Edit />
                       </Button>
                     </Link>
+                    <LoadingButton
+                      type="submit"
+                      onClick={() =>
+                        handleOpenDownLoad({ id: cv.id, title: cv.title })
+                      }
+                      pending={resumeState.isLoading}
+                    >
+                      <GetApp />
+                    </LoadingButton>
                     <Button
                       className={classes.btnDelete}
                       onClick={() => handleDeleteCV(cv.id)}

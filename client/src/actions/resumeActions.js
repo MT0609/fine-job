@@ -107,6 +107,34 @@ export const updateResume = (cvId, data) => async (dispatch) => {
   }
 };
 
+export const downloadResume = (data) => async (dispatch) => {
+  try {
+    dispatch({
+      type: RESUMECONSTANTS.RESUME_DOWNLOAD_ONE_REQUEST,
+    });
+
+    const result = await resumeApi.download(data);
+    if (result) {
+      const url = window.URL.createObjectURL(new Blob([result]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `${data.title}.pdf`); //or any other extension
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+
+      dispatch({
+        type: RESUMECONSTANTS.RESUME_DOWNLOAD_ONE_DONE,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: RESUMECONSTANTS.RESUME_DOWNLOAD_ONE_DONE,
+    });
+  }
+};
+
 export const deleteResume =
   (cvId, body = {}) =>
   async (dispatch) => {

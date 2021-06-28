@@ -108,7 +108,6 @@ function CompanyHeadContainer(props) {
                 </button>
               </Grid>
             ))}
-
           <Grid item>
             <a
               href={
@@ -123,6 +122,18 @@ function CompanyHeadContainer(props) {
                 <OpenInNew style={{ marginLeft: "0.5rem" }} />
               </button>
             </a>
+          </Grid>
+          <Grid item>
+            {user.isAuth && user.user.id === company.owner && (
+              <Link to={`/company/mine/${company.id}`}>
+                <button
+                  className={styles.company__head__follow}
+                  onClick={handleOnUnFollowClick}
+                >
+                  Edit
+                </button>
+              </Link>
+            )}
           </Grid>
         </Grid>
 

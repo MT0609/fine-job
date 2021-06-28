@@ -16,6 +16,7 @@ const createCompany = async (userBody) => {
     if (await Company.isNameTaken(userBody.name)) {
       throw new ApiError(httpStatus.BAD_REQUEST, 'Company name already taken');
     }
+    userBody.baseInfo.specialties = userBody.baseInfo.specialties.split(',');
     const company = await Company.create(userBody);
 
     // Elastic index
@@ -56,6 +57,15 @@ const queryCompanies = async (filter, options) => {
  */
 const getCompanyById = async (id) => {
   return Company.findById(id);
+};
+
+/**
+ * Get company by id
+ * @param {ObjectId} id
+ * @returns {Promise<Company>}
+ */
+const getMyCompanies = async (userID) => {
+  return Company.find({ owner: userID });
 };
 
 /**
@@ -238,6 +248,7 @@ module.exports = {
   createCompany,
   queryCompanies,
   getCompanyById,
+  getMyCompanies,
   getCompanyByEmail,
   updateCompanyById,
   deleteCompanyById,

@@ -1,390 +1,85 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
-    <mate charest="utf-8" />
-    <title>Hello world!</title>
-  </head>
-  <body>
-    <h1>User List</h1>
-    <ul>
-      {{#each users}}
-      <li>Name: {{this.name}}</li>
-      <li>Age: {{this.age}}</li>
-      <br />
-      {{/each}}
-    </ul>
-  </body>
-</html> -->
-
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style type="text/css">
       <!--
-      span.cls_002{font-family:Arial,serif;font-size:24.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
-      div.cls_002{font-family:Arial,serif;font-size:24.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
-      span.cls_003{font-family:Arial,serif;font-size:10.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
-      div.cls_003{font-family:Arial,serif;font-size:10.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
-      span.cls_004{font-family:Arial,serif;font-size:10.1px;color:rgb(0,115,176);font-weight:normal;font-style:normal;text-decoration: none}
-      div.cls_004{font-family:Arial,serif;font-size:10.1px;color:rgb(0,115,176);font-weight:normal;font-style:normal;text-decoration: none}
-      span.cls_005{font-family:Arial,serif;font-size:14.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
-      div.cls_005{font-family:Arial,serif;font-size:14.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
-      span.cls_006{font-family:Arial,serif;font-size:12.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
-      div.cls_006{font-family:Arial,serif;font-size:12.1px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
-      span.cls_007{font-family:Arial,serif;font-size:12.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
-      div.cls_007{font-family:Arial,serif;font-size:12.1px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
-      span.cls_008{font-family:Arial,serif;font-size:10.1px;color:rgb(133,133,133);font-weight:normal;font-style:normal;text-decoration: none}
-      div.cls_008{font-family:Arial,serif;font-size:10.1px;color:rgb(133,133,133);font-weight:normal;font-style:normal;text-decoration: none}
+        .header{margin-bottom: 5px;font-family:Arial,serif;font-size:30px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
+        .title{margin-bottom: 5px;font-family:Arial,serif;font-size:25px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
+        .sub_title{margin-bottom: 5px;font-family:Arial,serif;font-size:20px;color:rgb(0,0,0);font-weight:bold;font-style:normal;text-decoration: none}
+        .text{font-family:Arial,serif;font-size:16px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration: none}
+        .sub_section {padding-left: 15px;}
       -->
     </style>
-    <script
-      type="text/javascript"
-      src="8264ee4e-d4d3-11eb-a980-0cc47a792c0a_id_8264ee4e-d4d3-11eb-a980-0cc47a792c0a_files/wz_jsgraphics.js"
-    ></script>
   </head>
-  <body>
-    <div
-      style="
-        position: absolute;
-        left: 50%;
-        margin-left: -306px;
-        top: 0px;
-        width: 612px;
-        height: 792px;
-        border-style: outset;
-        overflow: hidden;
-      "
-    >
-      <div style="position: absolute; left: 0px; top: 0px">
-        <img
-          src="8264ee4e-d4d3-11eb-a980-0cc47a792c0a_id_8264ee4e-d4d3-11eb-a980-0cc47a792c0a_files/background1.jpg"
-          width="612"
-          height="792"
-        />
-      </div>
-      <div style="position: absolute; left: 48px; top: 52.23px" class="cls_002">
-        <span class="cls_002">Quốc Thái Nguyễn</span>
-      </div>
-      <div style="position: absolute; left: 48px; top: 84.6px" class="cls_003">
-        <span class="cls_003">Ho Chi Minh City, Vietnam</span>
-      </div>
-      <div style="position: absolute; left: 73px; top: 109.99px" class="cls_003">
-        <span class="cls_003">ct1.nquocthai@gmail.com</span>
-      </div>
-      <div style="position: absolute; left: 326px; top: 109.99px" class="cls_003">
-        <span class="cls_003">0776380164</span>
-      </div>
-      <div style="position: absolute; left: 73px; top: 130.77px" class="cls_004">
-        <span class="cls_004"> </span
-        ><a href="https://www.linkedin.com/in/nguyen-quoc-thai-pa-nqt">linkedin.com/in/nguyen-quoc-thai-pa-nqt</a>
-      </div>
-      <div style="position: absolute; left: 48px; top: 155.2px" class="cls_005"><span class="cls_005">Summary</span></div>
-      <div style="position: absolute; left: 48px; top: 175.18px" class="cls_003">
-        <span class="cls_003">3rd year student at University of Science HCMC.</span>
-      </div>
-      <div style="position: absolute; left: 48px; top: 203.18px" class="cls_003"><span class="cls_003">About me:</span></div>
-      <div style="position: absolute; left: 48px; top: 217.18px" class="cls_003">
-        <span class="cls_003">- I’m a friendly, easy-going and open-mind person</span>
-      </div>
-      <div style="position: absolute; left: 48px; top: 231.18px" class="cls_003">
-        <span class="cls_003">- Passion for learning and updating the latest technologies</span>
-      </div>
-      <div style="position: absolute; left: 48px; top: 245.18px" class="cls_003">
-        <span class="cls_003">- High sense of responsibility</span>
-      </div>
-      <div style="position: absolute; left: 48px; top: 259.18px" class="cls_003">
-        <span class="cls_003">- Documents reading in english & basic communicate</span>
-      </div>
-      <div style="position: absolute; left: 48px; top: 273.18px" class="cls_003">
-        <span class="cls_003">- Ability to self-study and problems solving</span>
-      </div>
-      <div style="position: absolute; left: 48px; top: 287.18px" class="cls_003">
-        <span class="cls_003">- Good background in data structure and algorithms</span>
-      </div>
-      <div style="position: absolute; left: 48px; top: 301.18px" class="cls_003">
-        <span class="cls_003">- Good at teamwork and communicate</span>
-      </div>
-      <div style="position: absolute; left: 48px; top: 315.18px" class="cls_003">
-        <span class="cls_003">- I love making fun side projects and blogging about dev</span>
-      </div>
-      <div style="position: absolute; left: 48px; top: 343.18px" class="cls_003">
-        <span class="cls_003">Tools & Skills:</span>
-      </div>
-      <div style="position: absolute; left: 48px; top: 357.18px" class="cls_003">
-        <span class="cls_003">- Front-end: HTML, CSS, JS, Bootstrap, ReactJs, SCSS</span>
-      </div>
-      <div style="position: absolute; left: 48px; top: 371.18px" class="cls_003">
-        <span class="cls_003">- Back-end: Nodejs, ExpressJs, Socket.io, MongoDB, Swagger UI, SQL Server</span>
-      </div>
-      <div style="position: absolute; left: 48px; top: 385.18px" class="cls_003">
-        <span class="cls_003">- Others: Github, NPM, Jira, deploy, linux</span>
-      </div>
-      <div style="position: absolute; left: 48px; top: 399.18px" class="cls_003">
-        <span class="cls_003">- Tools: VS, VS Code, Postman, Docker</span>
-      </div>
-      <div style="position: absolute; left: 48px; top: 421.22px" class="cls_005">
-        <span class="cls_005">Experience</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 445.12px" class="cls_006">
-        <span class="cls_006">Job Social Network</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 461.92px" class="cls_007"><span class="cls_007">R2W Team</span></div>
-      <div style="position: absolute; left: 70px; top: 478.8px" class="cls_003">
-        <span class="cls_003">Apr 2021 - Present (3 months +)</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 492.8px" class="cls_003">
-        <span class="cls_003">Descriptions:</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 506.8px" class="cls_003">
-        <span class="cls_003">The social network for jobs finding & hiring (CSR)</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 534.8px" class="cls_003">
-        <span class="cls_003">Base infos:</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 548.8px" class="cls_003">
-        <span class="cls_003">- Team size: 5</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 562.8px" class="cls_003">
-        <span class="cls_003">- Role: Backend developer</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 576.8px" class="cls_003">
-        <span class="cls_003">- Technologies: Node express boilerplate, ReactJS, RESTful API, OAuth, ...</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 604.8px" class="cls_003">
-        <span class="cls_003">Responsibilities:</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 618.8px" class="cls_003">
-        <span class="cls_003">- Schema design & implement</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 632.8px" class="cls_003">
-        <span class="cls_003">- Swagger UI for API testing</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 646.8px" class="cls_003">
-        <span class="cls_003">- Routing, handle controllers, mongo query</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 674.8px" class="cls_003">
-        <span class="cls_003">In the future:</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 688.8px" class="cls_003">
-        <span class="cls_003">- APIs protect, rate limit</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 702.8px" class="cls_003">
-        <span class="cls_003">- Optimal respond time</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 716.8px" class="cls_003">
-        <span class="cls_003">- Public APIs</span>
-      </div>
-      <div style="position: absolute; left: 244.62px; top: 753.59px" class="cls_008">
-        <span class="cls_008">Quốc Thái Nguyễn - page 1</span>
-      </div>
+  <body style="padding: 45px">
+    {{#each cvs}}
+    <div>
+      <p class="header">{{this.userSnapShort.baseInfo.firstName}} {{this.userSnapShort.baseInfo.lastName}}</p>
     </div>
-    <div
-      style="
-        position: absolute;
-        left: 50%;
-        margin-left: -306px;
-        top: 802px;
-        width: 612px;
-        height: 792px;
-        border-style: outset;
-        overflow: hidden;
-      "
-    >
-      <div style="position: absolute; left: 0px; top: 0px">
-        <img
-          src="8264ee4e-d4d3-11eb-a980-0cc47a792c0a_id_8264ee4e-d4d3-11eb-a980-0cc47a792c0a_files/background2.jpg"
-          width="612"
-          height="792"
-        />
-      </div>
-      <div style="position: absolute; left: 70px; top: 54.6px" class="cls_003">
-        <span class="cls_003">Link: </span
-        ><a href="https://github.com/nguyen-quoc-thai/fine-job/">https://github.com/Nguyen-Quoc-Thai/fine-job</a>
-      </div>
-      <div style="position: absolute; left: 70px; top: 88.51px" class="cls_006"><span class="cls_006">E-Store</span></div>
-      <div style="position: absolute; left: 70px; top: 105.31px" class="cls_007"><span class="cls_007">R2W Team</span></div>
-      <div style="position: absolute; left: 70px; top: 122.2px" class="cls_003">
-        <span class="cls_003">Oct 2020 - Nov 2020 (2 months)</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 136.2px" class="cls_003">
-        <span class="cls_003">Descriptions:</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 150.19px" class="cls_003">
-        <span class="cls_003">Ecommerce website for selling PC, laptop, mobile, ... (SSR)</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 178.2px" class="cls_003">
-        <span class="cls_003">Base infos:</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 192.2px" class="cls_003">
-        <span class="cls_003">- Team size: 3</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 206.2px" class="cls_003">
-        <span class="cls_003">- Role: Backend developer</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 220.2px" class="cls_003">
-        <span class="cls_003">- Technologies: NodeJS, ExpressJS, MongoDB, EJS, API, OAuth, ...</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 248.2px" class="cls_003">
-        <span class="cls_003">Responsibilities:</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 262.2px" class="cls_003">
-        <span class="cls_003">- Schema design & implement</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 276.2px" class="cls_003">
-        <span class="cls_003">- Define routes, handle controllers & mongo query</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 290.2px" class="cls_003">
-        <span class="cls_003">- API implement</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 318.2px" class="cls_003">
-        <span class="cls_003">In the future:</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 332.2px" class="cls_003">
-        <span class="cls_003">- Optimal respond time</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 346.2px" class="cls_003">
-        <span class="cls_003">- Security: avoid XSS, CSRF</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 374.2px" class="cls_003">
-        <span class="cls_003">Link: </span><a href="https://e-store.zeet.app/">https://e-store.zeet.app</a>
-      </div>
-      <div style="position: absolute; left: 70px; top: 408.11px" class="cls_006">
-        <span class="cls_006">Corona virus dashboard</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 424.91px" class="cls_007"><span class="cls_007">R2W Team</span></div>
-      <div style="position: absolute; left: 70px; top: 441.8px" class="cls_003">
-        <span class="cls_003">Feb 2020 - Mar 2020 (2 months)</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 455.8px" class="cls_003">
-        <span class="cls_003">Descriptions:</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 469.8px" class="cls_003">
-        <span class="cls_003">Coronavirus (COVID-19) Map Dashboard using coronavirus-tracker-api (CSR)</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 497.8px" class="cls_003">
-        <span class="cls_003">Base infos:</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 511.79px" class="cls_003">
-        <span class="cls_003">- Role: Fullstack developer</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 525.79px" class="cls_003">
-        <span class="cls_003">- Technologies: ReactJs, Nodejs, APIs, HighCharts/Maps</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 553.79px" class="cls_003">
-        <span class="cls_003">Responsibilities:</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 567.79px" class="cls_003">
-        <span class="cls_003">- Build an UI</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 581.79px" class="cls_003">
-        <span class="cls_003">- API fetching</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 595.79px" class="cls_003">
-        <span class="cls_003">- Chart/Map render</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 609.79px" class="cls_003">
-        <span class="cls_003">- Location request</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 637.79px" class="cls_003">
-        <span class="cls_003">In the future:</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 651.79px" class="cls_003">
-        <span class="cls_003">- Warning if people is near epidemic zone (location)</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 665.79px" class="cls_003">
-        <span class="cls_003">- Coronavirus articles (backend nodejs)</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 693.79px" class="cls_003">
-        <span class="cls_003">Links: </span
-        ><a href="https://coronavirus-update-up-ver.netlify.app/">https://coronavirus-update-up-ver.netlify.app/</a>
-      </div>
-      <div style="position: absolute; left: 48px; top: 723.84px" class="cls_005"><span class="cls_005">Education</span></div>
-      <div style="position: absolute; left: 244.62px; top: 753.59px" class="cls_008">
-        <span class="cls_008">Quốc Thái Nguyễn - page 2</span>
-      </div>
+    <div>
+      <p class="text">Email: {{this.userSnapShort.contact.email}}</p>
+      {{#if this.userSnapShort.contact.phone}}
+      <p class="text">Phone: {{this.userSnapShort.contact.phone}}</p>
+      {{/if}}
+      <p class="text">Fine Job Site: {{this.profileURL}}</p>
     </div>
-    <div
-      style="
-        position: absolute;
-        left: 50%;
-        margin-left: -306px;
-        top: 1604px;
-        width: 612px;
-        height: 792px;
-        border-style: outset;
-        overflow: hidden;
-      "
-    >
-      <div style="position: absolute; left: 0px; top: 0px">
-        <img
-          src="8264ee4e-d4d3-11eb-a980-0cc47a792c0a_id_8264ee4e-d4d3-11eb-a980-0cc47a792c0a_files/background3.jpg"
-          width="612"
-          height="792"
-        />
-      </div>
-      <div style="position: absolute; left: 70px; top: 58.51px" class="cls_006">
-        <span class="cls_006">VNUHCM - University of Science</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 75.31px" class="cls_007">
-        <span class="cls_007">Bachelor's degree, Computer Software Engineering</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 92.19px" class="cls_003">
-        <span class="cls_003">2018 - 2022</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 126.11px" class="cls_006">
-        <span class="cls_006">Chau Thanh 1 High school</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 142.91px" class="cls_007">
-        <span class="cls_007">High School</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 159.79px" class="cls_003">
-        <span class="cls_003">2016 - 2018</span>
-      </div>
-      <div style="position: absolute; left: 48px; top: 189.84px" class="cls_005">
-        <span class="cls_005">Licenses & Certifications</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 213.73px" class="cls_006">
-        <span class="cls_006">Semester scholarship</span><span class="cls_007"> - VNUHCM - University of Science</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 230.62px" class="cls_003">
-        <span class="cls_003">Issued Nov 2019 - Expires Nov 2019</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 244.62px" class="cls_003"><span class="cls_003">18120554</span></div>
-      <div style="position: absolute; left: 70px; top: 278.53px" class="cls_006">
-        <span class="cls_006">Cyber Security Web Application Exploitation</span><span class="cls_007"> - Udemy</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 295.42px" class="cls_003">
-        <span class="cls_003">Issued Dec 2020 - Expires Dec 2022</span>
-      </div>
-      <div style="position: absolute; left: 70px; top: 309.42px" class="cls_003">
-        <span class="cls_003">UC-fa7b5436-7e0f-4ac9-9e87-cd82ccebcae1</span>
-      </div>
-      <div style="position: absolute; left: 48px; top: 339.46px" class="cls_005"><span class="cls_005">Skills</span></div>
-      <div style="position: absolute; left: 54px; top: 359.43px" class="cls_003"><span class="cls_003">NodeJS</span></div>
-      <div style="position: absolute; left: 97.87px; top: 359.43px" class="cls_003">
-        <span class="cls_003">• ReactJS</span>
-      </div>
-      <div style="position: absolute; left: 155.76px; top: 359.43px" class="cls_003">
-        <span class="cls_003">• MongoDB</span>
-      </div>
-      <div style="position: absolute; left: 220.33px; top: 359.43px" class="cls_003">
-        <span class="cls_003">• JavaScript</span>
-      </div>
-      <div style="position: absolute; left: 287.11px; top: 359.43px" class="cls_003"><span class="cls_003">• GIT</span></div>
-      <div style="position: absolute; left: 323.87px; top: 359.43px" class="cls_003">
-        <span class="cls_003">• REST API</span>
-      </div>
-      <div style="position: absolute; left: 389.49px; top: 359.43px" class="cls_003"><span class="cls_003">• SQL</span></div>
-      <div style="position: absolute; left: 429.6px; top: 359.43px" class="cls_003"><span class="cls_003">• C++</span></div>
-      <div style="position: absolute; left: 468.6px; top: 359.43px" class="cls_003">
-        <span class="cls_003">• Microsoft Office</span>
-      </div>
-      <div style="position: absolute; left: 59.54px; top: 373.43px" class="cls_003">
-        <span class="cls_003">• Teamwork</span>
-      </div>
-      <div style="position: absolute; left: 244.62px; top: 753.59px" class="cls_008">
-        <span class="cls_008">Quốc Thái Nguyễn - page 3</span>
-      </div>
+    <div>
+      <p class="title">About</p>
+      <p class="text">{{this.userSnapShort.about}}</p>
     </div>
+    <div>
+      <p class="title">Skills</p>
+      <ul>
+        {{#each this.userSnapShort.skills}}
+        <li class="text">{{this}}</li>
+        {{/each}}
+      </ul>
+    </div>
+    <div>
+      <p class="title">Education</p>
+      {{#each this.userSnapShort.baseInfo.educations}}
+      <div class="sub_section">
+        <p class="sub_title">{{this.school.name}}</p>
+        <p>
+          {{#if this.degree}}
+          <span class="text">{{this.degree}} ,</span>
+          {{/if}}
+          <span class="text">{{this.major}}</span>
+        </p>
+        <p>
+          {{#if this.start_date}}
+          <span class="text">{{this.start_date}} -</span>
+          {{/if}}
+          <span class="text">{{this.end_date}}</span>
+        </p>
+      </div>
+      {{/each}}
+    </div>
+    <div>
+      <p class="title">Accomplishments</p>
+      {{#each this.userSnapShort.accomplishments}}
+      <div class="sub_section">
+        <p class="sub_title">{{this.name}}</p>
+        {{#if this.description}}
+        <p class="text">Description: {{this.description}}</p>
+        {{/if}}
+        <!-- -->
+        {{#if this.url}}
+        <p class="text">Link: {{this.url}}</p>
+        {{/if}}
+        <!-- -->
+        <p>
+          {{#if this.start_date}}
+          <span class="text">{{this.start_date}} -</span>
+          {{/if}}
+          <span class="text">{{this.end_date}}</span>
+        </p>
+      </div>
+      {{/each}}
+    </div>
+    {{/each}}
+
+    <script type="text/javascript" src="./normal.js"></script>
   </body>
 </html>

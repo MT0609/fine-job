@@ -21,6 +21,11 @@ const resumeApi = {
     const url = "/v1/cvs/?cvId=" + cvId;
     return axiosClient.delete(url, { data: body });
   },
+  download: (query) => {
+    const url = "/v1/cvs/download";
+    axiosClient.defaults.responseType = "blob";
+    return axiosClient.get(url, { params: query });
+  },
 };
 
 export default resumeApi;

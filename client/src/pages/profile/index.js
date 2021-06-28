@@ -566,7 +566,9 @@ function Profile() {
           </section>
 
           <section className={styles.profile__section}>
-            <Typography variant="h6">{t("people.interests")}</Typography>
+            <Box mb={1}>
+              <Typography variant="h6">{t("people.interests")}</Typography>
+            </Box>
             <Grid container spacing={2}>
               {user.followings?.map((item, index) => (
                 <Grid item xs={12} md={6} key={index}>

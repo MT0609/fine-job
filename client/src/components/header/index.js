@@ -151,7 +151,7 @@ function Header() {
                       marginBottom: "0.4rem",
                     }}
                     alt="Avatar"
-                    src="https://mcnewsmd1.keeng.net/netnews/archive/images/2020/07/20/tinngan_011115_916156142_0.jpg"
+                    src="https://res.cloudinary.com/dghvjalhh/image/upload/v1618850154/avatars/sxqvw0io5dmkg4apx30d.jpg"
                   />
                   <span>{t("header.me")}</span>
                 </button>

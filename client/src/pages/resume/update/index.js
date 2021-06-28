@@ -12,7 +12,8 @@ import {
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
-import { Email, Phone, Edit, Add, Delete } from "@material-ui/icons";
+import { Email, Phone, Edit, Add, Delete, GetApp } from "@material-ui/icons";
+import LoadingButton from "@material-ui/lab/LoadingButton";
 import { makeStyles } from "@material-ui/core/styles";
 import CVBasicInfoUpdate from "../../../container/resume/update/basicUpdate";
 import CVAboutUpdate from "../../../container/resume/update/aboutUpdate";
@@ -68,6 +69,11 @@ function ResumeUpdate() {
     }
   };
 
+  const handleOpenDownLoad = (reqBody) => {
+    // reqBody {id, title}
+    dispatch(cvActions.downloadResume(reqBody));
+  };
+
   const useStyles = makeStyles({
     btnEdit: {
       color: "#0A66C2",
@@ -94,9 +100,24 @@ function ResumeUpdate() {
             boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
           }}
         >
-          <Typography variant="h4" style={{ letterSpacing: "1px" }}>
-            {cv.title}
-          </Typography>
+          <Grid container justify="space-between" alignItems="center">
+            <Grid item>
+              <Typography variant="h4" style={{ letterSpacing: "1px" }}>
+                {cv.title}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <LoadingButton
+                type="submit"
+                onClick={() =>
+                  handleOpenDownLoad({ id: cv.id, title: cv.title })
+                }
+                pending={resumeState.isLoading}
+              >
+                <GetApp />
+              </LoadingButton>
+            </Grid>
+          </Grid>
 
           {/* basic info */}
           <section className={styles.cvupdate__section}>
