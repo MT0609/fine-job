@@ -3,6 +3,7 @@ const { password, objectId } = require('./custom.validation');
 
 const createSubscription = {
   body: Joi.object().keys({
+    userID: Joi.string().custom(objectId),
     subscription: Joi.object().keys({
       endpoint: Joi.string().required(),
       expirationTime: Joi.any(),

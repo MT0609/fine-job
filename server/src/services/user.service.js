@@ -2,8 +2,9 @@ const httpStatus = require('http-status');
 const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { sendEmail } = require('./email.service');
-
+const webPush = require('../config/webPush');
 const elasticService = require('../services/elastic.service');
+const { Subscription } = require('../models');
 
 const {
   createNotification,
@@ -428,6 +429,23 @@ const sendConnReq = async (userBody, sender, receiverID) => {
     await sender.save();
     await receiver.save();
 
+    // send push noti to receiver
+    const subscription = await Subscription.findOne({ userID: receiverID });
+    if (!subscription) return {};
+
+    webPush.sendNotification(
+      {
+        endpoint: subscription.endpoint,
+        expirationTime: subscription.expirationTime,
+        keys: subscription.keys,
+      },
+      JSON.stringify({
+        title: 'New connection request',
+        text: `${sender.baseInfo.firstName} ${sender.baseInfo.lastName} sent you connection request`,
+        url: `/profile/${sender._id}`,
+      })
+    );
+
     // Elastic update sender
 
     // Elastic delete
@@ -543,6 +561,23 @@ const acceptConnReq = async (userBody, sender, receiverID, notificationID) => {
     await sender.save();
     await receiver.save();
     await notification.save();
+
+    // send push noti to receiver
+    const subscription = await Subscription.findOne({ userID: receiverID });
+    if (!subscription) return {};
+
+    webPush.sendNotification(
+      {
+        endpoint: subscription.endpoint,
+        expirationTime: subscription.expirationTime,
+        keys: subscription.keys,
+      },
+      JSON.stringify({
+        title: 'New connection',
+        text: `${sender.baseInfo.firstName} ${sender.baseInfo.lastName} accepted your connection request`,
+        url: `/profile/${sender._id}`,
+      })
+    );
 
     // Elastic update sender
 
