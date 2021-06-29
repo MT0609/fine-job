@@ -54,7 +54,11 @@ const createJob = async (userBody) => {
     data: job,
   };
 
-  await elasticService.index('jobs', job._id, body);
+  try {
+    await elasticService.index('jobs', job._id, body);
+  } catch (error) {
+    console.log(error);
+  }
 
   return job;
 };
@@ -160,7 +164,11 @@ const applyJob = async (jobID, body, userID, cvPath) => {
       data: job,
     };
 
-    await elasticService.index('jobs', job._id, body);
+    try {
+      await elasticService.index('jobs', job._id, body);
+    } catch (error) {
+      console.log(error);
+    }
 
     // Elastic update user
 
@@ -178,7 +186,11 @@ const applyJob = async (jobID, body, userID, cvPath) => {
       data: user,
     };
 
-    await elasticService.index('users', user._id, bodyUser);
+    try {
+      await elasticService.index('users', user._id, bodyUser);
+    } catch (error) {
+      console.log(error);
+    }
 
     return {};
   } catch (error) {
@@ -216,7 +228,11 @@ const updateJobById = async (jobID, updateBody) => {
     data: job,
   };
 
-  await elasticService.index('jobs', job._id, body);
+  try {
+    await elasticService.index('jobs', job._id, body);
+  } catch (error) {
+    console.log(error);
+  }
 
   return job;
 };
@@ -292,7 +308,11 @@ const postSaveJob = async (jobID, userID) => {
       data: user,
     };
 
-    await elasticService.index('users', user._id, bodyUser);
+    try {
+      await elasticService.index('users', user._id, bodyUser);
+    } catch (error) {
+      console.log(error);
+    }
 
     return {};
   } catch (error) {
@@ -339,7 +359,11 @@ const postUnSaveJob = async (jobID, userID) => {
       data: user,
     };
 
-    await elasticService.index('users', user._id, bodyUser);
+    try {
+      await elasticService.index('users', user._id, bodyUser);
+    } catch (error) {
+      console.log(error);
+    }
 
     return {};
   } catch (error) {

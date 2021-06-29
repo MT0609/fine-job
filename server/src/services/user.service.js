@@ -38,8 +38,11 @@ const createUser = async (userBody) => {
     about: user.about,
     data: user,
   };
-
-  await elasticService.index('users', user._id, body);
+  try {
+    await elasticService.index('users', user._id, body);
+  } catch (error) {
+    console.log(error);
+  }
   return user;
 };
 
@@ -122,8 +125,11 @@ const updateUserById = async (userId, updateBody) => {
     about: user.about,
     data: user,
   };
-
-  await elasticService.index('users', user._id, body);
+  try {
+    await elasticService.index('users', user._id, body);
+  } catch (error) {
+    console.log(error);
+  }
 
   return user;
 };
@@ -161,8 +167,11 @@ const modifyEducation = async (userID, eduData) => {
     about: user.about,
     data: user,
   };
-
-  await elasticService.index('users', user._id, body);
+  try {
+    await elasticService.index('users', user._id, body);
+  } catch (error) {
+    console.log(error);
+  }
 
   return user;
 };
@@ -193,8 +202,11 @@ const deleteEducation = async (userID, reqBody) => {
       about: user.about,
       data: user,
     };
-
-    await elasticService.index('users', user._id, body);
+    try {
+      await elasticService.index('users', user._id, body);
+    } catch (error) {
+      console.log(error);
+    }
   }
   return user;
 };
@@ -232,8 +244,11 @@ const modifyAccomplishment = async (userID, data) => {
     about: user.about,
     data: user,
   };
-
-  await elasticService.index('users', user._id, body);
+  try {
+    await elasticService.index('users', user._id, body);
+  } catch (error) {
+    console.log(error);
+  }
 
   return user;
 };
@@ -264,8 +279,11 @@ const deleteAccomplishment = async (userID, reqBody) => {
       about: user.about,
       data: user,
     };
-
-    await elasticService.index('users', user._id, body);
+    try {
+      await elasticService.index('users', user._id, body);
+    } catch (error) {
+      console.log(error);
+    }
   }
   return user;
 };
@@ -443,8 +461,11 @@ const sendConnReq = async (userBody, sender, receiverID) => {
       about: sender.about,
       data: sender,
     };
-
-    await elasticService.index('users', sender._id, bodySender);
+    try {
+      await elasticService.index('users', sender._id, bodySender);
+    } catch (error) {
+      console.log(error);
+    }
 
     // Elastic update receiver
 
@@ -461,8 +482,11 @@ const sendConnReq = async (userBody, sender, receiverID) => {
       about: receiver.about,
       data: receiver,
     };
-
-    await elasticService.index('users', receiver._id, bodyReceiver);
+    try {
+      await elasticService.index('users', receiver._id, bodyReceiver);
+    } catch (error) {
+      console.log(error);
+    }
 
     return {};
   } catch (error) {
@@ -559,8 +583,11 @@ const acceptConnReq = async (userBody, sender, receiverID, notificationID) => {
       about: sender.about,
       data: sender,
     };
-
-    await elasticService.index('users', sender._id, bodySender);
+    try {
+      await elasticService.index('users', sender._id, bodySender);
+    } catch (error) {
+      console.log(error);
+    }
 
     // Elastic update receiver
 
@@ -577,8 +604,11 @@ const acceptConnReq = async (userBody, sender, receiverID, notificationID) => {
       about: receiver.about,
       data: receiver,
     };
-
-    await elasticService.index('users', receiver._id, bodyReceiver);
+    try {
+      await elasticService.index('users', receiver._id, bodyReceiver);
+    } catch (error) {
+      console.log(error);
+    }
 
     return {};
   } catch (error) {
@@ -653,8 +683,11 @@ const deleteConnReq = async (userBody, sender, receiverID, notificationID) => {
       about: sender.about,
       data: sender,
     };
-
-    await elasticService.index('users', sender._id, bodySender);
+    try {
+      await elasticService.index('users', sender._id, bodySender);
+    } catch (error) {
+      console.log(error);
+    }
 
     return {};
   } catch (error) {
@@ -744,8 +777,11 @@ const deleteFriend = async (userBody, sender, receiverID) => {
       about: sender.about,
       data: sender,
     };
-
-    await elasticService.index('users', sender._id, bodySender);
+    try {
+      await elasticService.index('users', sender._id, bodySender);
+    } catch (error) {
+      console.log(error);
+    }
 
     // Elastic update receiver
 
@@ -762,8 +798,11 @@ const deleteFriend = async (userBody, sender, receiverID) => {
       about: receiver.about,
       data: receiver,
     };
-
-    await elasticService.index('users', receiver._id, bodyReceiver);
+    try {
+      await elasticService.index('users', receiver._id, bodyReceiver);
+    } catch (error) {
+      console.log(error);
+    }
 
     return {};
   } catch (error) {
