@@ -26,6 +26,7 @@ const queryUniversities = async (filter, options, res) => {
     const totalPages = Math.ceil(allResults.length / limit);
     res.status(200).send({ results: paginatedResults, totalPages, page });
   } catch (error) {
+    console.log(error);
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
   }
 

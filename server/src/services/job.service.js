@@ -54,7 +54,7 @@ const createJob = async (userBody) => {
     data: job,
   };
 
-  elasticService.index('jobs', job._id, body);
+  await elasticService.index('jobs', job._id, body);
 
   return job;
 };
@@ -160,7 +160,7 @@ const applyJob = async (jobID, body, userID, cvPath) => {
       data: job,
     };
 
-    elasticService.index('jobs', job._id, body);
+    await elasticService.index('jobs', job._id, body);
 
     // Elastic update user
 
@@ -178,7 +178,7 @@ const applyJob = async (jobID, body, userID, cvPath) => {
       data: user,
     };
 
-    elasticService.index('users', user._id, bodyUser);
+    await elasticService.index('users', user._id, bodyUser);
 
     return {};
   } catch (error) {
@@ -216,7 +216,7 @@ const updateJobById = async (jobID, updateBody) => {
     data: job,
   };
 
-  elasticService.index('jobs', job._id, body);
+  await elasticService.index('jobs', job._id, body);
 
   return job;
 };
@@ -292,7 +292,7 @@ const postSaveJob = async (jobID, userID) => {
       data: user,
     };
 
-    elasticService.index('users', user._id, bodyUser);
+    await elasticService.index('users', user._id, bodyUser);
 
     return {};
   } catch (error) {
@@ -339,7 +339,7 @@ const postUnSaveJob = async (jobID, userID) => {
       data: user,
     };
 
-    elasticService.index('users', user._id, bodyUser);
+    await elasticService.index('users', user._id, bodyUser);
 
     return {};
   } catch (error) {
@@ -368,6 +368,7 @@ const searchJobs = async (filter, options, res) => {
     const totalPages = Math.ceil(allResults.length / limit);
     res.status(200).send({ results: paginatedResults, totalPages, page });
   } catch (error) {
+    console.log(error);
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
   }
 };

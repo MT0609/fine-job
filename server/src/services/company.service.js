@@ -28,7 +28,7 @@ const createCompany = async (userBody) => {
       data: company,
     };
 
-    elasticService.index('companies', company._id, body);
+    await elasticService.index('companies', company._id, body);
 
     return company;
   } catch (error) {
@@ -115,7 +115,7 @@ const updateCompanyById = async (companyID, updateBody) => {
     data: company,
   };
 
-  elasticService.index('companies', company._id, body);
+  await elasticService.index('companies', company._id, body);
 
   return company;
 };
@@ -196,7 +196,7 @@ const postFollowCompany = async (companyID, userID) => {
       data: company,
     };
 
-    elasticService.index('companies', company._id, body);
+    await elasticService.index('companies', company._id, body);
 
     // Elastic update user
 
@@ -214,7 +214,7 @@ const postFollowCompany = async (companyID, userID) => {
       data: user,
     };
 
-    elasticService.index('users', user._id, bodyUser);
+    await elasticService.index('users', user._id, bodyUser);
 
     return {};
   } catch (error) {
@@ -261,7 +261,7 @@ const postUnFollowCompany = async (companyID, userID) => {
       data: company,
     };
 
-    elasticService.index('companies', company._id, body);
+    await elasticService.index('companies', company._id, body);
 
     // Elastic update user
 
@@ -279,7 +279,7 @@ const postUnFollowCompany = async (companyID, userID) => {
       data: user,
     };
 
-    elasticService.index('users', user._id, bodyUser);
+    await elasticService.index('users', user._id, bodyUser);
 
     return {};
   } catch (error) {
@@ -308,6 +308,7 @@ const searchCompanies = async (filter, options, res) => {
     const totalPages = Math.ceil(allResults.length / limit);
     res.status(200).send({ results: paginatedResults, totalPages, page });
   } catch (error) {
+    console.log(error);
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
   }
 };

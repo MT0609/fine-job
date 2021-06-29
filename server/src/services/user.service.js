@@ -39,7 +39,7 @@ const createUser = async (userBody) => {
     data: user,
   };
 
-  elasticService.index('users', user._id, body);
+  await elasticService.index('users', user._id, body);
   return user;
 };
 
@@ -123,7 +123,7 @@ const updateUserById = async (userId, updateBody) => {
     data: user,
   };
 
-  elasticService.index('users', user._id, body);
+  await elasticService.index('users', user._id, body);
 
   return user;
 };
@@ -162,7 +162,7 @@ const modifyEducation = async (userID, eduData) => {
     data: user,
   };
 
-  elasticService.index('users', user._id, body);
+  await elasticService.index('users', user._id, body);
 
   return user;
 };
@@ -194,7 +194,7 @@ const deleteEducation = async (userID, reqBody) => {
       data: user,
     };
 
-    elasticService.index('users', user._id, body);
+    await elasticService.index('users', user._id, body);
   }
   return user;
 };
@@ -233,7 +233,7 @@ const modifyAccomplishment = async (userID, data) => {
     data: user,
   };
 
-  elasticService.index('users', user._id, body);
+  await elasticService.index('users', user._id, body);
 
   return user;
 };
@@ -265,7 +265,7 @@ const deleteAccomplishment = async (userID, reqBody) => {
       data: user,
     };
 
-    elasticService.index('users', user._id, body);
+    await elasticService.index('users', user._id, body);
   }
   return user;
 };
@@ -444,7 +444,7 @@ const sendConnReq = async (userBody, sender, receiverID) => {
       data: sender,
     };
 
-    elasticService.index('users', sender._id, bodySender);
+    await elasticService.index('users', sender._id, bodySender);
 
     // Elastic update receiver
 
@@ -462,7 +462,7 @@ const sendConnReq = async (userBody, sender, receiverID) => {
       data: receiver,
     };
 
-    elasticService.index('users', receiver._id, bodyReceiver);
+    await elasticService.index('users', receiver._id, bodyReceiver);
 
     return {};
   } catch (error) {
@@ -560,7 +560,7 @@ const acceptConnReq = async (userBody, sender, receiverID, notificationID) => {
       data: sender,
     };
 
-    elasticService.index('users', sender._id, bodySender);
+    await elasticService.index('users', sender._id, bodySender);
 
     // Elastic update receiver
 
@@ -578,7 +578,7 @@ const acceptConnReq = async (userBody, sender, receiverID, notificationID) => {
       data: receiver,
     };
 
-    elasticService.index('users', receiver._id, bodyReceiver);
+    await elasticService.index('users', receiver._id, bodyReceiver);
 
     return {};
   } catch (error) {
@@ -654,7 +654,7 @@ const deleteConnReq = async (userBody, sender, receiverID, notificationID) => {
       data: sender,
     };
 
-    elasticService.index('users', sender._id, bodySender);
+    await elasticService.index('users', sender._id, bodySender);
 
     return {};
   } catch (error) {
@@ -745,7 +745,7 @@ const deleteFriend = async (userBody, sender, receiverID) => {
       data: sender,
     };
 
-    elasticService.index('users', sender._id, bodySender);
+    await elasticService.index('users', sender._id, bodySender);
 
     // Elastic update receiver
 
@@ -763,7 +763,7 @@ const deleteFriend = async (userBody, sender, receiverID) => {
       data: receiver,
     };
 
-    elasticService.index('users', receiver._id, bodyReceiver);
+    await elasticService.index('users', receiver._id, bodyReceiver);
 
     return {};
   } catch (error) {
@@ -848,6 +848,7 @@ const searchUsers = async (filter, options, res) => {
     const totalPages = Math.ceil(allResults.length / limit);
     res.status(200).send({ results: paginatedResults, totalPages, page });
   } catch (error) {
+    console.log(error);
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
   }
 };
