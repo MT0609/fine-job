@@ -182,6 +182,40 @@ const postFollowCompany = async (companyID, userID) => {
     await company.save();
     await user.save();
 
+    // Elastic update
+
+    // Elastic delete
+    await elasticService.delete('companies', company._id);
+
+    // Elastic index
+    const body = {
+      name: company.name,
+      headLine: company.headLine,
+      about: company.about,
+      industry: company.baseInfo.industry,
+      data: company,
+    };
+
+    elasticService.index('companies', company._id, body);
+
+    // Elastic update user
+
+    // Elastic delete
+    await elasticService.delete('users', user._id);
+
+    // Elastic index
+    const bodyUser = {
+      firstName: user.baseInfo.firstName,
+      lastName: user.baseInfo.lastName,
+      headLine: user.baseInfo.headLine,
+      email: user.contact.email,
+      phone: user.contact.phone,
+      about: user.about,
+      data: user,
+    };
+
+    elasticService.index('users', user._id, bodyUser);
+
     return {};
   } catch (error) {
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
@@ -212,6 +246,40 @@ const postUnFollowCompany = async (companyID, userID) => {
 
     await company.save();
     await user.save();
+
+    // Elastic update
+
+    // Elastic delete
+    await elasticService.delete('companies', company._id);
+
+    // Elastic index
+    const body = {
+      name: company.name,
+      headLine: company.headLine,
+      about: company.about,
+      industry: company.baseInfo.industry,
+      data: company,
+    };
+
+    elasticService.index('companies', company._id, body);
+
+    // Elastic update user
+
+    // Elastic delete
+    await elasticService.delete('users', user._id);
+
+    // Elastic index
+    const bodyUser = {
+      firstName: user.baseInfo.firstName,
+      lastName: user.baseInfo.lastName,
+      headLine: user.baseInfo.headLine,
+      email: user.contact.email,
+      phone: user.contact.phone,
+      about: user.about,
+      data: user,
+    };
+
+    elasticService.index('users', user._id, bodyUser);
 
     return {};
   } catch (error) {

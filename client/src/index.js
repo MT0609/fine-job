@@ -9,9 +9,7 @@ import './index.css';
 import io from 'socket.io-client';
 
 // Socket
-const socket = io.connect(process.env.REACT_APP_BASE_URL, {
-	transports: ['websocket', 'polling', 'flashsocket'],
-});
+const socket = io.connect(process.env.REACT_APP_BASE_URL, {});
 
 ReactDOM.render(
 	<Provider store={store}>
