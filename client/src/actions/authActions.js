@@ -42,10 +42,21 @@ export const signUp = (data) => async (dispatch) => {
   }
 };
 
-export const signOut = () => {
-  return {
-    type: USERCONSTANTS.USER_LOGOUT,
-  };
+export const signOut = () => async (dispatch) => {
+  try {
+    const token = localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN);
+    const userID = jwt_decode(token)?.sub;
+    await authApi.deleteSubscription(userID);
+
+    dispatch({
+      type: USERCONSTANTS.USER_LOGOUT,
+    });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: USERCONSTANTS.USER_LOGOUT,
+    });
+  }
 };
 
 export const getUserData = () => async (dispatch) => {

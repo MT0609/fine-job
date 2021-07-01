@@ -7,7 +7,6 @@ import reportWebVitals from "./reportWebVitals";
 import "./configs/i18n";
 import "./index.css";
 import io from "socket.io-client";
-import swDev from "./swDev";
 
 // Socket
 const socket = io.connect(process.env.REACT_APP_BASE_URL, {});
@@ -23,4 +22,3 @@ ReactDOM.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https:s//bit.ly/CRA-vitals
 reportWebVitals();
-swDev();

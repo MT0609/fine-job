@@ -35,7 +35,7 @@ const getSubscription = {
 
 const deleteSubscription = {
   params: Joi.object().keys({
-    subscriptionID: Joi.string().custom(objectId),
+    userID: Joi.string().custom(objectId),
   }),
 };
 

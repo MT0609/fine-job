@@ -29,8 +29,8 @@ const getSubscription = catchAsync(async (req, res) => {
 });
 
 const deleteSubscription = catchAsync(async (req, res) => {
-  await subscriptionService.deleteSubscriptionById(req.params.subscriptionID);
-  res.status(httpStatus.NO_CONTENT).send();
+  await subscriptionService.deleteSubscriptionByUserId(req.params.userID);
+  res.status(httpStatus.NO_CONTENT).send({});
 });
 
 module.exports = {
