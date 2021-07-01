@@ -1,0 +1,17 @@
+{
+  "name": "fine_job",
+  "version": "1.0.0",
+  "description": "Finding Jobs Social Networking Site",
+  "author": "R2Ws",
+  "repository": "https://github.com/Nguyen-Quoc-Thai/fine-job",
+  "license": "MIT",
+  "scripts": {
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm start",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "devDependencies": {
+    "concurrently": "^5.3.0",
+    "nodemon": "^2.0.4"
+  }
+}

@@ -41,18 +41,13 @@ const getSubscriptionById = async (id) => {
  * @param {ObjectId} subscriptionID
  * @returns {Promise<Subscription>}
  */
-const deleteSubscriptionById = async (subscriptionID) => {
-  const subscription = await getSubscriptionsById(subscriptionID);
-  if (!subscription) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Subscription not found');
-  }
-  await subscription.remove();
-  return subscription;
+const deleteSubscriptionByUserId = async (userID) => {
+  await Subscription.deleteMany({ userID });
 };
 
 module.exports = {
   createSubscription,
   querySubscriptions,
   getSubscriptionById,
-  deleteSubscriptionById,
+  deleteSubscriptionByUserId,
 };

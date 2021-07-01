@@ -13,6 +13,10 @@ const authApi = {
     const url = `/v1/users/${id}`;
     return axiosClient.get(url);
   },
+  deleteSubscription: (userID) => {
+    const url = `/v1/subscriptions/${userID}`;
+    return axiosClient.delete(url);
+  },
 };
 
 export default authApi;
