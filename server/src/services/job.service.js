@@ -54,7 +54,11 @@ const createJob = async (userBody) => {
     data: job,
   };
 
-  elasticService.index('jobs', job._id, body);
+  try {
+    await elasticService.index('jobs', job._id, body);
+  } catch (error) {
+    console.log(error);
+  }
 
   return job;
 };
@@ -160,7 +164,11 @@ const applyJob = async (jobID, body, userID, cvPath) => {
       data: job,
     };
 
-    elasticService.index('jobs', job._id, body);
+    try {
+      await elasticService.index('jobs', job._id, body);
+    } catch (error) {
+      console.log(error);
+    }
 
     // Elastic update user
 
@@ -178,7 +186,11 @@ const applyJob = async (jobID, body, userID, cvPath) => {
       data: user,
     };
 
-    elasticService.index('users', user._id, bodyUser);
+    try {
+      await elasticService.index('users', user._id, bodyUser);
+    } catch (error) {
+      console.log(error);
+    }
 
     return {};
   } catch (error) {
@@ -216,7 +228,11 @@ const updateJobById = async (jobID, updateBody) => {
     data: job,
   };
 
-  elasticService.index('jobs', job._id, body);
+  try {
+    await elasticService.index('jobs', job._id, body);
+  } catch (error) {
+    console.log(error);
+  }
 
   return job;
 };
@@ -292,7 +308,11 @@ const postSaveJob = async (jobID, userID) => {
       data: user,
     };
 
-    elasticService.index('users', user._id, bodyUser);
+    try {
+      await elasticService.index('users', user._id, bodyUser);
+    } catch (error) {
+      console.log(error);
+    }
 
     return {};
   } catch (error) {
@@ -339,7 +359,11 @@ const postUnSaveJob = async (jobID, userID) => {
       data: user,
     };
 
-    elasticService.index('users', user._id, bodyUser);
+    try {
+      await elasticService.index('users', user._id, bodyUser);
+    } catch (error) {
+      console.log(error);
+    }
 
     return {};
   } catch (error) {
@@ -368,6 +392,7 @@ const searchJobs = async (filter, options, res) => {
     const totalPages = Math.ceil(allResults.length / limit);
     res.status(200).send({ results: paginatedResults, totalPages, page });
   } catch (error) {
+    console.log(error);
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
   }
 };

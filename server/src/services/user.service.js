@@ -2,8 +2,9 @@ const httpStatus = require('http-status');
 const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { sendEmail } = require('./email.service');
-
+const webPush = require('../config/webPush');
 const elasticService = require('../services/elastic.service');
+const { Subscription } = require('../models');
 
 const {
   createNotification,
@@ -38,8 +39,11 @@ const createUser = async (userBody) => {
     about: user.about,
     data: user,
   };
-
-  elasticService.index('users', user._id, body);
+  try {
+    await elasticService.index('users', user._id, body);
+  } catch (error) {
+    console.log(error);
+  }
   return user;
 };
 
@@ -122,8 +126,11 @@ const updateUserById = async (userId, updateBody) => {
     about: user.about,
     data: user,
   };
-
-  elasticService.index('users', user._id, body);
+  try {
+    await elasticService.index('users', user._id, body);
+  } catch (error) {
+    console.log(error);
+  }
 
   return user;
 };
@@ -161,8 +168,11 @@ const modifyEducation = async (userID, eduData) => {
     about: user.about,
     data: user,
   };
-
-  elasticService.index('users', user._id, body);
+  try {
+    await elasticService.index('users', user._id, body);
+  } catch (error) {
+    console.log(error);
+  }
 
   return user;
 };
@@ -193,8 +203,11 @@ const deleteEducation = async (userID, reqBody) => {
       about: user.about,
       data: user,
     };
-
-    elasticService.index('users', user._id, body);
+    try {
+      await elasticService.index('users', user._id, body);
+    } catch (error) {
+      console.log(error);
+    }
   }
   return user;
 };
@@ -232,8 +245,11 @@ const modifyAccomplishment = async (userID, data) => {
     about: user.about,
     data: user,
   };
-
-  elasticService.index('users', user._id, body);
+  try {
+    await elasticService.index('users', user._id, body);
+  } catch (error) {
+    console.log(error);
+  }
 
   return user;
 };
@@ -264,8 +280,11 @@ const deleteAccomplishment = async (userID, reqBody) => {
       about: user.about,
       data: user,
     };
-
-    elasticService.index('users', user._id, body);
+    try {
+      await elasticService.index('users', user._id, body);
+    } catch (error) {
+      console.log(error);
+    }
   }
   return user;
 };
@@ -428,6 +447,23 @@ const sendConnReq = async (userBody, sender, receiverID) => {
     await sender.save();
     await receiver.save();
 
+    // send push noti to receiver
+    const subscription = await Subscription.findOne({ userID: receiverID });
+    if (!subscription) return {};
+
+    webPush.sendNotification(
+      {
+        endpoint: subscription.endpoint,
+        expirationTime: subscription.expirationTime,
+        keys: subscription.keys,
+      },
+      JSON.stringify({
+        title: 'New connection request',
+        text: `${sender.baseInfo.firstName} ${sender.baseInfo.lastName} sent you connection request`,
+        url: `/profile/${sender._id}`,
+      })
+    );
+
     // Elastic update sender
 
     // Elastic delete
@@ -443,8 +479,11 @@ const sendConnReq = async (userBody, sender, receiverID) => {
       about: sender.about,
       data: sender,
     };
-
-    elasticService.index('users', sender._id, bodySender);
+    try {
+      await elasticService.index('users', sender._id, bodySender);
+    } catch (error) {
+      console.log(error);
+    }
 
     // Elastic update receiver
 
@@ -461,8 +500,11 @@ const sendConnReq = async (userBody, sender, receiverID) => {
       about: receiver.about,
       data: receiver,
     };
-
-    elasticService.index('users', receiver._id, bodyReceiver);
+    try {
+      await elasticService.index('users', receiver._id, bodyReceiver);
+    } catch (error) {
+      console.log(error);
+    }
 
     return {};
   } catch (error) {
@@ -544,6 +586,23 @@ const acceptConnReq = async (userBody, sender, receiverID, notificationID) => {
     await receiver.save();
     await notification.save();
 
+    // send push noti to receiver
+    const subscription = await Subscription.findOne({ userID: receiverID });
+    if (!subscription) return {};
+
+    webPush.sendNotification(
+      {
+        endpoint: subscription.endpoint,
+        expirationTime: subscription.expirationTime,
+        keys: subscription.keys,
+      },
+      JSON.stringify({
+        title: 'New connection',
+        text: `${sender.baseInfo.firstName} ${sender.baseInfo.lastName} accepted your connection request`,
+        url: `/profile/${sender._id}`,
+      })
+    );
+
     // Elastic update sender
 
     // Elastic delete
@@ -559,8 +618,11 @@ const acceptConnReq = async (userBody, sender, receiverID, notificationID) => {
       about: sender.about,
       data: sender,
     };
-
-    elasticService.index('users', sender._id, bodySender);
+    try {
+      await elasticService.index('users', sender._id, bodySender);
+    } catch (error) {
+      console.log(error);
+    }
 
     // Elastic update receiver
 
@@ -577,8 +639,11 @@ const acceptConnReq = async (userBody, sender, receiverID, notificationID) => {
       about: receiver.about,
       data: receiver,
     };
-
-    elasticService.index('users', receiver._id, bodyReceiver);
+    try {
+      await elasticService.index('users', receiver._id, bodyReceiver);
+    } catch (error) {
+      console.log(error);
+    }
 
     return {};
   } catch (error) {
@@ -653,8 +718,11 @@ const deleteConnReq = async (userBody, sender, receiverID, notificationID) => {
       about: sender.about,
       data: sender,
     };
-
-    elasticService.index('users', sender._id, bodySender);
+    try {
+      await elasticService.index('users', sender._id, bodySender);
+    } catch (error) {
+      console.log(error);
+    }
 
     return {};
   } catch (error) {
@@ -744,8 +812,11 @@ const deleteFriend = async (userBody, sender, receiverID) => {
       about: sender.about,
       data: sender,
     };
-
-    elasticService.index('users', sender._id, bodySender);
+    try {
+      await elasticService.index('users', sender._id, bodySender);
+    } catch (error) {
+      console.log(error);
+    }
 
     // Elastic update receiver
 
@@ -762,8 +833,11 @@ const deleteFriend = async (userBody, sender, receiverID) => {
       about: receiver.about,
       data: receiver,
     };
-
-    elasticService.index('users', receiver._id, bodyReceiver);
+    try {
+      await elasticService.index('users', receiver._id, bodyReceiver);
+    } catch (error) {
+      console.log(error);
+    }
 
     return {};
   } catch (error) {
@@ -848,6 +922,7 @@ const searchUsers = async (filter, options, res) => {
     const totalPages = Math.ceil(allResults.length / limit);
     res.status(200).send({ results: paginatedResults, totalPages, page });
   } catch (error) {
+    console.log(error);
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
   }
 };

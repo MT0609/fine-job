@@ -4,20 +4,13 @@ const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { subscriptionService } = require('../services');
 
-const webPush = require('../config/webPush');
-
 const createSubscription = catchAsync(async (req, res) => {
   // https://github.com/web-push-libs/web-push#sendnotificationpushsubscription-payload-options
   // subscription: {endpoint: "string", keys: {p256dh: "string", auth: "string"}}
   // payload: {title: "string", body: "string"}
-  const subs = req.body.subscription;
-  const payload = JSON.stringify(req.body.payload);
 
-  webPush.sendNotification(subs, payload);
-
-  //subs.userID = req.user?.id || null;
-
-  const subscription = await subscriptionService.createSubscription(subs);
+  const body = { userID: req.body.userID, ...req.body.subscription };
+  const subscription = await subscriptionService.createSubscription(body);
   res.status(httpStatus.CREATED).send(subscription);
 });
 
@@ -36,8 +29,8 @@ const getSubscription = catchAsync(async (req, res) => {
 });
 
 const deleteSubscription = catchAsync(async (req, res) => {
-  await subscriptionService.deleteSubscriptionById(req.params.subscriptionID);
-  res.status(httpStatus.NO_CONTENT).send();
+  await subscriptionService.deleteSubscriptionByUserId(req.params.userID);
+  res.status(httpStatus.NO_CONTENT).send({});
 });
 
 module.exports = {

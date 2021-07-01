@@ -9,9 +9,10 @@ const router = express.Router();
 router.route('/').post(validate(subscriptionValidation.createSubscription), subscriptionController.createSubscription);
 //.get(validate(subscriptionValidation.getSubscriptions), subscriptionController.getSubscriptions);
 
-router.route('/:subscriptionID');
-//.get(validate(subscriptionValidation.getSubscription), subscriptionController.getSubscription)
-//.delete(auth(), validate(subscriptionValidation.deleteSubscription), subscriptionController.deleteSubscription);
+router
+  .route('/:userID')
+  //.get(validate(subscriptionValidation.getSubscription), subscriptionController.getSubscription)
+  .delete(auth(), validate(subscriptionValidation.deleteSubscription), subscriptionController.deleteSubscription);
 
 module.exports = router;
 

@@ -28,7 +28,11 @@ const createCompany = async (userBody) => {
       data: company,
     };
 
-    elasticService.index('companies', company._id, body);
+    try {
+      await elasticService.index('companies', company._id, body);
+    } catch (error) {
+      console.log(error);
+    }
 
     return company;
   } catch (error) {
@@ -115,7 +119,11 @@ const updateCompanyById = async (companyID, updateBody) => {
     data: company,
   };
 
-  elasticService.index('companies', company._id, body);
+  try {
+    await elasticService.index('companies', company._id, body);
+  } catch (error) {
+    console.log(error);
+  }
 
   return company;
 };
@@ -196,7 +204,11 @@ const postFollowCompany = async (companyID, userID) => {
       data: company,
     };
 
-    elasticService.index('companies', company._id, body);
+    try {
+      await elasticService.index('companies', company._id, body);
+    } catch (error) {
+      console.log(error);
+    }
 
     // Elastic update user
 
@@ -214,7 +226,11 @@ const postFollowCompany = async (companyID, userID) => {
       data: user,
     };
 
-    elasticService.index('users', user._id, bodyUser);
+    try {
+      await elasticService.index('users', user._id, bodyUser);
+    } catch (error) {
+      console.log(error);
+    }
 
     return {};
   } catch (error) {
@@ -261,7 +277,11 @@ const postUnFollowCompany = async (companyID, userID) => {
       data: company,
     };
 
-    elasticService.index('companies', company._id, body);
+    try {
+      await elasticService.index('companies', company._id, body);
+    } catch (error) {
+      console.log(error);
+    }
 
     // Elastic update user
 
@@ -279,7 +299,11 @@ const postUnFollowCompany = async (companyID, userID) => {
       data: user,
     };
 
-    elasticService.index('users', user._id, bodyUser);
+    try {
+      await elasticService.index('users', user._id, bodyUser);
+    } catch (error) {
+      console.log(error);
+    }
 
     return {};
   } catch (error) {
@@ -308,6 +332,7 @@ const searchCompanies = async (filter, options, res) => {
     const totalPages = Math.ceil(allResults.length / limit);
     res.status(200).send({ results: paginatedResults, totalPages, page });
   } catch (error) {
+    console.log(error);
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
   }
 };
