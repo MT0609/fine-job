@@ -76,7 +76,7 @@ const postUnSave = {
 
 const postSearchJobs = {
   query: Joi.object().keys({
-    q: Joi.string(),
+    q: Joi.string().allow('', null),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),

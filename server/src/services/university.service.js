@@ -17,10 +17,10 @@ const queryUniversities = async (filter, options, res) => {
   const { q } = filter;
 
   try {
-    let allResults = await elasticService.search('universities', q || 'Viet Nam');
-    allResults = allResults.filter(function (result) {
-      return result !== undefined;
-    });
+    let allResults = [];
+    if (q && q.trim()) allResults = await University.find({ $text: { $search: q } });
+    else allResults = await University.find({ country: 'Viet Nam' });
+
     const { page, limit } = options;
     const paginatedResults = allResults.slice((page - 1) * limit, page * limit);
     const totalPages = Math.ceil(allResults.length / limit);

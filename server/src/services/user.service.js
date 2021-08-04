@@ -913,10 +913,10 @@ const getConnStatus = async (sender, receiverID) => {
  */
 const searchUsers = async (filter, options, res) => {
   try {
-    let allResults = await elasticService.search('users', filter.q);
-    allResults = allResults.filter(function (result) {
-      return result !== undefined;
-    });
+    let allResults = [];
+    if (filter.q && filter.q.trim()) allResults = await User.find({ $text: { $search: filter.q } });
+    else allResults = await User.find({});
+
     const { page, limit } = options;
     const paginatedResults = allResults.slice((page - 1) * limit, page * limit);
     const totalPages = Math.ceil(allResults.length / limit);

@@ -11,7 +11,7 @@ export const getJobs =
         type: JOBCONSTANTS.JOB_GET_ALL_REQUEST,
       });
 
-      if (!title) title = "*";
+      if (!title) title = "";
 
       // const params = {};
       // if (title) params.q = title;

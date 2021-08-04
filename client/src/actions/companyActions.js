@@ -10,7 +10,7 @@ export const getCompanies =
       });
 
       const params = {};
-      params.q = name || "*";
+      params.q = name || "";
       if (page) params.page = page;
       if (limit) params.limit = limit;
 

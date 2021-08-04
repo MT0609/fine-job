@@ -219,6 +219,14 @@ const userSchema = mongoose.Schema(
 // add plugin that converts mongoose to json
 userSchema.plugin(toJSON);
 userSchema.plugin(paginate);
+userSchema.index({
+  'baseInfo.firstName': 'text',
+  'baseInfo.lastName': 'text',
+  'baseInfo.headLine': 'text',
+  'contact.email': 'text',
+  'contact.phone': 'text',
+  about: 'text',
+});
 
 /**
  * Check if email is taken

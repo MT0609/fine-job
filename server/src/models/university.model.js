@@ -41,6 +41,7 @@ const universitySchema = mongoose.Schema(
 // add plugin that converts mongoose to json
 universitySchema.plugin(toJSON);
 universitySchema.plugin(paginate);
+universitySchema.index({ name: 'text', country: 'text' });
 
 /**
  * @typedef University
