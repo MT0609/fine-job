@@ -110,10 +110,7 @@ const companySchema = mongoose.Schema(
         },
       },
     ],
-    jobs: {
-      type: Array,
-      default: [],
-    },
+    jobs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Job' }],
     photos: [
       {
         title: {

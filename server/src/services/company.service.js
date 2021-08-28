@@ -41,7 +41,7 @@ const queryCompanies = async (filter, options) => {
  * @returns {Promise<Company>}
  */
 const getCompanyById = async (id) => {
-  return Company.findById(id);
+  return Company.findById(id).populate('jobs', '_id title description maxSalary');
 };
 
 /**
@@ -198,8 +198,9 @@ const postUnFollowCompany = async (companyID, userID) => {
 const searchCompanies = async (filter, options, res) => {
   try {
     let allResults = [];
-    if (filter.q && filter.q.trim()) allResults = await Company.find({ $text: { $search: filter.q } });
-    else allResults = await Company.find({});
+    if (filter.q && filter.q.trim())
+      allResults = await Company.find({ $text: { $search: filter.q } }).populate('jobs', '_id title description maxSalary');
+    else allResults = await Company.find({}).populate('jobs', '_id title description maxSalary');
 
     allResults = allResults.filter(function (result) {
       return result !== undefined;

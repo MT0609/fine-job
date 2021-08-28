@@ -32,15 +32,7 @@ const createJob = async (userBody) => {
 
   const job = await Job.create(userBody);
 
-  // Add job to company
-  const jobSub = {
-    name: userBody.title,
-    id: job._id,
-    description: userBody.description,
-    salary: userBody.maxSalary,
-  };
-
-  company.jobs.push(jobSub);
+  company.jobs.push(job._id);
   await company.save();
 
   return job;
