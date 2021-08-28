@@ -38,7 +38,7 @@ function JobDetail(props) {
                 alt="Company"
                 src={
                   job.company?.avatar ||
-                  "https://carleton.ca/career/wp-content/uploads/icon_job_postings.png"
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCkUuzxz2aZz6m3oSJxw19plx02TeUT68oPw&usqp=CAU"
                 }
               />
             </Grid>

@@ -26,7 +26,7 @@ export const searchUsers =
     try {
       dispatch({ type: USERCONSTANTS.USER_SEARCH_REQUEST });
 
-      if (!q) q = "*";
+      if (!q) q = "";
       let result = await userApi.search(q, limit, page);
 
       if (!result) {

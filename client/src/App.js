@@ -10,6 +10,7 @@ import Loading from "./components/loading/circular";
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import jwt_decode from "jwt-decode";
+import socket from "./configs/socket";
 import swDev from "./swDev";
 
 function App(props) {
@@ -17,12 +18,9 @@ function App(props) {
   const dispatch = useDispatch();
 
   const [partnerId, setPartnerId] = useState({});
-  const { socket } = props;
+  // const { socket } = props;
 
   try {
-    const token = localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN);
-    const userId = jwt_decode(token)?.sub;
-    userId && socket?.emit("update-user-id", userId);
   } catch (error) {
     console.log(error);
   }
@@ -32,7 +30,13 @@ function App(props) {
   }, [dispatch]);
 
   useEffect(() => {
-    if (auth.isAuth) swDev();
+    if (auth.isAuth) {
+      // swDev();
+
+      const token = localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN);
+      const userId = jwt_decode(token)?.sub;
+      userId && socket?.emit("update-user-id", userId);
+    }
   }, [auth.isAuth]);
 
   useEffect(() => {

@@ -110,10 +110,7 @@ const companySchema = mongoose.Schema(
         },
       },
     ],
-    jobs: {
-      type: Array,
-      default: [],
-    },
+    jobs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Job' }],
     photos: [
       {
         title: {
@@ -137,6 +134,7 @@ const companySchema = mongoose.Schema(
 // add plugin that converts mongoose to json
 companySchema.plugin(toJSON);
 companySchema.plugin(paginate);
+companySchema.index({ name: 'text', headLine: 'text', about: 'text', 'baseInfo.industry': 'text' });
 /**
  * Check if company name is taken
  * @param {string} name - The company's name

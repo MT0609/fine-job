@@ -2,9 +2,6 @@ const httpStatus = require('http-status');
 const moment = require('moment');
 const { Job } = require('../models');
 const ApiError = require('../utils/ApiError');
-
-const elasticService = require('../services/elastic.service');
-
 const { getCompanyById } = require('../services/company.service');
 const { getUserById } = require('../services/user.service');
 
@@ -35,30 +32,8 @@ const createJob = async (userBody) => {
 
   const job = await Job.create(userBody);
 
-  // Add job to company
-  const jobSub = {
-    name: userBody.title,
-    id: job._id,
-    description: userBody.description,
-    salary: userBody.maxSalary,
-  };
-
-  company.jobs.push(jobSub);
+  company.jobs.push(job._id);
   await company.save();
-
-  // Elastic index
-  const body = {
-    title: job.title,
-    company: job.company.name,
-    description: job.description,
-    data: job,
-  };
-
-  try {
-    await elasticService.index('jobs', job._id, body);
-  } catch (error) {
-    console.log(error);
-  }
 
   return job;
 };
@@ -151,47 +126,6 @@ const applyJob = async (jobID, body, userID, cvPath) => {
 
     await Promise.all([job.save(), user.save()]);
 
-    // Elastic update
-
-    // Elastic delete
-    await elasticService.delete('jobs', job._id);
-
-    // Elastic index
-    const body = {
-      title: job.title,
-      company: job.company.name,
-      description: job.description,
-      data: job,
-    };
-
-    try {
-      await elasticService.index('jobs', job._id, body);
-    } catch (error) {
-      console.log(error);
-    }
-
-    // Elastic update user
-
-    // Elastic delete
-    await elasticService.delete('users', user._id);
-
-    // Elastic index
-    const bodyUser = {
-      firstName: user.baseInfo.firstName,
-      lastName: user.baseInfo.lastName,
-      headLine: user.baseInfo.headLine,
-      email: user.contact.email,
-      phone: user.contact.phone,
-      about: user.about,
-      data: user,
-    };
-
-    try {
-      await elasticService.index('users', user._id, bodyUser);
-    } catch (error) {
-      console.log(error);
-    }
-
     return {};
   } catch (error) {
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
@@ -215,25 +149,6 @@ const updateJobById = async (jobID, updateBody) => {
   Object.assign(job, updateBody);
   await job.save();
 
-  // Elastic update
-
-  // Elastic delete
-  await elasticService.delete('jobs', job._id);
-
-  // Elastic index
-  const body = {
-    title: job.title,
-    company: job.company.name,
-    description: job.description,
-    data: job,
-  };
-
-  try {
-    await elasticService.index('jobs', job._id, body);
-  } catch (error) {
-    console.log(error);
-  }
-
   return job;
 };
 
@@ -248,9 +163,6 @@ const deleteJobById = async (jobID) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Job not found');
   }
   await job.remove();
-
-  // Elastic delete
-  await elasticService.delete('jobs', job._id);
 
   return job;
 };
@@ -292,28 +204,6 @@ const postSaveJob = async (jobID, userID) => {
 
     await user.save();
 
-    // Elastic update user
-
-    // Elastic delete
-    await elasticService.delete('users', user._id);
-
-    // Elastic index
-    const bodyUser = {
-      firstName: user.baseInfo.firstName,
-      lastName: user.baseInfo.lastName,
-      headLine: user.baseInfo.headLine,
-      email: user.contact.email,
-      phone: user.contact.phone,
-      about: user.about,
-      data: user,
-    };
-
-    try {
-      await elasticService.index('users', user._id, bodyUser);
-    } catch (error) {
-      console.log(error);
-    }
-
     return {};
   } catch (error) {
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
@@ -343,28 +233,6 @@ const postUnSaveJob = async (jobID, userID) => {
 
     await user.save();
 
-    // Elastic update user
-
-    // Elastic delete
-    await elasticService.delete('users', user._id);
-
-    // Elastic index
-    const bodyUser = {
-      firstName: user.baseInfo.firstName,
-      lastName: user.baseInfo.lastName,
-      headLine: user.baseInfo.headLine,
-      email: user.contact.email,
-      phone: user.contact.phone,
-      about: user.about,
-      data: user,
-    };
-
-    try {
-      await elasticService.index('users', user._id, bodyUser);
-    } catch (error) {
-      console.log(error);
-    }
-
     return {};
   } catch (error) {
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
@@ -383,7 +251,10 @@ const postUnSaveJob = async (jobID, userID) => {
  */
 const searchJobs = async (filter, options, res) => {
   try {
-    let allResults = await elasticService.search('jobs', filter.q);
+    let allResults = [];
+    if (filter.q && filter.q.trim()) allResults = await Job.find({ $text: { $search: filter.q } });
+    else allResults = await Job.find({});
+
     allResults = allResults.filter(function (result) {
       return result !== undefined;
     });

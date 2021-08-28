@@ -26,7 +26,6 @@ const jobSchema = new mongoose.Schema(
     title: {
       type: String,
       required: true,
-      index: true,
     },
     company: {
       name: {
@@ -114,6 +113,7 @@ const jobSchema = new mongoose.Schema(
 // add plugin that converts mongoose to json
 jobSchema.plugin(toJSON);
 jobSchema.plugin(paginate);
+jobSchema.index({ title: 'text', 'company.name': 'text', description: 'text' });
 
 /**
  * @typedef Job

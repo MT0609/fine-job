@@ -1,9 +1,6 @@
 const httpStatus = require('http-status');
 const { Company } = require('../models');
 const ApiError = require('../utils/ApiError');
-
-const elasticService = require('../services/elastic.service');
-
 const { getUserById } = require('./user.service');
 
 /**
@@ -18,22 +15,6 @@ const createCompany = async (userBody) => {
     }
     userBody.baseInfo.specialties = userBody.baseInfo.specialties.split(',');
     const company = await Company.create(userBody);
-
-    // Elastic index
-    const body = {
-      name: company.name,
-      headLine: company.headLine,
-      about: company.about,
-      industry: company.baseInfo.industry,
-      data: company,
-    };
-
-    try {
-      await elasticService.index('companies', company._id, body);
-    } catch (error) {
-      console.log(error);
-    }
-
     return company;
   } catch (error) {
     console.log(error);
@@ -60,7 +41,7 @@ const queryCompanies = async (filter, options) => {
  * @returns {Promise<Company>}
  */
 const getCompanyById = async (id) => {
-  return Company.findById(id);
+  return Company.findById(id).populate('jobs', '_id title description maxSalary');
 };
 
 /**
@@ -105,26 +86,6 @@ const updateCompanyById = async (companyID, updateBody) => {
   Object.assign(company, updateBody);
   await company.save();
 
-  // Elastic update
-
-  // Elastic delete
-  await elasticService.delete('companies', company._id);
-
-  // Elastic index
-  const body = {
-    name: company.name,
-    headLine: company.headLine,
-    about: company.about,
-    industry: company.baseInfo.industry,
-    data: company,
-  };
-
-  try {
-    await elasticService.index('companies', company._id, body);
-  } catch (error) {
-    console.log(error);
-  }
-
   return company;
 };
 
@@ -139,9 +100,6 @@ const deleteCompanyById = async (companyID) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Company not found');
   }
   await company.remove();
-
-  // Elastic delete
-  await elasticService.delete('companies', company._id);
 
   return company;
 };
@@ -190,48 +148,6 @@ const postFollowCompany = async (companyID, userID) => {
     await company.save();
     await user.save();
 
-    // Elastic update
-
-    // Elastic delete
-    await elasticService.delete('companies', company._id);
-
-    // Elastic index
-    const body = {
-      name: company.name,
-      headLine: company.headLine,
-      about: company.about,
-      industry: company.baseInfo.industry,
-      data: company,
-    };
-
-    try {
-      await elasticService.index('companies', company._id, body);
-    } catch (error) {
-      console.log(error);
-    }
-
-    // Elastic update user
-
-    // Elastic delete
-    await elasticService.delete('users', user._id);
-
-    // Elastic index
-    const bodyUser = {
-      firstName: user.baseInfo.firstName,
-      lastName: user.baseInfo.lastName,
-      headLine: user.baseInfo.headLine,
-      email: user.contact.email,
-      phone: user.contact.phone,
-      about: user.about,
-      data: user,
-    };
-
-    try {
-      await elasticService.index('users', user._id, bodyUser);
-    } catch (error) {
-      console.log(error);
-    }
-
     return {};
   } catch (error) {
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
@@ -263,48 +179,6 @@ const postUnFollowCompany = async (companyID, userID) => {
     await company.save();
     await user.save();
 
-    // Elastic update
-
-    // Elastic delete
-    await elasticService.delete('companies', company._id);
-
-    // Elastic index
-    const body = {
-      name: company.name,
-      headLine: company.headLine,
-      about: company.about,
-      industry: company.baseInfo.industry,
-      data: company,
-    };
-
-    try {
-      await elasticService.index('companies', company._id, body);
-    } catch (error) {
-      console.log(error);
-    }
-
-    // Elastic update user
-
-    // Elastic delete
-    await elasticService.delete('users', user._id);
-
-    // Elastic index
-    const bodyUser = {
-      firstName: user.baseInfo.firstName,
-      lastName: user.baseInfo.lastName,
-      headLine: user.baseInfo.headLine,
-      email: user.contact.email,
-      phone: user.contact.phone,
-      about: user.about,
-      data: user,
-    };
-
-    try {
-      await elasticService.index('users', user._id, bodyUser);
-    } catch (error) {
-      console.log(error);
-    }
-
     return {};
   } catch (error) {
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
@@ -323,7 +197,11 @@ const postUnFollowCompany = async (companyID, userID) => {
  */
 const searchCompanies = async (filter, options, res) => {
   try {
-    let allResults = await elasticService.search('companies', filter.q);
+    let allResults = [];
+    if (filter.q && filter.q.trim())
+      allResults = await Company.find({ $text: { $search: filter.q } }).populate('jobs', '_id title description maxSalary');
+    else allResults = await Company.find({}).populate('jobs', '_id title description maxSalary');
+
     allResults = allResults.filter(function (result) {
       return result !== undefined;
     });
