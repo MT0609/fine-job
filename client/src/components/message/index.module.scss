@@ -28,6 +28,10 @@
   }
 }
 
+.inboxContainer {
+  position: relative;
+}
+
 .messages {
   height: 20rem;
   overflow: auto;
@@ -67,5 +71,13 @@
     &:hover {
       visibility: visible;
     }
+  }
+  &__typing {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #ebebeb;
+    font-size: 13px;
   }
 }

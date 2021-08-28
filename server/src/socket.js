@@ -1,7 +1,11 @@
 const socket = require('socket.io');
 
 module.exports.socket = (server) => {
-  const io = socket(server);
+  const io = socket(server, {
+    cors: {
+      origin: '*',
+    },
+  });
 
   let socketsConnected = new Set();
 
@@ -32,6 +36,36 @@ module.exports.socket = (server) => {
     });
 
     try {
+      sk.on('typingMessage', ({ receiver }) => {
+        console.log('typing from: ', sk.id);
+        let sen = null;
+        let rev = null;
+        socketsConnected.forEach((conn) => {
+          if (conn.skId == sk.id) {
+            sen = conn;
+          }
+          if (conn.userId == receiver) {
+            rev = conn;
+          }
+        });
+        sk.to(rev?.skId || '').emit('server-res-typingMessage', sen?.userId || '');
+      });
+
+      sk.on('stopTypingMessage', ({ receiver }) => {
+        console.log('stop typing from: ', sk.id);
+        let sen = null;
+        let rev = null;
+        socketsConnected.forEach((conn) => {
+          if (conn.skId == sk.id) {
+            sen = conn;
+          }
+          if (conn.userId == receiver) {
+            rev = conn;
+          }
+        });
+        sk.to(rev?.skId || '').emit('server-res-stopTypingMessage', sen?.userId || '');
+      });
+
       // 1 vs 1 message
       sk.on('new-1-1-msg', ({ receiver, data }) => {
         console.log('New message from: ', sk.id);
