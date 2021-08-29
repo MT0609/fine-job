@@ -5,7 +5,13 @@ import { Delete } from "@material-ui/icons";
 import styles from "./index.module.scss";
 
 function InboxMessages(props) {
-  const { myInfo, receiver, messages = [], ondelete } = props;
+  const {
+    myInfo,
+    receiver,
+    messages = [],
+    partnerTyping = {},
+    ondelete,
+  } = props;
 
   const auth = useSelector((state) => state.auth);
 
@@ -22,63 +28,73 @@ function InboxMessages(props) {
   };
 
   return (
-    <div className={styles.messages}>
-      {messages.map((message, index) => {
-        if (message.status === "sent")
-          return (
-            <div key={index} className={styles.message}>
-              <Box
-                className={`${styles.message__item} ${
-                  auth?.user?.id !== message?.senderID &&
-                  styles["message__item--left"]
-                }`}
-              >
-                <Box display="flex">
-                  {auth?.user?.id !== message?.senderID && (
-                    <Avatar
-                      alt={receiver.name}
-                      src={
-                        receiver.avatar ||
-                        "https://res.cloudinary.com/dghvjalhh/image/upload/v1610614321/avatars/dwmh6cncmhlzy6jtlskm.png"
-                      }
-                      style={{ marginRight: "10px" }}
-                    />
-                  )}
-                  <div>
-                    <p className={styles.messages__time}>
-                      {new Date(message.time).toLocaleString()}
-                    </p>
-                    <p className={`${styles.message__text}`}>{message.msg}</p>
-                  </div>
+    <div className={styles.messageContainer}>
+      <div className={styles.messages}>
+        {messages.map((message, index) => {
+          if (message.status === "sent")
+            return (
+              <div key={index} className={styles.message}>
+                <Box
+                  className={`${styles.message__item} ${
+                    auth?.user?.id !== message?.senderID &&
+                    styles["message__item--left"]
+                  }`}
+                >
+                  <Box display="flex">
+                    {auth?.user?.id !== message?.senderID && (
+                      <Avatar
+                        alt={receiver.name}
+                        src={
+                          receiver.avatar ||
+                          "https://res.cloudinary.com/dghvjalhh/image/upload/v1610614321/avatars/dwmh6cncmhlzy6jtlskm.png"
+                        }
+                        style={{ marginRight: "10px" }}
+                      />
+                    )}
+                    <div>
+                      <p className={styles.messages__time}>
+                        {new Date(message.time).toLocaleString()}
+                      </p>
+                      <p className={`${styles.message__text}`}>{message.msg}</p>
+                    </div>
+
+                    {auth?.user?.id === message?.senderID && (
+                      <Avatar
+                        alt={myInfo.name}
+                        src={
+                          myInfo.avatar ||
+                          "https://res.cloudinary.com/dghvjalhh/image/upload/v1618850154/avatars/sxqvw0io5dmkg4apx30d.jpg"
+                        }
+                        style={{ marginLeft: "10px" }}
+                      />
+                    )}
+                  </Box>
 
                   {auth?.user?.id === message?.senderID && (
-                    <Avatar
-                      alt={myInfo.name}
-                      src={
-                        myInfo.avatar ||
-                        "https://res.cloudinary.com/dghvjalhh/image/upload/v1618850154/avatars/sxqvw0io5dmkg4apx30d.jpg"
-                      }
-                      style={{ marginLeft: "10px" }}
-                    />
+                    <div className={styles.message__delete}>
+                      <IconButton
+                        style={{ padding: "0.5rem" }}
+                        onClick={() => deleteMessage(message._id)}
+                      >
+                        <Delete fontSize="small" />
+                      </IconButton>
+                    </div>
                   )}
                 </Box>
+              </div>
+            );
+          return "";
+        })}
+        <div ref={messagesEndRef} />
+      </div>
 
-                {auth?.user?.id === message?.senderID && (
-                  <div className={styles.message__delete}>
-                    <IconButton
-                      style={{ padding: "0.5rem" }}
-                      onClick={() => deleteMessage(message._id)}
-                    >
-                      <Delete fontSize="small" />
-                    </IconButton>
-                  </div>
-                )}
-              </Box>
-            </div>
-          );
-        return "";
-      })}
-      <div ref={messagesEndRef} />
+      {partnerTyping.partnerID === receiver.id && partnerTyping.typing ? (
+        <span className={styles.message__typing}>
+          {receiver.name} is typing message...
+        </span>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

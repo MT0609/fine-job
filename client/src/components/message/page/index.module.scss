@@ -1,3 +1,8 @@
+.messageContainer {
+  height: 100%;
+  position: relative;
+}
+
 .messages {
   height: 100%;
   max-height: 100%;
@@ -34,5 +39,13 @@
     &:hover {
       visibility: visible;
     }
+  }
+  &__typing {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #ebebeb;
+    font-size: 13px;
   }
 }

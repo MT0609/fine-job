@@ -13,12 +13,9 @@ import jwt_decode from "jwt-decode";
 import socket from "./configs/socket";
 import swDev from "./swDev";
 
-function App(props) {
+function App() {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
-  const [partnerId, setPartnerId] = useState({});
-  // const { socket } = props;
 
   try {
   } catch (error) {
@@ -39,12 +36,6 @@ function App(props) {
     }
   }, [auth.isAuth]);
 
-  useEffect(() => {
-    socket.on("server-res-1-1-msg", (partnerId) => {
-      setPartnerId({ partnerId });
-    });
-  }, []);
-
   return (
     <div className="App">
       <BrowserRouter>
@@ -55,7 +46,7 @@ function App(props) {
 
             {auth.isAuth && (
               <div className="App__message">
-                <MessageBubbleContainer partnerId={partnerId} {...props} />
+                <MessageBubbleContainer />
               </div>
             )}
 
