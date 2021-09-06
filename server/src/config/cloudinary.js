@@ -39,6 +39,23 @@ const uploadSingleAvatar = (file) => {
   });
 };
 
+const uploadSingleCV = (file) => {
+  return new Promise((resolve) => {
+    cloudinary.uploader
+      .upload(file, {
+        folder: 'cvs',
+      })
+      .then((result) => {
+        if (result) {
+          resolve({
+            url: result.secure_url,
+            id: result.public_id,
+          });
+        }
+      });
+  });
+};
+
 const destroySingle = (id) => {
   return new Promise((resolve) => {
     cloudinary.uploader.destroy(id, (error, result) => {
@@ -58,6 +75,7 @@ const destroyMultiple = (IDs) => {
 module.exports = {
   uploadSingleProduct,
   uploadSingleAvatar,
+  uploadSingleCV,
   destroySingle,
   destroyMultiple,
 };

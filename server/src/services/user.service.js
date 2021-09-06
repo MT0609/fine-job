@@ -3,7 +3,6 @@ const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { sendEmail } = require('./email.service');
 const webPush = require('../config/webPush');
-const elasticService = require('../services/elastic.service');
 const { Subscription } = require('../models');
 
 const {
@@ -29,21 +28,6 @@ const createUser = async (userBody) => {
   const user = await User.create(newUser);
   await sendEmail(newUser.contact.email, 'Verify your account!', 'Click below button to verify account!');
 
-  // Elastic index
-  const body = {
-    firstName: user.baseInfo.firstName,
-    lastName: user.baseInfo.lastName,
-    headLine: user.baseInfo.headLine,
-    email: user.contact.email,
-    phone: user.contact.phone,
-    about: user.about,
-    data: user,
-  };
-  try {
-    await elasticService.index('users', user._id, body);
-  } catch (error) {
-    console.log(error);
-  }
   return user;
 };
 
@@ -111,27 +95,6 @@ const updateUserById = async (userId, updateBody) => {
 
   await user.save();
 
-  // Elastic update
-
-  // Elastic delete
-  await elasticService.delete('users', user._id);
-
-  // Elastic index
-  const body = {
-    firstName: user.baseInfo.firstName,
-    lastName: user.baseInfo.lastName,
-    headLine: user.baseInfo.headLine,
-    email: user.contact.email,
-    phone: user.contact.phone,
-    about: user.about,
-    data: user,
-  };
-  try {
-    await elasticService.index('users', user._id, body);
-  } catch (error) {
-    console.log(error);
-  }
-
   return user;
 };
 
@@ -153,27 +116,6 @@ const modifyEducation = async (userID, eduData) => {
   }
   await user.save();
 
-  // Elastic update
-
-  // Elastic delete
-  await elasticService.delete('users', user._id);
-
-  // Elastic index
-  const body = {
-    firstName: user.baseInfo.firstName,
-    lastName: user.baseInfo.lastName,
-    headLine: user.baseInfo.headLine,
-    email: user.contact.email,
-    phone: user.contact.phone,
-    about: user.about,
-    data: user,
-  };
-  try {
-    await elasticService.index('users', user._id, body);
-  } catch (error) {
-    console.log(error);
-  }
-
   return user;
 };
 
@@ -187,27 +129,6 @@ const deleteEducation = async (userID, reqBody) => {
   if (index > -1) {
     user.baseInfo.educations.splice(index, 1);
     await user.save();
-
-    // Elastic update
-
-    // Elastic delete
-    await elasticService.delete('users', user._id);
-
-    // Elastic index
-    const body = {
-      firstName: user.baseInfo.firstName,
-      lastName: user.baseInfo.lastName,
-      headLine: user.baseInfo.headLine,
-      email: user.contact.email,
-      phone: user.contact.phone,
-      about: user.about,
-      data: user,
-    };
-    try {
-      await elasticService.index('users', user._id, body);
-    } catch (error) {
-      console.log(error);
-    }
   }
   return user;
 };
@@ -230,27 +151,6 @@ const modifyAccomplishment = async (userID, data) => {
   }
   await user.save();
 
-  // Elastic update
-
-  // Elastic delete
-  await elasticService.delete('users', user._id);
-
-  // Elastic index
-  const body = {
-    firstName: user.baseInfo.firstName,
-    lastName: user.baseInfo.lastName,
-    headLine: user.baseInfo.headLine,
-    email: user.contact.email,
-    phone: user.contact.phone,
-    about: user.about,
-    data: user,
-  };
-  try {
-    await elasticService.index('users', user._id, body);
-  } catch (error) {
-    console.log(error);
-  }
-
   return user;
 };
 
@@ -264,27 +164,6 @@ const deleteAccomplishment = async (userID, reqBody) => {
   if (index > -1) {
     user.accomplishments.splice(index, 1);
     await user.save();
-
-    // Elastic update
-
-    // Elastic delete
-    await elasticService.delete('users', user._id);
-
-    // Elastic index
-    const body = {
-      firstName: user.baseInfo.firstName,
-      lastName: user.baseInfo.lastName,
-      headLine: user.baseInfo.headLine,
-      email: user.contact.email,
-      phone: user.contact.phone,
-      about: user.about,
-      data: user,
-    };
-    try {
-      await elasticService.index('users', user._id, body);
-    } catch (error) {
-      console.log(error);
-    }
   }
   return user;
 };
@@ -300,9 +179,6 @@ const deleteUserById = async (userId) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
   await user.remove();
-
-  // Elastic delete
-  await elasticService.delete('users', user._id);
 
   return user;
 };
@@ -464,48 +340,6 @@ const sendConnReq = async (userBody, sender, receiverID) => {
       })
     );
 
-    // Elastic update sender
-
-    // Elastic delete
-    await elasticService.delete('users', sender._id);
-
-    // Elastic index
-    const bodySender = {
-      firstName: sender.baseInfo.firstName,
-      lastName: sender.baseInfo.lastName,
-      headLine: sender.baseInfo.headLine,
-      email: sender.contact.email,
-      phone: sender.contact.phone,
-      about: sender.about,
-      data: sender,
-    };
-    try {
-      await elasticService.index('users', sender._id, bodySender);
-    } catch (error) {
-      console.log(error);
-    }
-
-    // Elastic update receiver
-
-    // Elastic delete
-    await elasticService.delete('users', receiver._id);
-
-    // Elastic index
-    const bodyReceiver = {
-      firstName: receiver.baseInfo.firstName,
-      lastName: receiver.baseInfo.lastName,
-      headLine: receiver.baseInfo.headLine,
-      email: receiver.contact.email,
-      phone: receiver.contact.phone,
-      about: receiver.about,
-      data: receiver,
-    };
-    try {
-      await elasticService.index('users', receiver._id, bodyReceiver);
-    } catch (error) {
-      console.log(error);
-    }
-
     return {};
   } catch (error) {
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
@@ -603,48 +437,6 @@ const acceptConnReq = async (userBody, sender, receiverID, notificationID) => {
       })
     );
 
-    // Elastic update sender
-
-    // Elastic delete
-    await elasticService.delete('users', sender._id);
-
-    // Elastic index
-    const bodySender = {
-      firstName: sender.baseInfo.firstName,
-      lastName: sender.baseInfo.lastName,
-      headLine: sender.baseInfo.headLine,
-      email: sender.contact.email,
-      phone: sender.contact.phone,
-      about: sender.about,
-      data: sender,
-    };
-    try {
-      await elasticService.index('users', sender._id, bodySender);
-    } catch (error) {
-      console.log(error);
-    }
-
-    // Elastic update receiver
-
-    // Elastic delete
-    await elasticService.delete('users', receiver._id);
-
-    // Elastic index
-    const bodyReceiver = {
-      firstName: receiver.baseInfo.firstName,
-      lastName: receiver.baseInfo.lastName,
-      headLine: receiver.baseInfo.headLine,
-      email: receiver.contact.email,
-      phone: receiver.contact.phone,
-      about: receiver.about,
-      data: receiver,
-    };
-    try {
-      await elasticService.index('users', receiver._id, bodyReceiver);
-    } catch (error) {
-      console.log(error);
-    }
-
     return {};
   } catch (error) {
     throw new ApiError(httpStatus.NOT_FOUND, error.message);
@@ -702,27 +494,6 @@ const deleteConnReq = async (userBody, sender, receiverID, notificationID) => {
 
     await sender.save();
     await notification.save();
-
-    // Elastic update sender
-
-    // Elastic delete
-    await elasticService.delete('users', sender._id);
-
-    // Elastic index
-    const bodySender = {
-      firstName: sender.baseInfo.firstName,
-      lastName: sender.baseInfo.lastName,
-      headLine: sender.baseInfo.headLine,
-      email: sender.contact.email,
-      phone: sender.contact.phone,
-      about: sender.about,
-      data: sender,
-    };
-    try {
-      await elasticService.index('users', sender._id, bodySender);
-    } catch (error) {
-      console.log(error);
-    }
 
     return {};
   } catch (error) {
@@ -796,48 +567,6 @@ const deleteFriend = async (userBody, sender, receiverID) => {
     await sender.save();
     await receiver.save();
     await notification.save();
-
-    // Elastic update sender
-
-    // Elastic delete
-    await elasticService.delete('users', sender._id);
-
-    // Elastic index
-    const bodySender = {
-      firstName: sender.baseInfo.firstName,
-      lastName: sender.baseInfo.lastName,
-      headLine: sender.baseInfo.headLine,
-      email: sender.contact.email,
-      phone: sender.contact.phone,
-      about: sender.about,
-      data: sender,
-    };
-    try {
-      await elasticService.index('users', sender._id, bodySender);
-    } catch (error) {
-      console.log(error);
-    }
-
-    // Elastic update receiver
-
-    // Elastic delete
-    await elasticService.delete('users', receiver._id);
-
-    // Elastic index
-    const bodyReceiver = {
-      firstName: receiver.baseInfo.firstName,
-      lastName: receiver.baseInfo.lastName,
-      headLine: receiver.baseInfo.headLine,
-      email: receiver.contact.email,
-      phone: receiver.contact.phone,
-      about: receiver.about,
-      data: receiver,
-    };
-    try {
-      await elasticService.index('users', receiver._id, bodyReceiver);
-    } catch (error) {
-      console.log(error);
-    }
 
     return {};
   } catch (error) {

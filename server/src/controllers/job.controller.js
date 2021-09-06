@@ -3,7 +3,7 @@ const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { jobService } = require('../services');
-const { uploadSingleAvatar } = require('../config/cloudinary');
+const { uploadSingleCV } = require('../config/cloudinary');
 
 const isUserOwnerJob = async (jobID, userID) => {
   const job = await jobService.getJobById(jobID);
@@ -38,7 +38,15 @@ const applyJob = catchAsync(async (req, res) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Job not found');
   }
   let cvPath = '';
-  if (req.file) cvPath = req.hostname + '/' + req.file.path.replace(/\\/g, '/').replace('..', '');
+  // cv upload
+  if (req.file) {
+    const uploaded = req.file;
+    if (uploaded) {
+      const retAvt = await uploadSingleCV(uploaded.path);
+      cvPath = retAvt.url;
+    }
+  }
+  // if (req.file) cvPath = req.hostname + '/' + req.file.path.replace(/\\/g, '/').replace('..', '');
   jobService.applyJob(req.params.jobID, req.body, req.user.id, cvPath);
   res.status(httpStatus.CREATED).send({});
 });
