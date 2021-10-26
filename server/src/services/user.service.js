@@ -26,7 +26,7 @@ const createUser = async (userBody) => {
   var newUser = formatUser(userBody);
 
   const user = await User.create(newUser);
-  await sendEmail(newUser.contact.email, 'Verify your account!', 'Click below button to verify account!');
+  // await sendEmail(newUser.contact.email, 'Verify your account!', 'Click below button to verify account!');
 
   return user;
 };
