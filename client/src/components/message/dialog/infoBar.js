@@ -36,7 +36,7 @@ function InfoBar(props) {
           alt="Travis Howard"
           src={
             receiver.avatar ||
-            "https://res.cloudinary.com/dghvjalhh/image/upload/v1610614321/avatars/dwmh6cncmhlzy6jtlskm.png"
+            "https://res.cloudinary.com/dghvjalhh/image/upload/v1638072745/avatars/user_xscsme.png"
           }
           style={{ marginRight: "0.5rem" }}
         />

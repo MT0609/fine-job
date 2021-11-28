@@ -98,7 +98,7 @@ function TalentHomePage() {
                         variant="square"
                         src={
                           job.company.avatar ||
-                          "https://mcnewsmd1.keeng.net/netnews/archive/images/2020/07/20/tinngan_011115_916156142_0.jpg"
+                          "https://res.cloudinary.com/dghvjalhh/image/upload/v1623952564/avatars/job_xjiuyn.svg"
                         }
                         alt="company"
                       />

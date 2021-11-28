@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useSelector, useDispatch } from "react-redux";
 import { Container, Grid, useMediaQuery } from "@material-ui/core";
@@ -7,12 +7,14 @@ import { getAllMessages, getMessage } from "../../actions/messageActions";
 import MessageList from "../../container/message/pageContainer/messageList";
 import MessageDetail from "../../container/message/pageContainer/messageDetail";
 import MessageDialog from "../../container/message/dialog";
+import socket from "../../configs/socket";
 
 function MessagePage() {
   const myInfo = useSelector((state) => state.auth.user);
   const messageState = useSelector((state) => state.message);
   const messages = messageState.messages;
   const message = messageState.message;
+  const selectMessageID = useRef();
 
   const theme = useTheme();
   const messageDialogAllow = useMediaQuery(theme.breakpoints.down("sm"));
@@ -24,7 +26,18 @@ function MessagePage() {
 
   useEffect(() => {
     dispatch(getAllMessages());
+    if (message.partnerID) selectMessageID.current = message.partnerID;
   }, [dispatch, message]);
+
+  useEffect(() => {
+    socket.on("server-res-1-1-msg", (partnerId) => {
+      if (selectMessageID.current && partnerId !== selectMessageID.current)
+        return;
+
+      if (partnerId === selectMessageID.current)
+        dispatch(getMessage(partnerId, 1));
+    });
+  }, []);
 
   const handleMessageClick = (partnerID) => {
     dispatch(getMessage(partnerID, 1));
@@ -62,7 +75,11 @@ function MessagePage() {
 
           {messageGridAllow && (
             <Grid item md style={{ height: "100%" }}>
-              <MessageDetail myInfo={myInfo} message={message} />
+              <MessageDetail
+                myInfo={myInfo}
+                message={message}
+                socket={socket}
+              />
             </Grid>
           )}
 
@@ -71,6 +88,7 @@ function MessagePage() {
               myInfo={myInfo}
               show={messageDialogShow && messageDialogAllow}
               message={message}
+              socket={socket}
               close={() => setMessageDialogShow(false)}
             />
           )}

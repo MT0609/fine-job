@@ -6,14 +6,10 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./configs/i18n";
 import "./index.css";
-import io from "socket.io-client";
-
-// Socket
-const socket = io.connect(process.env.REACT_APP_BASE_URL, {});
 
 ReactDOM.render(
   <Provider store={store}>
-    <App socket={socket} />
+    <App />
   </Provider>,
   document.getElementById("root")
 );

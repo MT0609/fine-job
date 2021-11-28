@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Grid, TextField, IconButton } from "@material-ui/core";
 import { Send } from "@material-ui/icons";
 
-export default function Input({ sendMessage }) {
+export default function Input({ onTyping, sendMessage }) {
   const [input, setInput] = useState("");
 
   const { t } = useTranslation();
@@ -33,7 +33,10 @@ export default function Input({ sendMessage }) {
           }}
           value={input}
           placeholder={t("message.type")}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => {
+            onTyping();
+            setInput(e.target.value);
+          }}
           onKeyPress={(e) => (e.key === "Enter" ? send() : null)}
         />
       </Grid>

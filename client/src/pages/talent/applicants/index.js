@@ -63,7 +63,7 @@ function JobApplicantsView() {
                       variant="square"
                       src={
                         job.company.avatar ||
-                        "https://mcnewsmd1.keeng.net/netnews/archive/images/2020/07/20/tinngan_011115_916156142_0.jpg"
+                        "https://res.cloudinary.com/dghvjalhh/image/upload/v1623952564/avatars/job_xjiuyn.svg"
                       }
                       alt="company"
                     />
@@ -127,9 +127,9 @@ function JobApplicantsView() {
                           <Avatar
                             src={
                               user.user.avtar ||
-                              "https://res.cloudinary.com/dghvjalhh/image/upload/v1610614321/avatars/dwmh6cncmhlzy6jtlskm.png"
+                              "https://res.cloudinary.com/dghvjalhh/image/upload/v1638072745/avatars/user_xscsme.png"
                             }
-                            alt="company"
+                            alt="applicant"
                           />
                         </Link>
                       </Grid>

@@ -33,7 +33,7 @@ export const getJobs =
   };
 
 export const getMyPostingJobs =
-  (title = "*") =>
+  (title = "") =>
   async (dispatch) => {
     // params: {title, limit, ...}
     try {
