@@ -57,7 +57,7 @@ function MessageList(props) {
                   alt="Avatar"
                   src={
                     message.partnerBaseInfo.avatar ||
-                    "https://mcnewsmd1.keeng.net/netnews/archive/images/2020/07/20/tinngan_011115_916156142_0.jpg"
+                    "https://res.cloudinary.com/dghvjalhh/image/upload/v1638072745/avatars/user_xscsme.png"
                   }
                 ></Avatar>
                 <Box flexGrow={1}>

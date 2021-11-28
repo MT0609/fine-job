@@ -70,7 +70,7 @@ function JobApplyDialog(props) {
                   <Avatar
                     src={
                       user.avatar ||
-                      "https://res.cloudinary.com/dghvjalhh/image/upload/v1618850154/avatars/sxqvw0io5dmkg4apx30d.jpg"
+                      "https://res.cloudinary.com/dghvjalhh/image/upload/v1610614321/avatars/dwmh6cncmhlzy6jtlskm.png"
                     }
                     alt="avatar"
                   />

@@ -120,7 +120,7 @@ function PeopleSearchResult(props) {
                           alt="Company"
                           src={
                             user.avatar ||
-                            "https://res.cloudinary.com/dghvjalhh/image/upload/v1618850154/avatars/sxqvw0io5dmkg4apx30d.jpg"
+                            "https://res.cloudinary.com/dghvjalhh/image/upload/v1638072745/avatars/user_xscsme.png"
                           }
                         />
                       </Link>

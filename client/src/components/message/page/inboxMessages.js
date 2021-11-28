@@ -46,7 +46,7 @@ function InboxMessages(props) {
                         alt={receiver.name}
                         src={
                           receiver.avatar ||
-                          "https://res.cloudinary.com/dghvjalhh/image/upload/v1610614321/avatars/dwmh6cncmhlzy6jtlskm.png"
+                          "https://res.cloudinary.com/dghvjalhh/image/upload/v1638072745/avatars/user_xscsme.png"
                         }
                         style={{ marginRight: "10px" }}
                       />
@@ -63,7 +63,7 @@ function InboxMessages(props) {
                         alt={myInfo.name}
                         src={
                           myInfo.avatar ||
-                          "https://res.cloudinary.com/dghvjalhh/image/upload/v1618850154/avatars/sxqvw0io5dmkg4apx30d.jpg"
+                          "https://res.cloudinary.com/dghvjalhh/image/upload/v1610614321/avatars/dwmh6cncmhlzy6jtlskm.png"
                         }
                         style={{ marginLeft: "10px" }}
                       />

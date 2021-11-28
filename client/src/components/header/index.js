@@ -151,7 +151,7 @@ function Header() {
                       marginBottom: "0.4rem",
                     }}
                     alt="Avatar"
-                    src="https://res.cloudinary.com/dghvjalhh/image/upload/v1618850154/avatars/sxqvw0io5dmkg4apx30d.jpg"
+                    src="https://res.cloudinary.com/dghvjalhh/image/upload/v1610614321/avatars/dwmh6cncmhlzy6jtlskm.png"
                   />
                   <span>{t("header.me")}</span>
                 </button>

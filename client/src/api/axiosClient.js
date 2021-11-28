@@ -1,10 +1,10 @@
-import axios from "axios";
-import queryString from "query-string";
+import axios from 'axios';
+import queryString from 'query-string';
 
 const axiosClient = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: 'http://localhost:5000',
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
   paramsSerializer: (params) => queryString.stringify(params),
 });
@@ -12,7 +12,7 @@ const axiosClient = axios.create({
 axiosClient.interceptors.request.use(async (config) => {
   const token =
     localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN) || null;
-  config.headers["Authorization"] = `Bearer ${token}`;
+  config.headers['Authorization'] = `Bearer ${token}`;
   return config;
 });
 
@@ -26,13 +26,13 @@ axiosClient.interceptors.response.use(
   (error) => {
     const originalRequest = error.config;
     if (error.response.status === 401) {
-      if (originalRequest.url === "/v1/auth/refresh-tokens") {
+      if (originalRequest.url === '/v1/auth/refresh-tokens') {
         localStorage.removeItem(process.env.REACT_APP_ACCESS_TOKEN);
         localStorage.removeItem(process.env.REACT_APP_REFRESH_TOKEN);
         return;
       }
       axiosClient
-        .post("/v1/auth/refresh-tokens", {
+        .post('/v1/auth/refresh-tokens', {
           refreshToken:
             localStorage.getItem(process.env.REACT_APP_REFRESH_TOKEN) || 1,
         })
@@ -43,7 +43,7 @@ axiosClient.interceptors.response.use(
               res.access.tokens
             );
             axios.defaults.headers.common[
-              "Authorization"
+              'Authorization'
             ] = `Bearer ${res.access.tokens}`;
             axiosClient(originalRequest);
           }

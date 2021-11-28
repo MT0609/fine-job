@@ -84,7 +84,7 @@ function JobView() {
               </Box>
 
               <Typography variant="h5">{job.title}</Typography>
-              {job.status !== "close" && (
+              {job.status === "close" && (
                 <div
                   className={`${styles["section__title"]} ${styles["section__title--close"]}`}
                 >
